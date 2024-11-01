@@ -1,4 +1,4 @@
-# LMS - Client
+# LMS - Api
 
 This is the back-end client for the Learning Management System (LMS). Will be build using Laravel
 
