@@ -33,9 +33,9 @@ return [
     |
     */
 
-<<<<<<< HEAD
-    'guard' => ['web'],
-=======
+// <<<<<<< HEAD
+    // 'guard' => ['web'],
+// =======
     'guards' => [
         'web' => [
             'driver' => 'session',
@@ -48,7 +48,7 @@ return [
         ],
     ],
 
->>>>>>> installSwagger
+// >>>>>>> installSwagger
 
     /*
     |--------------------------------------------------------------------------
@@ -95,8 +95,8 @@ return [
         'validate_csrf_token' => Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
     ],
 
-<<<<<<< HEAD
+// <<<<<<< HEAD
 ];
-=======
-];
->>>>>>> installSwagger
+// =======
+// ];
+// >>>>>>> installSwagger
