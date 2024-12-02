@@ -8,42 +8,30 @@ use Illuminate\Support\Facades\Log;
 
 class Result
 {
-    /**
-     * Create a new class instance.
-     */
-    public function __construct()
+    public static function success($data, $message = 'Success', $status = 200)
     {
-        //
+        return response()->json([
+            'status' => true,
+            'message' => $message,
+            'data' => $data,
+        ], $status);
     }
 
-    public static function rollback($e, $message = "Something went wrong! Process not completed")
-    {
-        DB::rollBack();
-        self::throw($e, $message);
+    public static function successwithtoken($data, $token, $message = 'Success', $status = 200){
+        
+        return response()->json([
+            'status' => true,
+            'message' => $message,
+            'data' => $data,
+            'token' => $token
+        ], $status);
     }
 
-    public static function throw($e, $message = "Something went wrong! Process not completed")
+    public static function error($message, $status = 400)
     {
-        Log::info($e);
-        throw new HttpResponseException(response()->json(["message" => $message], 500));
-    }
-
-    public static function sendResponse($result, $message, $code = 200)
-    {
-        // Ensure the code is a valid HTTP status code
-        if (!is_int($code) || $code < 100 || $code > 599) {
-            $code = 200; // Set to default if invalid
-        }
-
-        $response = [
-            'success' => true,
-            'data'    => $result,
-        ];
-
-        if (!empty($message)) {
-            $response['message'] = $message;
-        }
-
-        return response()->json($response, $code);
+        return response()->json([
+            'status' => false,
+            'message' => $message,
+        ], $status);
     }
 }

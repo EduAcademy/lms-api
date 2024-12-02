@@ -16,11 +16,13 @@ Route::get('/user', function (Request $request) {
 // <<<<<<< HEAD
 // =======
 
-Route::post("/register",[AuthController::class,"register"]);
-Route::post("/login",[AuthController::class,"login"]);
+Route::post('/register', [ AuthController::class, 'register']);
+
+Route::post("/login", [ AuthController::class,"login"]);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/getDepartment', [DepartmentController::class, 'index']);
     Route::post('/createDepartment', [DepartmentController::class, 'createDepartment']);
+    Route::get('/profile', [AuthController::class, 'profile']);
 });
 // >>>>>>> installSwagger

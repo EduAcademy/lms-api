@@ -3,47 +3,44 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use Hash;
+use App\Http\Requests\SignUpRequest;
+use App\Services\UserService;
+use App\Shared\Handler\Result;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    private $userservice;
+
+    public function __construct(UserService $userService)
     {
-        $data = $request->validate([
-            "name"=>"required|string",
-            "email"=>"required|email|unique:users",
-            "password"=>"required|string"
-        ]);
-        $user = User::create($data);
-        $token = $user->createToken("auth_token")->plainTextToken;
-        return response()->json([
-            "user"=>$user,
-            "token"=>$token
-        ]);
+        $this->userservice = $userService;
     }
+
+    public function register(SignUpRequest $request)
+    {
+        // Validation handled by SignUpRequest
+
+        $user = $this->userservice->registerUser($request->validated());
+        
+        return Result::success($user, 'User registered successfully');
+    }
+
     public function login(Request $request)
     {
         $data = $request->validate([
-            "email"=>"required|email|exists:users",
-            "password"=>"required|string"
+            "email" => "required|email|exists:users,email",
+            "password" => "required|string"
         ]);
-        $user = User::where("email",$data["email"])->first();
-        if (!$user ||!Hash::check($data["password"],$user->password)) {
-            return response()->json([
-                "message"=>"Invalid credentials"
-            ],401);
-        }
-        if (!auth()->attempt($data)) {
-            return response()->json([
-                "message"=>"Invalid credentials"
-            ],401);
-        }
-        $token = $user->createToken("auth_token")->plainTextToken;
-        return response()->json([
-            "user"=>$user,
-            "token"=>$token
-        ]);
+
+        $response = $this->userservice->login($data);
+        return $response;
+    }
+
+    
+    public function profile(Request $request)
+    {
+        $user = $request->user();
+        return Result::success($user, 'Found profile Successfully', 200);
     }
 }
