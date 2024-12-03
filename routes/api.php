@@ -26,3 +26,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', [AuthController::class, 'profile']);
 });
 // >>>>>>> installSwagger
+
+
+
+Route::prefix('v1')->middleware(['auth:sanctum'])->group(function () {
+    // Admin-only routes
+    Route::middleware(['role:admin'])->group(function () { 
+        Route::get('/getDepartment', [DepartmentController::class, 'index']);
+    });
+
+    // Student-only routes
+    Route::middleware(['role:student'])->group(function () {
+        Route::post('/createDepartment', [DepartmentController::class, 'createDepartment']);
+    });
+
+});

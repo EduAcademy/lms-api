@@ -22,9 +22,21 @@ class SignUpRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6'
+            'password' => 'required|string|min:6',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'phone' => 'nullable|string',
+            'address' => 'nullable|string',
+            'role_id' => 'integer',
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'role' => $this->role ?? 3, // Set default role ID to 3 if not provided
+        ]);
     }
 }

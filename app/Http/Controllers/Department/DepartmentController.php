@@ -10,16 +10,24 @@ class DepartmentController extends Controller
 {
     public function index()
     {
-        return Department::all();
+        // return Department::all();
+
+        return response()->json(
+            [
+                'messgae'=> 'fetch all departs successfully'
+            ]);
     }
     public function createDepartment(Request $request)
     {
-        $data = $request->validate([
-            'name' => 'required|string|min:3|max:255',
-            'shortName' => 'required','max:5',
-            'description' => 'required|string|min:3|max:255',
-        ]);
-        $department = Department::create($data);
-        return response()->json($department, 201); // Return the created department
+        // $data = $request->validate([
+        //     'name' => 'required|string|min:3|max:255',
+        //     'shortName' => 'required','max:5',
+        //     'description' => 'required|string|min:3|max:255',
+        // ]);
+        // $department = Department::create($data);
+        return response()->json([
+            'message'=> 'added successfully',
+            'status'=>201
+        ]); // Return the created department
     }
 }

@@ -28,7 +28,8 @@ class UserService implements UserServiceInterface
     {
         
         
-        $data['password'] = Hash::make($data['password']); // Ensure password is hashed
+        $data['password'] = Hash::make($data['password']);
+        $data['role_id'] = $data['role_id'] ?? 3;
         return $this->userRepository->createUser($data);
     }
 

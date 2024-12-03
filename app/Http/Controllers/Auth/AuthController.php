@@ -41,6 +41,7 @@ class AuthController extends Controller
     public function profile(Request $request)
     {
         $user = $request->user();
-        return Result::success($user, 'Found profile Successfully', 200);
+        
+        return Result::success($user->role->name, 'Found profile Successfully', 200);
     }
 }
