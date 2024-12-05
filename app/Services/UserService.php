@@ -6,6 +6,8 @@ use App\Contracts\UserRepositoryInterface;
 use App\Interfaces\Services\UserServiceInterface;
 use App\Shared\Handler\Result;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Validator;
 
 class UserService implements UserServiceInterface
 {
@@ -27,10 +29,27 @@ class UserService implements UserServiceInterface
     public function registerUser(array $data)
     {
         
-        
+        $validator = Validator::make($data, [
+            'username' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'phone' => 'nullable|string',
+            'address' => 'nullable|string',
+            'role_id' => 'integer',
+        ]);
+
+        if ($validator->fails()) {
+            return Result::error('Validation failed', 422, $validator->errors());
+        }
+
         $data['password'] = Hash::make($data['password']);
         $data['role_id'] = $data['role_id'] ?? 3;
-        return $this->userRepository->createUser($data);
+
+        $user = $this->userRepository->createUser($data);
+
+        return Result::success($user, 'User registered successfully', 200);
     }
 
     public function login(array $data)
@@ -44,4 +63,51 @@ class UserService implements UserServiceInterface
 
         return Result::successwithtoken($user, $token, 'Logged in successfully', 200);
     }
+
+    public function forgotPassword(array $data)
+    {
+        $validator = Validator::make($data, [
+            'email' => 'required|email',
+        ]);
+
+        if ($validator->fails()) {
+            return Result::error('Validation failed', 422, $validator->errors());
+        }
+
+        $status = Password::sendResetLink($data);
+
+        return $status === Password::RESET_LINK_SENT
+            ? Result::success([], __($status))
+            : Result::error(__($status), 400);
+    }
+
+    public function resetPassword(array $data)
+    {
+        $validator = Validator::make($data, [
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:6|confirmed',
+        ]);
+
+        if ($validator->fails()) {
+            return Result::error('Validation failed', 422, $validator->errors());
+        }
+
+        $status = Password::reset(
+            $data,
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password)
+                ])->save();
+
+                $user->tokens()->delete();
+                $user->createToken('auth_token')->plainTextToken;
+            }
+        );
+
+        return $status === Password::PASSWORD_RESET
+            ? Result::success([], __($status))
+            : Result::error(__($status), 400);
+    }
+
 }

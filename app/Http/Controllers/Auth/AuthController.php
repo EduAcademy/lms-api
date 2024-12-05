@@ -7,6 +7,7 @@ use App\Http\Requests\SignUpRequest;
 use App\Services\UserService;
 use App\Shared\Handler\Result;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -19,11 +20,10 @@ class AuthController extends Controller
 
     public function register(SignUpRequest $request)
     {
-        // Validation handled by SignUpRequest
-
-        $user = $this->userservice->registerUser($request->validated());
         
-        return Result::success($user, 'User registered successfully');
+
+        $response = $this->userservice->registerUser($request->all());
+        return $response;
     }
 
     public function login(Request $request)
@@ -42,6 +42,18 @@ class AuthController extends Controller
     {
         $user = $request->user();
         
-        return Result::success($user->role->name, 'Found profile Successfully', 200);
+        return Result::success($user, 'Found profile Successfully', 200);
+    }
+
+    public function forgotPassword(Request $request)
+    {
+        $response = $this->userservice->forgotPassword($request->all());
+        return $response;
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $response = $this->userservice->resetPassword($request->all());
+        return $response;
     }
 }
