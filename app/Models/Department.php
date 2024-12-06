@@ -8,4 +8,24 @@ class Department extends Model
 {
     use HasFactory;
     protected $guarded = [];
+    
+    protected $table = 'departments';
+    protected $fillable = [
+        'name', 'description',
+    ];
+
+    public function students()
+    {
+        return $this->hasMany(Student::class);
+    }
+
+    public function studyplans()
+    {
+        return $this->hasMany(StudyPlan::class);
+    }
+
+    public function courses()
+    {
+        return $this->hasMany(Course::class);
+    }
 }

@@ -22,7 +22,7 @@ class User extends Authenticatable
 
     protected $table = 'users'; 
     protected $fillable = [
-        'username', 'email', 'password', 'first_name', 'last_name', 'phone', 'address', 'role_id', 'status', 'gender',
+        'username', 'email', 'password', 'first_name', 'last_name', 'phone', 'address', 'role_id', 'status', 'gender', 'admin_id', 'student_id', 'instructor_id',
     ];
 
     /**
@@ -51,6 +51,21 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class);
+    }
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
+    }
+
+    public function instructor()
+    {
+        return $this->belongsTo(Instructor::class);
     }
 
     public function getJWTIdentifier()
