@@ -38,8 +38,8 @@ class Student extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function studentCourseInstructors()
+    public function studentCourseInstructorsGroups()
     {
-        return $this->hasMany(StudentCourseInstructor::class);
+        return $this->hasMany(StudentCourseInstructorGroup::class);
     }
 }

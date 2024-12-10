@@ -29,8 +29,8 @@ class Course extends Model
         return $this->hasMany(CourseMaterial::class);
     }
 
-    public function studentCourseInstructors()
+    public function studentCourseInstructorsGroups()
     {
-        return $this->hasMany(StudentCourseInstructor::class);
+        return $this->hasMany(StudentCourseInstructorGroup::class);
     }
 }

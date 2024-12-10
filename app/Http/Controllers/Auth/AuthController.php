@@ -7,7 +7,6 @@ use App\Http\Requests\SignUpRequest;
 use App\Services\UserService;
 use App\Shared\Handler\Result;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {

@@ -61,7 +61,7 @@ class UserService implements UserServiceInterface
         $user = auth()->user();
         $token = $user->createToken("auth_token")->plainTextToken;
 
-        return Result::successwithtoken($user, $token, 'Logged in successfully', 200);
+        return Result::success_with_token($user, $token, 'Logged in successfully', 200);
     }
 
     public function forgotPassword(array $data)

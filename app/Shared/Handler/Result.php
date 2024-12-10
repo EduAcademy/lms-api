@@ -17,7 +17,7 @@ class Result
         ], $status);
     }
 
-    public static function successwithtoken($data, $token, $message = 'Success', $status = 200){
+    public static function success_with_token($data, $token, $message = 'Success', $status = 200){
         
         return response()->json([
             'status' => true,

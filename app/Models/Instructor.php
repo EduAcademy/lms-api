@@ -39,8 +39,13 @@ class Instructor extends Model
         return $this->hasMany(AssignmentStatus::class);
     }
 
-    public function studentCourseInstructors()
+    public function studentCourseInstructorsGroups()
     {
-        return $this->hasMany(StudentCourseInstructor::class);
+        return $this->hasMany(StudentCourseInstructorGroup::class);
+    }
+
+    public function lab_groups()
+    {
+        return $this->hasMany(LabGroups::class);
     }
 }
