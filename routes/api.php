@@ -4,6 +4,7 @@ use App\Http\Controllers\Department\DepartmentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\StudentController;
 
 
 Route::get('/user', function (Request $request) {
@@ -21,7 +22,8 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 
-
+Route::post('/upload-students', [StudentController::class, 'uploadStudents']);
+Route::post('/upload-depts', [DepartmentController::class, 'createDepartment']);
 
 Route::prefix('v1')->middleware(['auth:sanctum'])->group(function () {
     // Admin-only routes

@@ -11,7 +11,7 @@ class Department extends Model
     
     protected $table = 'departments';
     protected $fillable = [
-        'name', 'description',
+        'name', 'shortName', 'description',
     ];
 
     public function students()
