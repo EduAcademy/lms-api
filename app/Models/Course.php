@@ -11,7 +11,12 @@ class Course extends Model
     use HasFactory;
     protected $table = 'courses';
     protected $fillable = [
-        'name', 'description', 'course_code', 'course_hours', 'type', 'department_id',
+        'name',
+        'description',
+        'course_code',
+        'course_hours',
+        'type',
+        'department_id',
     ];
 
     public function department()
@@ -19,9 +24,8 @@ class Course extends Model
         return $this->belongsTo(Department::class);
     }
 
-    public function coursematerials()
+    public function materials()
     {
         return $this->hasMany(CourseMaterial::class);
     }
-
 }

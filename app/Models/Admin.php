@@ -12,10 +12,15 @@ class Admin extends Model
     protected $table = 'admins';
     protected $fillable = [
         'uuid',
+        'user_id',
     ];
 
-    public function users()
+    // public function users()
+    // {
+    //     return $this->hasMany(User::class);
+    // }
+    public function user()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsTo(User::class);
     }
 }

@@ -12,7 +12,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable,HasApiTokens;
+    use HasFactory, Notifiable, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -20,9 +20,21 @@ class User extends Authenticatable
      * @var array<int, string>
      */
 
-    protected $table = 'users'; 
+    protected $table = 'users';
     protected $fillable = [
-        'username', 'email', 'password', 'first_name', 'last_name', 'phone', 'address', 'role_id', 'status', 'gender', 'admin_id', 'student_id', 'instructor_id',
+        'username',
+        'email',
+        'password',
+        'first_name',
+        'last_name',
+        'phone',
+        'address',
+        'role_id',
+        'status',
+        'gender',
+        'admin_id',
+        'student_id',
+        'instructor_id',
     ];
 
     /**
@@ -58,14 +70,14 @@ class User extends Authenticatable
         return $this->belongsTo(Admin::class);
     }
 
-    public function student()
-    {
-        return $this->belongsTo(Student::class);
-    }
-
     public function instructor()
     {
-        return $this->belongsTo(Instructor::class);
+        return $this->hasOne(Instructor::class);
+    }
+
+    public function student()
+    {
+        return $this->hasOne(Student::class);
     }
 
     public function getJWTIdentifier()

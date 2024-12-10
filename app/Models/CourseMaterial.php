@@ -4,14 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 class CourseMaterial extends Model
 {
     //
     use HasFactory;
 
-    protected $table = 'coursematerials';
+    protected $table = 'course_materials';
     protected $fillable = [
-        'name', 'type', 'url', 'course_id', 'instructor_id',
+        'name',
+        'type',
+        'url',
+        'course_id',
+        'instructor_id',
     ];
 
     public function course()
@@ -23,5 +28,4 @@ class CourseMaterial extends Model
     {
         return $this->belongsTo(Instructor::class);
     }
-    
 }

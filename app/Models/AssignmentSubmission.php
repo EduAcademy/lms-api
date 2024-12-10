@@ -10,12 +10,14 @@ class AssignmentSubmission extends Model
     //
     use HasFactory;
 
-    protected $table = 'assignmentsubmissions';
+    protected $table = 'assignment_submissions';
     protected $fillable = [
-        'data', 'file_url', 'assignmentstatus_id',
+        'data',
+        'file_url',
+        'assignment_status_id',
     ];
 
-    public function assignmentstatus()
+    public function assignment_status()
     {
         return $this->belongsTo(AssignmentStatus::class);
     }
