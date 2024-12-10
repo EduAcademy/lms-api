@@ -38,4 +38,9 @@ class Instructor extends Model
     {
         return $this->hasMany(AssignmentStatus::class);
     }
+
+    public function studentCourseInstructors()
+    {
+        return $this->hasMany(StudentCourseInstructor::class);
+    }
 }
