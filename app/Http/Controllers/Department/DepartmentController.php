@@ -29,34 +29,34 @@ class DepartmentController extends Controller
         //     'description' => 'required|string|min:3|max:255',
         // ]);
         // $department = Department::create($data);
-        // return response()->json([
-        //     'message'=> 'added successfully',
-        //     'status'=>201
-        // ]); // Return the created department
-        try {
-            if (!$request->hasFile('file')) {
-                return response()->json(['error' => 'No file provided.'], 400);
-            }
+        return response()->json([
+            'message'=> 'added successfully',
+            'status'=>201
+        ]); // Return the created department
+        // try {
+        //     if (!$request->hasFile('file')) {
+        //         return response()->json(['error' => 'No file provided.'], 400);
+        //     }
     
-            $file = $request->file('file');
-            if ($file->getClientOriginalExtension() !== 'xlsx') {
-                return response()->json(['error' => 'Invalid file type. Only .xlsx files are allowed.'], 400);
-            }
+        //     $file = $request->file('file');
+        //     if ($file->getClientOriginalExtension() !== 'xlsx') {
+        //         return response()->json(['error' => 'Invalid file type. Only .xlsx files are allowed.'], 400);
+        //     }
     
-            // Import the file
-            Excel::import(new DepartmentImport, $file);
+        //     // Import the file
+        //     Excel::import(new DepartmentImport, $file);
     
-            return response()->json(['success' => 'File imported successfully.']);
-        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-            return response()->json([
-                'error' => 'Validation error in Excel file.',
-                'messages' => $e->failures(),
-            ], 422);
-        } catch (\Exception $e) {
-            // Log the error
-            Log::error('File upload error: ' . $e->getMessage());
+        //     return response()->json(['success' => 'File imported successfully.']);
+        // } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+        //     return response()->json([
+        //         'error' => 'Validation error in Excel file.',
+        //         'messages' => $e->failures(),
+        //     ], 422);
+        // } catch (\Exception $e) {
+        //     // Log the error
+        //     Log::error('File upload error: ' . $e->getMessage());
     
-            return response()->json(['error' => 'An error occurred while importing the file.', 'details' => $e->getMessage()], 500);
-        }
+        //     return response()->json(['error' => 'An error occurred while importing the file.', 'details' => $e->getMessage()], 500);
+        // }
     }
 }
