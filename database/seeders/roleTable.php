@@ -14,9 +14,9 @@ class RoleTable extends Seeder
     public function run(): void
     {
         Role::insert([
-            ['name' => RoleEnum::Admin],
-            ['name' => RoleEnum::Instructor],
-            ['name' => RoleEnum::Student],
+            ['name' => RoleEnum::Admin, 'description' => 'Administrator'],
+            ['name' => RoleEnum::Instructor, 'description' => 'Instructor'],
+            ['name' => RoleEnum::Student, 'description' => 'Student'],
         ]);
     }
 }

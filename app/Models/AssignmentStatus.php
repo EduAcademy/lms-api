@@ -10,9 +10,11 @@ class AssignmentStatus extends Model
     //
     use HasFactory;
 
-    protected $table = 'assignmentstatus';
+    protected $table = 'assignment_status';
     protected $fillable = [
-        'name', 'description', 'instructor_id',
+        'name',
+        'description',
+        'instructor_id',
     ];
 
     //assignment_id
@@ -22,12 +24,12 @@ class AssignmentStatus extends Model
         return $this->belongsTo(Instructor::class);
     }
 
-    // public function assignment()
-    // {
-    //     return $this->belongsTo(Assignment::class);
-    // }
+    public function assignment()
+    {
+        return $this->belongsTo(Assignment::class);
+    }
 
-    public function assignmentsubmissions()
+    public function assignment_submissions()
     {
         return $this->hasMany(AssignmentSubmission::class);
     }

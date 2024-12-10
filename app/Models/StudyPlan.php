@@ -10,14 +10,24 @@ class StudyPlan extends Model
     //
     use HasFactory;
 
-    protected $table = 'studyplans';
+    protected $table = 'study_plans';
     protected $fillable = [
-        'studyplan_no', 'level', 'semester', 'issued_at', 'department_id',
+        'study_plan_no',
+        'level',
+        'semester',
+        'issued_at',
+        'department_id',
+        'course_id',
     ];
 
     public function students()
     {
         return $this->hasMany(Student::class);
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
     }
 
     public function department()

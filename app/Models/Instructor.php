@@ -11,21 +11,31 @@ class Instructor extends Model
     use HasFactory;
     protected $table = 'instructors';
     protected $fillable = [
-        'uuid', 'professional_title', 'about_me', 'social_links',
+        'uuid',
+        'professional_title',
+        'about_me',
+        'social_links',
+        'user_id',
     ];
 
-    public function coursematerials()
+    public function course_materials()
     {
         return $this->hasMany(CourseMaterial::class);
     }
 
-    public function users()
+    public function user()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function assignments()
     {
         return $this->hasMany(Assignment::class);
+    }
+
+
+    public function assignment_statuses()
+    {
+        return $this->hasMany(AssignmentStatus::class);
     }
 }

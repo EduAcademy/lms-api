@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 
 return new class extends Migration
 {
@@ -12,33 +11,25 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('students', function (Blueprint $table) {
+        Schema::create('study_plans', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->default(Str::uuid()->toString());
-
+            $table->integer('study_plan_no')->nullable();
+            $table->integer('level')->default(1);
+            $table->integer('semester')->default(1);
+            $table->date('issued_at')->nullable(true);
             $table->foreignId('department_id')
                 ->unsignedBigInteger()
                 ->references('id')
                 ->on('departments')
-                ->nullable(false)
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->foreignId('course_id')
+                ->unsignedBigInteger()
+                ->references('id')
+                ->on('courses')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
-            $table->foreignId('study_plan_id')
-                ->unsignedBigInteger()
-                ->references('id')
-                ->on('study_plans')
-                ->nullable(false)
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-
-            $table->foreignId('user_id')
-                ->unsignedBigInteger()
-                ->references('id')
-                ->on('users')
-                ->nullable(false)
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -48,6 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('students');
+        Schema::dropIfExists('study_plans');
     }
 };

@@ -12,7 +12,10 @@ class Assignment extends Model
 
     protected $table = 'assignments';
     protected $fillable = [
-        'title', 'instructions', 'due_date', 'instructor_id',
+        'title',
+        'instructions',
+        'due_date',
+        'instructor_id',
     ];
 
     public function instructor()
@@ -20,5 +23,9 @@ class Assignment extends Model
         return $this->belongsTo(Instructor::class);
     }
 
-    
+
+    public function status()
+    {
+        return $this->hasOne(AssignmentStatus::class);
+    }
 }

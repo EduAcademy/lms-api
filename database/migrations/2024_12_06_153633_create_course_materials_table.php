@@ -11,11 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('assignments', function (Blueprint $table) {
+        Schema::create('course_materials', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->nullable();
-            $table->text('instructions')->nullable();
-            $table->date('due_date');
+            $table->string('name')->nullable();
+            $table->enum('type', ['theoretical', 'practical'])->default('theoretical');
+            $table->string('url');
+
+            $table->foreignId('course_id')
+                ->unsignedBigInteger()
+                ->references('id')
+                ->on('courses')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
 
             $table->foreignId('instructor_id')
                 ->unsignedBigInteger()
@@ -33,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('assignments');
+        Schema::dropIfExists('course_materials');
     }
 };

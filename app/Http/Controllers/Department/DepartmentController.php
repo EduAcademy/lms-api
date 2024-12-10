@@ -18,14 +18,15 @@ class DepartmentController extends Controller
 
         return response()->json(
             [
-                'messgae'=> 'fetch all departs successfully'
-            ]);
+                'messgae' => 'fetch all departs successfully'
+            ]
+        );
     }
     public function createDepartment(Request $request)
     {
         // $data = $request->validate([
         //     'name' => 'required|string|min:3|max:255',
-        //     'shortName' => 'required','max:5',
+        //     'short_name' => 'required','max:5',
         //     'description' => 'required|string|min:3|max:255',
         // ]);
         // $department = Department::create($data);

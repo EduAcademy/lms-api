@@ -4,6 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+
 return new class extends Migration
 {
     /**
@@ -17,6 +18,14 @@ return new class extends Migration
             $table->string('professional_title');
             $table->text('about_me');
             $table->string('social_links');
+
+            $table->foreignId('user_id')
+                ->unsignedBigInteger()
+                ->references('id')
+                ->on('users')
+                ->nullable(false)
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->timestamps();
         });
     }
