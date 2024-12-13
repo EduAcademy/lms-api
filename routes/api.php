@@ -12,8 +12,8 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-Route::post('/register', [ AuthController::class, 'register']);
-Route::post("/login", [ AuthController::class,"login"]);
+Route::post('/register', [AuthController::class, 'register']);
+Route::post("/login", [AuthController::class, "login"]);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', [AuthController::class, 'profile']);
@@ -27,8 +27,9 @@ Route::post('/upload-depts', [DepartmentController::class, 'createDepartment']);
 
 Route::prefix('v1')->middleware(['auth:sanctum'])->group(function () {
     // Admin-only routes
-    Route::middleware(['role:admin'])->group(function () { 
+    Route::middleware(['role:admin'])->group(function () {
         Route::get('/getDepartment', [DepartmentController::class, 'index']);
+        require __DIR__ . '/Instructors.php';
     });
 
     // Student-only routes

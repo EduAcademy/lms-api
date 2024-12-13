@@ -18,17 +18,19 @@ class UserService implements UserServiceInterface
         $this->userRepository = $userRepository;
     }
 
-    public function getUserById($id) {
+    public function getUserById($id)
+    {
         return $this->userRepository->findById($id);
     }
 
-    public function getUserByEmail($email) {
+    public function getUserByEmail($email)
+    {
         return $this->userRepository->findByEmail($email);
     }
 
     public function registerUser(array $data)
     {
-        
+
         $validator = Validator::make($data, [
             'username' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
@@ -109,5 +111,4 @@ class UserService implements UserServiceInterface
             ? Result::success([], __($status))
             : Result::error(__($status), 400);
     }
-
 }
