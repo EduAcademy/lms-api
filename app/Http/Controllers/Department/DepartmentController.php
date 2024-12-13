@@ -6,9 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Department;
 use Illuminate\Http\Request;
 use App\Imports\DepartmentImport;
+use App\Models\UploadedFiles;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class DepartmentController extends Controller
 {
@@ -22,42 +23,50 @@ class DepartmentController extends Controller
             ]
         );
     }
+
     public function createDepartment(Request $request)
     {
-        // $data = $request->validate([
-        //     'name' => 'required|string|min:3|max:255',
-        //     'short_name' => 'required','max:5',
-        //     'description' => 'required|string|min:3|max:255',
-        // ]);
-        // $department = Department::create($data);
-        return response()->json([
-            'message'=> 'added successfully',
-            'status'=>201
-        ]); // Return the created department
-        // try {
-        //     if (!$request->hasFile('file')) {
-        //         return response()->json(['error' => 'No file provided.'], 400);
-        //     }
-    
-        //     $file = $request->file('file');
-        //     if ($file->getClientOriginalExtension() !== 'xlsx') {
-        //         return response()->json(['error' => 'Invalid file type. Only .xlsx files are allowed.'], 400);
-        //     }
-    
-        //     // Import the file
-        //     Excel::import(new DepartmentImport, $file);
-    
-        //     return response()->json(['success' => 'File imported successfully.']);
-        // } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-        //     return response()->json([
-        //         'error' => 'Validation error in Excel file.',
-        //         'messages' => $e->failures(),
-        //     ], 422);
-        // } catch (\Exception $e) {
-        //     // Log the error
-        //     Log::error('File upload error: ' . $e->getMessage());
-    
-        //     return response()->json(['error' => 'An error occurred while importing the file.', 'details' => $e->getMessage()], 500);
-        // }
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls',
+        ]);
+
+        $file = $request->file('file');
+        $filePath = $file->getRealPath();
+
+        // Generate a hash for the file
+        $fileHash = hash_file('sha256', $filePath);
+        $fileSize = $file->getSize();
+        $lastModified = Carbon::createFromTimestamp($file->getMTime())->toDateTimeString();
+        $fileName = $file->getClientOriginalName();
+
+        // Check if the file has been uploaded before
+        $existingFile = UploadedFiles::where('file_hash', $fileHash)
+            ->orWhere(function ($query) use ($fileName, $fileSize, $lastModified) {
+                $query->where('file_name', $fileName)
+                    ->where('file_size', $fileSize)
+                    ->where('last_modified', $lastModified);
+            })
+            ->first();
+
+        if ($existingFile) {
+            return response()->json(['error' => 'This file has already been uploaded and processed.'], 400);
+        }
+
+        // Store file metadata
+        UploadedFiles::create([
+            'file_name' => $fileName,
+            'file_hash' => $fileHash,
+            'file_size' => $fileSize,
+            'last_modified' => $lastModified,
+        ]);
+
+        // Import departments
+        try {
+            Excel::import(new DepartmentImport, $file);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error processing file: ' . $e->getMessage()], 500);
+        }
+
+        return response()->json(['message' => 'File uploaded and processed successfully.']);
     }
 }

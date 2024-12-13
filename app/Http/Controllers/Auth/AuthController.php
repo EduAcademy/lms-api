@@ -8,6 +8,8 @@ use App\Services\UserService;
 use App\Shared\Handler\Result;
 use Illuminate\Http\Request;
 
+use App\Shared\Constants\StatusResponse;
+
 class AuthController extends Controller
 {
     private $userservice;
@@ -41,7 +43,7 @@ class AuthController extends Controller
     {
         $user = $request->user();
         
-        return Result::success($user, 'Found profile Successfully', 200);
+        return Result::success($user, 'Found profile Successfully', StatusResponse::HTTP_OK);
     }
 
     public function forgotPassword(Request $request)
