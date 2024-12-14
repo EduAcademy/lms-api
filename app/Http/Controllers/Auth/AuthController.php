@@ -12,49 +12,47 @@ use App\Shared\Constants\StatusResponse;
 
 class AuthController extends Controller
 {
-    private $userservice;
+    private $user_service;
 
     public function __construct(UserService $userService)
     {
-        $this->userservice = $userService;
+        $this->user_service = $userService;
     }
 
     public function register(SignUpRequest $request)
     {
-        
-
-        $response = $this->userservice->registerUser($request->all());
+        $response = $this->user_service->registerUser($request->all());
         return $response;
     }
 
     public function login(Request $request)
     {
         $data = $request->validate([
-            "email" => "required|email|exists:users,email",
+            "email" => "required|email",
             "password" => "required|string"
         ]);
 
-        $response = $this->userservice->login($data);
+        $response = $this->user_service->login($data);
         return $response;
     }
 
-    
+
     public function profile(Request $request)
     {
         $user = $request->user();
-        
+
         return Result::success($user, 'Found profile Successfully', StatusResponse::HTTP_OK);
     }
 
     public function forgotPassword(Request $request)
     {
-        $response = $this->userservice->forgotPassword($request->all());
+        $response = $this->user_service->forgotPassword($request->all());
         return $response;
     }
 
     public function resetPassword(Request $request)
     {
-        $response = $this->userservice->resetPassword($request->all());
+        $response = $this->user_service->resetPassword($request->all());
         return $response;
     }
 }

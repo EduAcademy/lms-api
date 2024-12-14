@@ -56,6 +56,11 @@ class UserService implements UserServiceInterface
 
     public function login(array $data)
     {
+
+        // if (!$user) {
+        //     return Result::error('Username or password is invalid', 401);
+        // }
+
         if (!auth()->attempt($data)) {
             return Result::error('Invalid credentials', 401);
         }
