@@ -18,6 +18,10 @@ class Instructor extends Model
         'user_id',
     ];
 
+    protected $hidden = [
+        'updated_at'
+    ];
+
     public function course_materials()
     {
         return $this->hasMany(CourseMaterial::class);

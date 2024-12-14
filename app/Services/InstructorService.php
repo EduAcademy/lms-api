@@ -15,7 +15,11 @@ class InstructorService implements InstructorServiceInterface
         $this->InstructorRepository = $InstructorRepository;
     }
 
-    public function getAll() {}
+    public function getAll()
+    {
+        $instructors = Instructor::with('user')->get();
+        return $instructors;
+    }
     public function findById($id) {}
     public function getInstructorById($id) {}
     public function createInstructor(array $data) {}
