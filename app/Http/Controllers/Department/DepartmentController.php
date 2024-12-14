@@ -2,26 +2,42 @@
 
 namespace App\Http\Controllers\Department;
 
+use App\Contracts\GenericRepositoryInterface;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use Illuminate\Http\Request;
 use App\Imports\DepartmentImport;
 use App\Models\UploadedFiles;
+use App\Repositories\GenericRepository;
+use App\Shared\Constants\StatusResponse;
+use App\Shared\Handler\Result;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 
 class DepartmentController extends Controller
 {
+
+    protected $repo;
+
+    public function __construct()
+    {
+        $this->repo = new GenericRepository(new Department);
+    }
+
     public function index()
     {
         // return Department::all();
 
-        return response()->json(
-            [
-                'messgae' => 'fetch all departs successfully'
-            ]
-        );
+        $result = $this->repo->getAll();
+
+        // return response()->json(
+        //     [
+        //         'messgae' => 'fetch all departs successfully'
+        //     ]
+        // );
+
+        return Result::success($result, 'Get all Departments Successfully', StatusResponse::HTTP_OK);
     }
 
     public function createDepartment(Request $request)
