@@ -6,14 +6,14 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 
-class RefreshDatabase extends Command
+class refreshdb extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:refresh-database';
+    protected $signature = 'app:refreshdb';
 
     /**
      * The console command description.
@@ -27,6 +27,7 @@ class RefreshDatabase extends Command
      */
     public function handle()
     {
+        //
         echo 'Refreshing database... ';
         try {
             // Drop tables or database

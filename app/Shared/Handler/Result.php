@@ -11,7 +11,7 @@ class Result
     public static function success($data, $message = 'Success', $status = 200)
     {
         return response()->json([
-            'status' => true,
+            'status' => $status,
             'message' => $message,
             'data' => $data,
         ], $status);

@@ -9,6 +9,7 @@ use App\Shared\Handler\Result;
 use Illuminate\Http\Request;
 
 use App\Shared\Constants\StatusResponse;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -30,11 +31,12 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $data = $request->validate([
-            "email" => "required|email|exists:users,email",
+            "email" => "required|email",
             "password" => "required|string"
         ]);
 
         $response = $this->userservice->login($data);
+        
         return $response;
     }
 
