@@ -4,6 +4,7 @@ use App\Http\Controllers\Department\DepartmentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Instructor\InstructorController;
 use App\Http\Controllers\StudentController;
 
 
@@ -29,7 +30,15 @@ Route::prefix('v1')->middleware(['auth:sanctum'])->group(function () {
     // Admin-only routes
     Route::middleware(['role:admin'])->group(function () {
         Route::get('/getDepartment', [DepartmentController::class, 'index']);
-        require __DIR__ . '/Instructors.php';
+
+        // Instructor routes
+        Route::prefix('instructors')->group(function () {
+            Route::get('/', [InstructorController::class, 'index']);
+            Route::get('/{id}', [InstructorController::class, 'show']);
+            Route::post('/', [InstructorController::class, 'store']);
+            Route::put('/{id}', [InstructorController::class, 'update']);
+            Route::delete('/{id}', [InstructorController::class, 'destroy']);
+        });
     });
 
     // Student-only routes
