@@ -17,6 +17,11 @@ class Department extends Model
         'description',
     ];
 
+    // public function __construct(Department $department)
+    // {
+    //     $this->department = $department;
+    // }
+
     public function courses()
     {
         return $this->hasMany(Course::class);

@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Department;
 use Illuminate\Http\Request;
 use App\Imports\DepartmentImport;
+use App\Interfaces\Services\DepartmentServiceInterface;
+use App\Services\DepartmentService;
 use App\Models\UploadedFiles;
 use App\Repositories\GenericRepository;
 use App\Shared\Constants\StatusResponse;
@@ -18,26 +20,28 @@ use Carbon\Carbon;
 class DepartmentController extends Controller
 {
 
-    protected $repo;
+    protected $departmentService;
 
-    public function __construct()
+    public function __construct(DepartmentServiceInterface $departmentService)
     {
-        $this->repo = new GenericRepository(new Department);
+        $this->departmentService = $departmentService;
     }
 
     public function index()
     {
         // return Department::all();
 
-        $result = $this->repo->getAll();
+        $result = $this->departmentService->getAllDepartments();
 
+        // return 'hwllo';
         // return response()->json(
         //     [
         //         'messgae' => 'fetch all departs successfully'
         //     ]
         // );
 
-        return Result::success($result, 'Get all Departments Successfully', StatusResponse::HTTP_OK);
+        return $result;
+        
     }
 
     public function createDepartment(Request $request)
@@ -85,4 +89,24 @@ class DepartmentController extends Controller
 
         return response()->json(['message' => 'File uploaded and processed successfully.']);
     }
+
+    public function show($id)
+    {
+        $result = $this->departmentService->getDepartmentById($id);
+
+        return $result;
+    }
+
+    public function store(Request $request)
+    {
+        $result = $this->departmentService->createDepartment($request->all());
+        return $result;
+    }
+
+    public function update($id, Request $request)
+    {
+        $result = $this->departmentService->updateDepartment($id, $request->all());
+        return $result;
+    }
+
 }

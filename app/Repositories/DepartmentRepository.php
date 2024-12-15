@@ -6,6 +6,7 @@ use App\Models\Department;
 use App\Contracts\DepartmentRepositoryInterface;
 
 
+
 class DepartmentRepository implements DepartmentRepositoryInterface{
     
     public function findById($id)

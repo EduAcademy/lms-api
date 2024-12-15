@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
 // Protected routes
 // Commented out auth:sanctum middleware for testing purposes
 // Route::middleware('auth:sanctum')->group(function () {
@@ -30,6 +31,7 @@ Route::post('/login', [AuthController::class, 'login']);
         // Route::middleware(['role:admin'])->group(function () {
             // Department routes
             Route::get('/departments', [DepartmentController::class, 'index']);
+            Route::get('/departments/{id}', [DepartmentController::class, 'show']);
             Route::post('/departments', [DepartmentController::class, 'store']);
             Route::put('/departments/{id}', [DepartmentController::class, 'update']);
             Route::delete('/departments/{id}', [DepartmentController::class, 'destroy']);

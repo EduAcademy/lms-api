@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
-use App\Contracts\DepartmentRepositoryInterface;
 use App\Contracts\GenericRepositoryInterface;
 use App\Repositories\DepartmentRepository;
+use App\Contracts\DepartmentRepositoryInterface;
 use App\Contracts\InstructorRepositoryInterface;
 use App\Repositories\InstructorRepository;
 use App\Contracts\UserRepositoryInterface;
@@ -21,9 +21,9 @@ class RepositoryServiceProvider extends ServiceProvider
     {
         //
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
-        $this->app->bind(DepartmentRepositoryInterface::class,DepartmentRepository::class);
+        $this->app->bind(DepartmentRepositoryInterface::class, DepartmentRepository::class);
         $this->app->bind(InstructorRepositoryInterface::class, InstructorRepository::class);
-        $this->app->bind(GenericRepositoryInterface::class,GenericRepository::class);
+        $this->app->bind(GenericRepositoryInterface::class, GenericRepository::class);
     }
 
     /**

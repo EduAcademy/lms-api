@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Interfaces\Services\DepartmentService;
+use App\Services\DepartmentService;
 use App\Interfaces\Services\DepartmentServiceInterface;
 use App\Interfaces\Services\UserServiceInterface;
 use App\Services\UserService;
