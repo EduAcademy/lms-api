@@ -16,8 +16,11 @@ class AppServiceProvider extends ServiceProvider
     {
         // Bind the GenericRepositoryInterface to GenericRepository for the Student model
         $this->app->bind(GenericRepositoryInterface::class, function ($app) {
-            return new GenericRepository(new Student());
+            $repository = new GenericRepository(new Student());
+            dd($repository); // This should dump the repository instance
+            return $repository;
         });
+
     }
 
     /**
@@ -28,3 +31,4 @@ class AppServiceProvider extends ServiceProvider
         //
     }
 }
+

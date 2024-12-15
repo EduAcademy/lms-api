@@ -12,8 +12,10 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/departments', [DepartmentController::class, 'index']);
 Route::post('/upload-depts', [DepartmentController::class, 'createDepartment']);
+
 // Protected routes
-Route::middleware('auth:sanctum')->group(function () {
+// Commented out auth:sanctum middleware for testing purposes
+// Route::middleware('auth:sanctum')->group(function () {
     // User profile and password routes
     Route::get('/profile', [AuthController::class, 'profile']);
     Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
@@ -21,13 +23,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Students - Import Students from Excel
     Route::post('/upload-students', [StudentController::class, 'uploadStudents']);
-    // Route::post('/upload-depts', [DepartmentController::class, 'createDepartment']);
 
     // Versioned routes
     Route::prefix('v1')->group(function () {
         // Admin-only routes
-        
-        Route::middleware(['role:admin'])->group(function () {
+
+        // Commented out role:admin middleware for testing purposes
+        // Route::middleware(['role:admin'])->group(function () {
             // Department routes
             Route::get('/departments', [DepartmentController::class, 'index']);
             // Route::post('/departments', [DepartmentController::class, 'store']);
@@ -51,11 +53,12 @@ Route::middleware('auth:sanctum')->group(function () {
                 Route::put('/{id}', [StudentController::class, 'update']);
                 Route::delete('/{id}', [StudentController::class, 'destroy']);
             });
-        });
+        // });
 
         // Student-specific routes
-        Route::middleware(['role:student'])->group(function () {
+        // Commented out role:student middleware for testing purposes
+        // Route::middleware(['role:student'])->group(function () {
             Route::get('/study-plans', [StudentController::class, 'getStudyPlans']);
-        });
+        // });
     });
-});
+// });
