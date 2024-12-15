@@ -10,8 +10,6 @@ use Illuminate\Support\Facades\Route;
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::get('/departments', [DepartmentController::class, 'index']);
-Route::post('/upload-depts', [DepartmentController::class, 'createDepartment']);
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
     // User profile and password routes
@@ -21,7 +19,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Students - Import Students from Excel
     Route::post('/upload-students', [StudentController::class, 'uploadStudents']);
-    // Route::post('/upload-depts', [DepartmentController::class, 'createDepartment']);
+    Route::post('/upload-depts', [DepartmentController::class, 'createDepartment']);
 
     // Versioned routes
     Route::prefix('v1')->group(function () {
@@ -30,7 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::middleware(['role:admin'])->group(function () {
             // Department routes
             Route::get('/departments', [DepartmentController::class, 'index']);
-            // Route::post('/departments', [DepartmentController::class, 'store']);
+            Route::post('/departments', [DepartmentController::class, 'store']);
             Route::put('/departments/{id}', [DepartmentController::class, 'update']);
             Route::delete('/departments/{id}', [DepartmentController::class, 'destroy']);
 
