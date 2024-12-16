@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Course\CourseController;
 use App\Http\Controllers\Department\DepartmentController;
 use App\Http\Controllers\Instructor\InstructorController;
 use App\Http\Controllers\StudentController;
@@ -33,7 +34,7 @@ Route::post('/login', [AuthController::class, 'login']);
             Route::get('/departments/{id}', [DepartmentController::class, 'show']);
             Route::post('/departments', [DepartmentController::class, 'store']);
             Route::put('/departments/{id}', [DepartmentController::class, 'update']);
-            Route::delete('/departments/{id}', [DepartmentController::class, 'destroy']);
+            Route::delete('/departments/{id}', [DepartmentController::class, 'delete']);
 
             // Student routes
             Route::get('/students', [StudentController::class, 'index']);
@@ -49,6 +50,15 @@ Route::post('/login', [AuthController::class, 'login']);
                 Route::post('/', [InstructorController::class, 'store']);
                 Route::put('/{id}', [InstructorController::class, 'update']);
                 Route::delete('/{id}', [InstructorController::class, 'destroy']);
+            });
+
+            // Students CRUD
+            Route::prefix('students')->group(function () {
+                Route::get('/', [StudentController::class, 'index']);
+                Route::get('/{id}', [StudentController::class, 'show']);
+                Route::post('/', [StudentController::class, 'store']);
+                Route::put('/{id}', [StudentController::class, 'update']);
+                Route::delete('/{id}', [StudentController::class, 'destroy']);
             });
         // });
 

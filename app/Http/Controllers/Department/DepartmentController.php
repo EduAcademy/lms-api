@@ -109,4 +109,11 @@ class DepartmentController extends Controller
         return $result;
     }
 
+    public function delete($id)
+    {
+        $result = $this->departmentService->deleteDepartment($id);
+
+        return $result;
+    }
+
 }

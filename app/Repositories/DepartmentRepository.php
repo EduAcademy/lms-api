@@ -8,7 +8,7 @@ use App\Contracts\DepartmentRepositoryInterface;
 
 
 class DepartmentRepository implements DepartmentRepositoryInterface{
-    
+
     public function findById($id)
     {
         return Department::find($id);
@@ -28,4 +28,6 @@ class DepartmentRepository implements DepartmentRepositoryInterface{
     {
         return $department->update($data);
     }
+
+
 }

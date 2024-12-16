@@ -10,4 +10,5 @@ interface DepartmentServiceInterface {
     public function getDepartmentByShortName($shortName);
     public function createDepartment(array $data);
     public function updateDepartment($id, array $data);
+    public function deleteDepartment($id);
 }
