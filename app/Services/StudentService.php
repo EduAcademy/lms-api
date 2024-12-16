@@ -6,6 +6,7 @@ use App\Contracts\GenericRepositoryInterface;
 use App\Contracts\StudentRepositoryInterface;
 use App\Interfaces\Services\StudentServiceInterface;
 use App\Models\Student;
+use App\Repositories\GenericRepository;
 use App\Shared\Constants\StatusResponse;
 use App\Shared\Handler\Result;
 use Illuminate\Support\Facades\Validator;
@@ -16,10 +17,10 @@ class StudentService implements StudentServiceInterface
     private $genericRepository;
 
     public function __construct(
-        StudentRepositoryInterface $studentRepository
+        StudentRepositoryInterface $studentRepository,
     ) {
         $this->studentRepository = $studentRepository;
-        $this->genericRepository = new GenericRepository(new Student());
+        $this->genericRepository = new GenericRepository(new Student);
     }
 
     public function getAllStudents()
@@ -36,15 +37,22 @@ class StudentService implements StudentServiceInterface
             return Result::error('Student not found', StatusResponse::HTTP_NOT_FOUND);
         }
 
-        return Result::success($result, 'Student found Successfully by ID', StatusResponse::HTTP_OK);
+        return Result::success($result, 'Student found Successfully by Id', StatusResponse::HTTP_OK);
     }
 
     public function createStudent(array $data)
     {
+        // Additional Validation Logic
+        $existingStudent = $this->studentRepository->findByUuid($data['uuid']);
+        if ($existingStudent) {
+            return Result::error('Student with the same UUID already exists', StatusResponse::HTTP_CONFLICT);
+        }
+
         $validator = Validator::make($data, [
-            'name' => 'required|string',
-            'email' => 'required|email|unique:students,email',
+            'uuid' => 'required|string|unique:students,uuid',
             'department_id' => 'required|exists:departments,id',
+            'study_plan_id' => 'required|exists:study_plans,id',
+            'user_id' => 'required|exists:users,id',
         ]);
 
         if ($validator->fails()) {
@@ -58,9 +66,10 @@ class StudentService implements StudentServiceInterface
     public function updateStudent($id, array $data)
     {
         $validator = Validator::make($data, [
-            'name' => 'required|string',
-            'email' => 'required|email|unique:students,email,' . $id,
+            'uuid' => 'required|string|unique:students,uuid,' . $id,
             'department_id' => 'required|exists:departments,id',
+            'study_plan_id' => 'required|exists:study_plans,id',
+            'user_id' => 'required|exists:users,id',
         ]);
 
         if ($validator->fails()) {
@@ -78,8 +87,12 @@ class StudentService implements StudentServiceInterface
 
     public function getStudentsByDepartment($departmentId)
     {
-        $result = $this->studentRepository->getStudentsByDepartment($departmentId);
+        $students = $this->studentRepository->findByDepartmentId($departmentId);
 
-        return Result::success($result, 'Students found Successfully by Department', StatusResponse::HTTP_OK);
+        if ($students->isEmpty()) {
+            return Result::error('No students found for the given department', StatusResponse::HTTP_NOT_FOUND);
+        }
+
+        return Result::success($students, 'Students found Successfully by department', StatusResponse::HTTP_OK);
     }
 }

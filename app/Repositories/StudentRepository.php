@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Contracts\StudentRepositoryInterface;
 use App\Models\Student;
+use App\Contracts\StudentRepositoryInterface;
 
 class StudentRepository implements StudentRepositoryInterface
 {
@@ -12,12 +12,22 @@ class StudentRepository implements StudentRepositoryInterface
         return Student::find($id);
     }
 
-    public function findByEmail($email)
+    public function findByUuid($uuid)
     {
-        return Student::where('email', $email)->first();
+        return Student::where('uuid', $uuid)->first();
     }
 
-    public function getStudentsByDepartment($departmentId)
+    public function create(array $data)
+    {
+        return Student::create($data);
+    }
+
+    public function update(Student $student, array $data)
+    {
+        return $student->update($data);
+    }
+
+    public function findByDepartmentId($departmentId)
     {
         return Student::where('department_id', $departmentId)->get();
     }

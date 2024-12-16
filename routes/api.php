@@ -4,7 +4,6 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Department\DepartmentController;
 use App\Http\Controllers\Instructor\InstructorController;
 use App\Http\Controllers\StudentController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
@@ -19,7 +18,7 @@ Route::post('/login', [AuthController::class, 'login']);
     Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
     Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
-    // Students - Import Students from Excel
+    // Import routes
     Route::post('/upload-students', [StudentController::class, 'uploadStudents']);
     Route::post('/upload-depts', [DepartmentController::class, 'createDepartment']);
 
@@ -36,22 +35,20 @@ Route::post('/login', [AuthController::class, 'login']);
             Route::put('/departments/{id}', [DepartmentController::class, 'update']);
             Route::delete('/departments/{id}', [DepartmentController::class, 'destroy']);
 
-            // Instructors CRUD
+            // Student routes
+            Route::get('/students', [StudentController::class, 'index']);
+            Route::get('/students/{id}', [StudentController::class, 'show']);
+            Route::post('/students', [StudentController::class, 'store']);
+            Route::put('/students/{id}', [StudentController::class, 'update']);
+            Route::delete('/students/{id}', [StudentController::class, 'destroy']);
+
+            // Instructor routes
             Route::prefix('instructors')->group(function () {
                 Route::get('/', [InstructorController::class, 'index']);
                 Route::get('/{id}', [InstructorController::class, 'show']);
                 Route::post('/', [InstructorController::class, 'store']);
                 Route::put('/{id}', [InstructorController::class, 'update']);
                 Route::delete('/{id}', [InstructorController::class, 'destroy']);
-            });
-
-            // Students CRUD
-            Route::prefix('students')->group(function () {
-                Route::get('/', [StudentController::class, 'index']);
-                Route::get('/{id}', [StudentController::class, 'show']);
-                Route::post('/', [StudentController::class, 'store']);
-                Route::put('/{id}', [StudentController::class, 'update']);
-                Route::delete('/{id}', [StudentController::class, 'destroy']);
             });
         // });
 

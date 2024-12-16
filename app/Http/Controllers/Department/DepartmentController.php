@@ -41,7 +41,7 @@ class DepartmentController extends Controller
         // );
 
         return $result;
-        
+
     }
 
     public function createDepartment(Request $request)

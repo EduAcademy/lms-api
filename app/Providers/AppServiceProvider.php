@@ -15,11 +15,10 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         // Bind the GenericRepositoryInterface to GenericRepository for the Student model
-        $this->app->bind(GenericRepositoryInterface::class, function ($app) {
-            $repository = new GenericRepository(new Student());
-            dd($repository); // This should dump the repository instance
-            return $repository;
-        });
+        $this->app->bind(StudentServiceInterface::class, StudentService::class);
+
+
+
 
     }
 

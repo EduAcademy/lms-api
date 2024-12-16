@@ -2,8 +2,7 @@
 
 namespace App\Interfaces\Services;
 
-interface StudentServiceInterface
-{
+interface StudentServiceInterface {
     public function getAllStudents();
     public function getStudentById($id);
     public function createStudent(array $data);
