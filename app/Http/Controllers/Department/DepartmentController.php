@@ -41,7 +41,7 @@ class DepartmentController extends Controller
         // );
 
         return $result;
-        
+
     }
 
     public function createDepartment(Request $request)
@@ -106,6 +106,13 @@ class DepartmentController extends Controller
     public function update($id, Request $request)
     {
         $result = $this->departmentService->updateDepartment($id, $request->all());
+        return $result;
+    }
+
+    public function delete($id)
+    {
+        $result = $this->departmentService->deleteDepartment($id);
+
         return $result;
     }
 

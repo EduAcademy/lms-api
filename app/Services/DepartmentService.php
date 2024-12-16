@@ -85,7 +85,7 @@ class DepartmentService implements DepartmentServiceInterface
         if ($validator->fails()) {
             return Result::error('Validation failed', 422, $validator->errors());
         }
-        
+
         $updatedDepartment = $this->genericRepository->update($id, $data);
 
         if (!$updatedDepartment) {
@@ -93,5 +93,12 @@ class DepartmentService implements DepartmentServiceInterface
         }
 
         return Result::success($updatedDepartment, 'Department Updated Successfully', StatusResponse::HTTP_OK);
+    }
+
+    public function deleteDepartment($id)
+    {
+        $result = $this->genericRepository->delete($id);
+
+        return Result::success($result, 'Department is Deleted Successfully', StatusResponse::HTTP_OK);
     }
 }
