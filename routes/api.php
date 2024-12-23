@@ -5,6 +5,7 @@ use App\Http\Controllers\Course\CourseController;
 use App\Http\Controllers\Department\DepartmentController;
 use App\Http\Controllers\Instructor\InstructorController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudyPlanController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
@@ -29,19 +30,16 @@ Route::post('/login', [AuthController::class, 'login']);
 
         // Commented out role:admin middleware for testing purposes
         // Route::middleware(['role:admin'])->group(function () {
-            // Department routes
-            Route::get('/departments', [DepartmentController::class, 'index']);
-            Route::get('/departments/{id}', [DepartmentController::class, 'show']);
-            Route::post('/departments', [DepartmentController::class, 'store']);
-            Route::put('/departments/{id}', [DepartmentController::class, 'update']);
-            Route::delete('/departments/{id}', [DepartmentController::class, 'delete']);
 
-            // Student routes
-            Route::get('/students', [StudentController::class, 'index']);
-            Route::get('/students/{id}', [StudentController::class, 'show']);
-            Route::post('/students', [StudentController::class, 'store']);
-            Route::put('/students/{id}', [StudentController::class, 'update']);
-            Route::delete('/students/{id}', [StudentController::class, 'destroy']);
+
+            // Department routes
+            Route::prefix('departments')->group(function(){
+                Route::get('/', [DepartmentController::class, 'index']);
+                Route::get('/{id}', [DepartmentController::class, 'show']);
+                Route::post('/', [DepartmentController::class, 'store']);
+                Route::put('/{id}', [DepartmentController::class, 'update']);
+                Route::delete('/{id}', [DepartmentController::class, 'delete']);
+            });
 
             // Instructor routes
             Route::prefix('instructors')->group(function () {
@@ -61,6 +59,26 @@ Route::post('/login', [AuthController::class, 'login']);
                 Route::delete('/{id}', [StudentController::class, 'destroy']);
             });
         // });
+
+            // Courses routes
+            Route::prefix('courses')->group(function () {
+                Route::get('/', [CourseController::class, 'index']);
+                Route::get('/{id}', [CourseController::class, 'show']);
+                Route::get('/department/{departmentId}', [CourseController::class, 'showbyDepartment']);
+                Route::post('/', [CourseController::class, 'store']);
+                Route::put('/{id}', [CourseController::class, 'update']);
+                Route::delete('/{id}', [CourseController::class, 'delete']);
+            });
+
+            Route::prefix('study_plans')->group(function () {
+                Route::get('/', [StudyPlanController::class, 'index']);
+                Route::get('/{id}', [StudyPlanController::class, 'show']);
+                Route::get('/department/{departmentId}', [StudyPlanController::class, 'showbyDepartment']);
+                Route::get('/course/{courseId}', [StudyPlanController::class, 'showbyCourse']);
+                Route::post('/', [StudyPlanController::class, 'store']);
+                Route::put('/{id}', [StudyPlanController::class, 'update']);
+                Route::delete('/{id}', [StudyPlanController::class, 'delete']);
+            });
 
         // Student-specific routes
         // Commented out role:student middleware for testing purposes

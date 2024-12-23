@@ -1,15 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Contracts\StudentRepositoryInterface;
-use App\Models\Student;
 use Illuminate\Http\Request;
 use App\Imports\StudentImport;
 use App\Interfaces\Services\StudentServiceInterface;
 use App\Models\UploadedFiles;
-use App\Shared\Constants\StatusResponse;
-use App\Shared\Handler\Result;
-use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 

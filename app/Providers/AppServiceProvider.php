@@ -15,8 +15,6 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         // Bind the GenericRepositoryInterface to GenericRepository for the Student model
-        $this->app->bind(StudentServiceInterface::class, StudentService::class);
-
 
 
 

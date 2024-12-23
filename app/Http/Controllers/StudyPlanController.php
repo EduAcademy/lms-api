@@ -2,17 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Interfaces\Services\StudyPlanServiceInterface;
 use App\Models\StudyPlan;
 use Illuminate\Http\Request;
 
 class StudyPlanController extends Controller
 {
+
+    protected $study_PlanService;
+    public function __construct(StudyPlanServiceInterface $studyPlanService)
+    {
+        $this->study_PlanService = $studyPlanService;
+    }
+
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         //
+        $result = $this->study_PlanService->getAllStudyPlans();
+
+        return $result;
     }
 
     /**
@@ -29,14 +41,22 @@ class StudyPlanController extends Controller
     public function store(Request $request)
     {
         //
+        $result = $this->study_PlanService->createStudyPlan($request->all());
+
+
+        return $result;
+
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(StudyPlan $studyPlan)
+    public function show($id)
     {
         //
+        $result = $this->study_PlanService->getStudyPlanById($id);
+
+        return $result;
     }
 
     /**
@@ -50,16 +70,20 @@ class StudyPlanController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, StudyPlan $studyPlan)
+    public function update($id, Request $request)
     {
         //
+        $result = $this->study_PlanService->updateStudyPlan($id, $request->all());
+        return $result;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(StudyPlan $studyPlan)
+    public function delete($id)
     {
         //
+        $result = $this->study_PlanService->deleteStudyPlan($id);
+        return $result;
     }
 }
