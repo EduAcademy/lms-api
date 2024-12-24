@@ -23,7 +23,7 @@ class StudentController extends Controller
         return $result;
     }
 
-    public function createStudent(Request $request)
+    public function uploadStudent(Request $request)
     {
         $request->validate([
             'file' => 'required|file|mimes:xlsx,xls',

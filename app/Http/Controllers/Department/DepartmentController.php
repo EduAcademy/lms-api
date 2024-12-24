@@ -44,7 +44,7 @@ class DepartmentController extends Controller
 
     }
 
-    public function createDepartment(Request $request)
+    public function uploadDepartment(Request $request)
     {
         $request->validate([
             'file' => 'required|file|mimes:xlsx,xls',
