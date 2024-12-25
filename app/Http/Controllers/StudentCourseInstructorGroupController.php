@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Interfaces\Services\StuCouInstrGroupServiceInterface;
 use Illuminate\Http\Request;
 
 class StudentCourseInstructorGroupController extends Controller
@@ -9,16 +10,19 @@ class StudentCourseInstructorGroupController extends Controller
     //
 
     protected $stu_cou_ins_groService;
-    public function __construct()
+    public function __construct(StuCouInstrGroupServiceInterface $stuCouInstrGroupService)
     {
-
+        $this->stu_cou_ins_groService = $stuCouInstrGroupService;
     }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         //
+        $result = $this->stu_cou_ins_groService->getAllStuCouInstrGroups();
+        return $result;
     }
 
     /**
@@ -35,6 +39,8 @@ class StudentCourseInstructorGroupController extends Controller
     public function store(Request $request)
     {
         //
+        $result = $this->stu_cou_ins_groService->createStuCouInstrGroup($request->all());
+        return $result;
     }
 
     /**
@@ -43,6 +49,8 @@ class StudentCourseInstructorGroupController extends Controller
     public function show($id)
     {
         //
+        $result = $this->stu_cou_ins_groService->getStuCouInstrGroupById($id);
+        return $result;
     }
 
     /**
@@ -59,6 +67,8 @@ class StudentCourseInstructorGroupController extends Controller
     public function update($id, Request $request)
     {
         //
+        $result = $this->stu_cou_ins_groService->updateStuCouInstrGroup($id, $request->all());
+        return $result;
     }
 
     /**
@@ -67,5 +77,7 @@ class StudentCourseInstructorGroupController extends Controller
     public function delete($id)
     {
         //
+        $result = $this->stu_cou_ins_groService->deleteStuCouInstrGroup($id);
+        return $result;
     }
 }

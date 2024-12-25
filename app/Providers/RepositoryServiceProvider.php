@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Contracts\CourseMaterialRepositoryInterface;
 use App\Contracts\CourseRepositoryInterface;
 use App\Contracts\GenericRepositoryInterface;
 use App\Repositories\DepartmentRepository;
@@ -14,6 +15,7 @@ use App\Contracts\StudyPlanRepositoryInterface;
 use App\Contracts\TheoreticalGroupRepositoryInterface;
 use App\Repositories\InstructorRepository;
 use App\Contracts\UserRepositoryInterface;
+use App\Repositories\CourseMaterialRepository;
 use App\Repositories\CourseRepository;
 use App\Repositories\GenericRepository;
 use App\Repositories\LabGroupRepository;
@@ -42,6 +44,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(StuCouInstrGroupRepositoryInterface::class, StuCouInstrGroupRepository::class);
         $this->app->bind(LabGroupRepositoryInterface::class, LabGroupRepository::class);
         $this->app->bind(TheoreticalGroupRepositoryInterface::class, TheoreticalGroupRepository::class);
+        $this->app->bind(CourseMaterialRepositoryInterface::class, CourseMaterialRepository::class);
     }
 
     /**

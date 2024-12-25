@@ -22,7 +22,12 @@ class InstructorService implements InstructorServiceInterface
     }
     public function findById($id) {}
     public function getInstructorById($id) {}
-    public function createInstructor(array $data) {}
+    public function createInstructor(array $data)
+    {
+        $result = $this->InstructorRepository->createInstructor($data);
+
+        return $result;
+    }
     public function updateInstructor($id, array $data) {}
     public function deleteInstructor($id) {}
 }

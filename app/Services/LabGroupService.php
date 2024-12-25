@@ -49,7 +49,7 @@ class LabGroupService implements LabGroupServiceInterface
             return Result::error('Validation failed', 422, $validator->errors());
         }
         $result = $this->labGroupRepository->create($data);
-        return Result::success($result, 'Course is Created Successfully', StatusResponse::HTTP_CREATED);
+        return Result::success($result, 'Lab is Created Successfully', StatusResponse::HTTP_CREATED);
     }
 
     public function getLabByTheoGroup($theogroupId)

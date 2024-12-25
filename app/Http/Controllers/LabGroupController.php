@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Interfaces\Services\LabGroupServiceInterface;
 use Illuminate\Http\Request;
 
 class LabGroupController extends Controller
@@ -9,9 +10,9 @@ class LabGroupController extends Controller
     //
 
     protected $lab_groupService;
-    public function __construct()
+    public function __construct(LabGroupServiceInterface $labGroupService)
     {
-
+        $this->lab_groupService = $labGroupService;
     }
 
     /**
@@ -20,6 +21,8 @@ class LabGroupController extends Controller
     public function index()
     {
         //
+        $result = $this->lab_groupService->getAllLabGroup();
+        return $result;
     }
 
     /**
@@ -36,6 +39,8 @@ class LabGroupController extends Controller
     public function store(Request $request)
     {
         //
+        $result = $this->lab_groupService->createLabGroup($request->all());
+        return $result;
     }
 
     /**
@@ -44,6 +49,8 @@ class LabGroupController extends Controller
     public function show($id)
     {
         //
+        $result = $this->lab_groupService->getLabById($id);
+        return $result;
     }
 
     /**
@@ -60,13 +67,17 @@ class LabGroupController extends Controller
     public function update($id, Request $request)
     {
         //
+        $result = $this->lab_groupService->updateLabGroup($id, $request->all());
+        return $result;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function delete($id)
     {
         //
+        $result = $this->lab_groupService->deleteLabGroup($id);
+        return $result;
     }
 }

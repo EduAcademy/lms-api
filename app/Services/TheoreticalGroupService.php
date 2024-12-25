@@ -8,6 +8,7 @@ use App\Models\TheoreticalGroups;
 use App\Repositories\GenericRepository;
 use App\Shared\Constants\StatusResponse;
 use App\Shared\Handler\Result;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class TheoreticalGroupService implements TheoreticalGroupServiceInterface
@@ -44,6 +45,7 @@ class TheoreticalGroupService implements TheoreticalGroupServiceInterface
         ]);
 
         if ($validator->fails()) {
+            Log::error('Validation Errors:', $validator->errors()->toArray());
             return Result::error('Validation failed', 422, $validator->errors());
         }
         $result = $this->theoreticalGroupRepository->create($data);

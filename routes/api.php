@@ -4,8 +4,11 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Course\CourseController;
 use App\Http\Controllers\Department\DepartmentController;
 use App\Http\Controllers\Instructor\InstructorController;
+use App\Http\Controllers\LabGroupController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentCourseInstructorGroupController;
 use App\Http\Controllers\StudyPlanController;
+use App\Http\Controllers\TheoreticalGroupController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
@@ -20,10 +23,6 @@ Route::post('/login', [AuthController::class, 'login']);
     Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
     Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
-    // Import routes
-    Route::post('/upload-students', [StudentController::class, 'uploadStudents']);
-    Route::post('/upload-depts', [DepartmentController::class, 'createDepartment']);
-
     // Versioned routes
     Route::prefix('v1')->group(function () {
         // Admin-only routes
@@ -31,6 +30,10 @@ Route::post('/login', [AuthController::class, 'login']);
         // Commented out role:admin middleware for testing purposes
         // Route::middleware(['role:admin'])->group(function () {
 
+
+            // Excel Import routes
+            Route::post('/upload-students', [StudentController::class, 'uploadStudents']);
+            Route::post('/upload-depts', [DepartmentController::class, 'createDepartment']);
 
             // Department routes
             Route::prefix('departments')->group(function(){
@@ -70,6 +73,7 @@ Route::post('/login', [AuthController::class, 'login']);
                 Route::delete('/{id}', [CourseController::class, 'delete']);
             });
 
+            // StudyPlan routes
             Route::prefix('study_plans')->group(function () {
                 Route::get('/', [StudyPlanController::class, 'index']);
                 Route::get('/{id}', [StudyPlanController::class, 'show']);
@@ -80,10 +84,33 @@ Route::post('/login', [AuthController::class, 'login']);
                 Route::delete('/{id}', [StudyPlanController::class, 'delete']);
             });
 
-        // Student-specific routes
-        // Commented out role:student middleware for testing purposes
-        // Route::middleware(['role:student'])->group(function () {
-            Route::get('/study-plans', [StudentController::class, 'getStudyPlans']);
+            // Theoretical Group routes
+            Route::prefix('theo_groups')->group(function () {
+                Route::get('/', [TheoreticalGroupController::class, 'index']);
+                Route::get('/{id}', [TheoreticalGroupController::class, 'show']);
+                Route::post('/', [TheoreticalGroupController::class, 'store']);
+                Route::put('/{id}', [TheoreticalGroupController::class, 'update']);
+                Route::delete('/{id}', [TheoreticalGroupController::class, 'delete']);
+            });
+
+            // Lab Group routes
+            Route::prefix('lab_groups')->group(function () {
+                Route::get('/', [LabGroupController::class, 'index']);
+                Route::get('/{id}', [LabGroupController::class, 'show']);
+                Route::post('/', [LabGroupController::class, 'store']);
+                Route::put('/{id}', [LabGroupController::class, 'update']);
+                Route::delete('/{id}', [LabGroupController::class, 'delete']);
+            });
+
+            // StuCouInstGroup routes
+            Route::prefix('stucouinstgroups')->group(function () {
+                Route::get('/', [StudentCourseInstructorGroupController::class, 'index']);
+                Route::get('/{id}', [StudentCourseInstructorGroupController::class, 'show']);
+                Route::post('/', [StudentCourseInstructorGroupController::class, 'store']);
+                Route::put('/{id}', [StudentCourseInstructorGroupController::class, 'update']);
+                Route::delete('/{id}', [StudentCourseInstructorGroupController::class, 'delete']);
+            });
+
         // });
     });
 // });

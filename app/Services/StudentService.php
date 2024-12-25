@@ -43,13 +43,13 @@ class StudentService implements StudentServiceInterface
     public function createStudent(array $data)
     {
         // Additional Validation Logic
-        $existingStudent = $this->studentRepository->findByUuid($data['uuid']);
-        if ($existingStudent) {
-            return Result::error('Student with the same UUID already exists', StatusResponse::HTTP_CONFLICT);
-        }
+        // $existingStudent = $this->studentRepository->findByUuid($data['uuid']);
+        // if ($existingStudent) {
+        //     return Result::error('Student with the same UUID already exists', StatusResponse::HTTP_CONFLICT);
+        // }
 
         $validator = Validator::make($data, [
-            'uuid' => 'required|string|unique:students,uuid',
+            // 'uuid' => 'required|string|unique:students,uuid',
             'department_id' => 'required|exists:departments,id',
             'study_plan_id' => 'required|exists:study_plans,id',
             'user_id' => 'required|exists:users,id',

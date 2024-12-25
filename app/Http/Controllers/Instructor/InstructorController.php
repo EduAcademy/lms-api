@@ -38,7 +38,7 @@ class InstructorController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'uuid' => 'required|uuid',
+            // 'uuid' => 'required|uuid',
             'professional_title' => 'required|string|max:255',
             'about_me' => 'nullable|string',
             'social_links' => 'nullable|url',

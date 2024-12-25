@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Interfaces\Services\TheoreticalGroupServiceInterface;
 use Illuminate\Http\Request;
 
 class TheoreticalGroupController extends Controller
@@ -9,9 +10,9 @@ class TheoreticalGroupController extends Controller
     //
 
     protected $theo_groupService;
-    public function __construct()
+    public function __construct(TheoreticalGroupServiceInterface $theoreticalGroupService)
     {
-
+        $this->theo_groupService = $theoreticalGroupService;
     }
 
     /**
@@ -20,6 +21,8 @@ class TheoreticalGroupController extends Controller
     public function index()
     {
         //
+        $result = $this->theo_groupService->getAllTheoGroups();
+        return $result;
     }
 
     /**
@@ -36,6 +39,8 @@ class TheoreticalGroupController extends Controller
     public function store(Request $request)
     {
         //
+        $result = $this->theo_groupService->createTheoGroup($request->all());
+        return $result;
     }
 
     /**
@@ -44,6 +49,8 @@ class TheoreticalGroupController extends Controller
     public function show($id)
     {
         //
+        $result = $this->theo_groupService->getTheoGroupById($id);
+        return $result;
     }
 
     /**
@@ -60,6 +67,8 @@ class TheoreticalGroupController extends Controller
     public function update($id, Request $request)
     {
         //
+        $result = $this->theo_groupService->updateLabGroup($id, $request->all());
+        return $result;
     }
 
     /**
@@ -68,5 +77,7 @@ class TheoreticalGroupController extends Controller
     public function destroy($id)
     {
         //
+        $result = $this->theo_groupService->deleteLabGroup($id);
+        return $result;
     }
 }

@@ -8,8 +8,11 @@ use App\Contracts\Interfaces\Services\TheoreticalGroupServiceInterface;
 use App\Interfaces\Services\CourseServiceInterface;
 use App\Services\DepartmentService;
 use App\Interfaces\Services\DepartmentServiceInterface;
+use App\Interfaces\Services\LabGroupServiceInterface as ServicesLabGroupServiceInterface;
+use App\Interfaces\Services\StuCouInstrGroupServiceInterface as ServicesStuCouInstrGroupServiceInterface;
 use App\Interfaces\Services\StudentServiceInterface;
 use App\Interfaces\Services\StudyPlanServiceInterface;
+use App\Interfaces\Services\TheoreticalGroupServiceInterface as ServicesTheoreticalGroupServiceInterface;
 use App\Interfaces\Services\UserServiceInterface;
 use App\Services\CourseService;
 use App\Services\LabGroupService;
@@ -33,9 +36,9 @@ class ServicesServiceProvider extends ServiceProvider
         $this->app->bind(CourseServiceInterface::class, CourseService::class);
         $this->app->bind(StudentServiceInterface::class, StudentService::class);
         $this->app->bind(StudyPlanServiceInterface::class, StudyPlanService::class);
-        $this->app->bind(StuCouInstrGroupServiceInterface::class, StuCouInstrGroupService::class);
-        $this->app->bind(LabGroupServiceInterface::class, LabGroupService::class);
-        $this->app->bind(TheoreticalGroupServiceInterface::class, TheoreticalGroupService::class);
+        $this->app->bind(ServicesStuCouInstrGroupServiceInterface::class, StuCouInstrGroupService::class);
+        $this->app->bind(ServicesLabGroupServiceInterface::class, LabGroupService::class);
+        $this->app->bind(ServicesTheoreticalGroupServiceInterface::class, TheoreticalGroupService::class);
     }
 
     /**
