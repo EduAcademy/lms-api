@@ -74,7 +74,7 @@ class CourseMaterialService implements CourseMaterialServiceInterface
     public function updateCourseMaterial($id, array $data)
     {
         $validator = Validator::make($data, [
-            'name' => "required|string,{$id}",
+            'name' => "required|string",
             'type' => 'required|in:theoretical,practical',
             'url' => 'nullable|url',
             'course_id' => 'required|integer|exists:courses,id',

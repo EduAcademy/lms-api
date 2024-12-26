@@ -80,7 +80,7 @@ class CourseMaterialController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function delete($id)
     {
         //
         $result = $this->course_materialService->deleteCourseMaterial($id);
