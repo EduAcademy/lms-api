@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Course\CourseController;
+use App\Http\Controllers\CourseMaterialController;
 use App\Http\Controllers\Department\DepartmentController;
 use App\Http\Controllers\Instructor\InstructorController;
 use App\Http\Controllers\LabGroupController;
@@ -109,6 +110,14 @@ Route::post('/login', [AuthController::class, 'login']);
                 Route::post('/', [StudentCourseInstructorGroupController::class, 'store']);
                 Route::put('/{id}', [StudentCourseInstructorGroupController::class, 'update']);
                 Route::delete('/{id}', [StudentCourseInstructorGroupController::class, 'delete']);
+            });
+
+            Route::prefix('course_materials')->group(function () {
+                Route::get('/', [CourseMaterialController::class, 'index']);
+                Route::get('/{id}', [CourseMaterialController::class, 'show']);
+                Route::post('/', [CourseMaterialController::class, 'store']);
+                Route::put('/{id}', [CourseMaterialController::class, 'update']);
+                Route::delete('/{id}', [CourseMaterialController::class, 'delete']);
             });
 
         // });

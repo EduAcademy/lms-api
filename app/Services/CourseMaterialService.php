@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Contracts\CourseMaterialRepositoryInterface;
-use App\Contracts\Interfaces\Services\CourseMaterialServiceInterface;
+use App\Interfaces\Services\CourseMaterialServiceInterface;
 use App\Models\CourseMaterial;
 use App\Repositories\GenericRepository;
 use App\Shared\Constants\StatusResponse;
@@ -73,12 +73,27 @@ class CourseMaterialService implements CourseMaterialServiceInterface
 
     public function updateCourseMaterial($id, array $data)
     {
+        $validator = Validator::make($data, [
+            'name' => "required|string,{$id}",
+            'type' => 'required|in:theoretical,practical',
+            'url' => 'nullable|url',
+            'course_id' => 'required|integer|exists:courses,id',
+            'instructor_id' => 'required|integer|exists:instructors,id'
+        ]);
 
+        if ($validator->fails()) {
+            return Result::error('Validation failed', 422, $validator->errors());
+        }
+        $result = $this->genericRepository->update($id, $data);
+
+        return Result::success($result, 'Course Material is Updated Successfully', StatusResponse::HTTP_CREATED);
     }
 
     public function deleteCourseMaterial($id)
     {
+        $result = $this->genericRepository->delete($id);
 
+        return Result::success($result, 'Course Material is deleted Successfully', StatusResponse::HTTP_CREATED);
     }
 
 
