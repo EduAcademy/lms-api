@@ -49,7 +49,10 @@ class AuthController extends Controller
     {
         $user = $request->user();
 
+        if ($user == null) {
 
+            return Result::error('Token is expired or invalid', StatusResponse::HTTP_UNAUTHORIZED);
+        }
 
         return Result::success($user, 'Found profile Successfully', StatusResponse::HTTP_OK);
     }
@@ -66,26 +69,18 @@ class AuthController extends Controller
         return $response;
     }
 
-    public function update($id, Request $request)
-    {
+    public function update($id, Request $request) {}
 
-    }
-
-    public function delete($id)
-    {
-
-    }
+    public function delete($id) {}
 
     public function validateToken(Request $request)
     {
-        // Validate the token input
-        $data = $request->validate([
+        $request->validate([
             'token' => 'required|string',
         ]);
 
-        // Call the service method to validate the token
-        $response = $this->user_service->validateToken($data['token']);
+        $result = $this->user_service->validateToken($request->token);
 
-        return response()->json($response);
+        return response()->json($result);
     }
 }

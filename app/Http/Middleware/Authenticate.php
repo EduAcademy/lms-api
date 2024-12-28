@@ -20,12 +20,12 @@ class Authenticate extends Middleware
      */
     protected function unauthenticated($request, array $guards)
     {
-        Log::warning('Unauthenticated request detected.', [
-            'ip' => $request->ip(),
-            'url' => $request->url(),
-            'headers' => $request->headers->all(),
-        ]);
+        // Log::warning('Unauthenticated request detected.', [
+        //     'ip' => $request->ip(),
+        //     'url' => $request->url(),
+        //     'headers' => $request->headers->all(),
+        // ]);
 
-        abort(Result::error('Token is expired or invalid', StatusResponse::HTTP_UNAUTHORIZED));
+        // abort(Result::error('Token is expired or invalid', StatusResponse::HTTP_UNAUTHORIZED));
     }
 }
