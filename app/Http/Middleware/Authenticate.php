@@ -2,20 +2,30 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
-use Illuminate\Http\Request;
+use App\Shared\Constants\StatusResponse;
+use App\Shared\Handler\Result;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Log;
 
 class Authenticate extends Middleware
 {
     /**
-     * Handle an incoming request.
+     * Handle an incoming unauthenticated request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param \Illuminate\Http\Request $request
+     * @param array $guards
+     * @return void
+     *
+     * @throws \Illuminate\Auth\AuthenticationException
      */
-    protected function redirectTo(Request $request): ?string
+    protected function unauthenticated($request, array $guards)
     {
-        return $request->expectsJson() ? null : route('login');
+        Log::warning('Unauthenticated request detected.', [
+            'ip' => $request->ip(),
+            'url' => $request->url(),
+            'headers' => $request->headers->all(),
+        ]);
+
+        abort(Result::error('Token is expired or invalid', StatusResponse::HTTP_UNAUTHORIZED));
     }
 }

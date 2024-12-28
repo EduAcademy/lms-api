@@ -20,6 +20,13 @@ class AuthController extends Controller
         $this->user_service = $userService;
     }
 
+    public function index()
+    {
+        $result = $this->user_service->getAllUsers();
+
+        return $result;
+    }
+
     public function register(SignUpRequest $request)
     {
         $response = $this->user_service->registerUser($request->all());
@@ -42,6 +49,8 @@ class AuthController extends Controller
     {
         $user = $request->user();
 
+
+
         return Result::success($user, 'Found profile Successfully', StatusResponse::HTTP_OK);
     }
 
@@ -55,5 +64,28 @@ class AuthController extends Controller
     {
         $response = $this->user_service->resetPassword($request->all());
         return $response;
+    }
+
+    public function update($id, Request $request)
+    {
+
+    }
+
+    public function delete($id)
+    {
+
+    }
+
+    public function validateToken(Request $request)
+    {
+        // Validate the token input
+        $data = $request->validate([
+            'token' => 'required|string',
+        ]);
+
+        // Call the service method to validate the token
+        $response = $this->user_service->validateToken($data['token']);
+
+        return response()->json($response);
     }
 }

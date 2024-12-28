@@ -3,19 +3,42 @@
 namespace App\Services;
 
 use App\Contracts\UserRepositoryInterface;
+use App\Interfaces\Services\InstructorServiceInterface;
+use App\Interfaces\Services\StudentServiceInterface;
 use App\Interfaces\Services\UserServiceInterface;
+use App\Models\User;
+use App\Repositories\GenericRepository;
+use App\Shared\Constants\RoleEnum;
+use App\Shared\Constants\StatusResponse;
 use App\Shared\Handler\Result;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class UserService implements UserServiceInterface
 {
     protected $userRepository;
-
-    public function __construct(UserRepositoryInterface $userRepository)
+    protected $studentService;
+    protected $instructorService;
+    private $genericRepository;
+    public function __construct(
+        UserRepositoryInterface $userRepository,
+        StudentServiceInterface $studentService,
+        InstructorServiceInterface $instructorService)
     {
         $this->userRepository = $userRepository;
+        $this->genericRepository = new GenericRepository(new User);
+        $this->studentService = $studentService;
+        $this->instructorService = $instructorService;
+    }
+
+    public function getAllUsers()
+    {
+        // $result = $this->userRepository->getAll();
+
+        return ;
+        // return Result::success($result, 'Get All Users Successfully', StatusResponse::HTTP_OK);
     }
 
     public function getUserById($id)
@@ -49,7 +72,20 @@ class UserService implements UserServiceInterface
         $data['password'] = Hash::make($data['password']);
         $data['role_id'] = $data['role_id'] ?? 3;
 
-        $user = $this->userRepository->createUser($data);
+        $result = $this->userRepository->createUser($data);
+
+        $user = $this->userRepository->findById($result->id);
+
+
+        if ($user->role->name == RoleEnum::Student)
+        {
+            $result = $this->studentService->createStudent();
+        }
+
+        if ($user->role->name == RoleEnum::Instructor)
+        {
+            $result = $this->instructorService->createInstructor();
+        }
 
         return Result::success($user, 'User registered successfully', 200);
     }
@@ -66,9 +102,40 @@ class UserService implements UserServiceInterface
         }
 
         $user = auth()->user();
-        $token = $user->createToken("auth_token")->plainTextToken;
+        $token = $user->createToken("auth_token", ['*'], now()->addMinutes(1))->plainTextToken;
+
 
         return Result::success_with_token($user, $token, 'Logged in successfully', 200);
+    }
+
+    public function update($id, array $data)
+    {
+        $validator = Validator::make($data, [
+            'username' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'phone' => 'nullable|string',
+            'address' => 'nullable|string',
+            'role_id' => 'integer',
+        ]);
+
+        if ($validator->fails()) {
+            return Result::error('Validation failed', 422, $validator->errors());
+        }
+
+
+        $result = $this->genericRepository->update($id, $data);
+
+        return Result::success($result, 'User is updated Successfully', StatusResponse::HTTP_OK);
+    }
+
+    public function delete($id)
+    {
+        $result = $this->genericRepository->delete($id);
+
+        return Result::success($result, 'User is deleted Successfully', StatusResponse::HTTP_OK);
     }
 
     public function forgotPassword(array $data)
@@ -115,5 +182,33 @@ class UserService implements UserServiceInterface
         return $status === Password::PASSWORD_RESET
             ? Result::success([], __($status))
             : Result::error(__($status), 400);
+    }
+
+    public function validateToken(string $token)
+    {
+        // Parse the token to retrieve the token model
+        $accessToken = PersonalAccessToken::findToken($token);
+
+        // If no token found, return invalid response
+        if (!$accessToken) {
+            return [
+                'status' => 'invalid',
+                'message' => 'The token is invalid or not found.',
+            ];
+        }
+
+        // Check if the token is expired
+        if ($accessToken->expires_at && $accessToken->expires_at->isPast()) {
+            return [
+                'status' => 'expired',
+                'message' => 'The token has expired.',
+            ];
+        }
+
+        // Token is valid
+        return [
+            'status' => 'valid',
+            'message' => 'The token is valid.',
+        ];
     }
 }

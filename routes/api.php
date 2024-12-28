@@ -18,11 +18,13 @@ Route::post('/login', [AuthController::class, 'login']);
 
 // Protected routes
 // Commented out auth:sanctum middleware for testing purposes
-// Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     // User profile and password routes
     Route::get('/profile', [AuthController::class, 'profile']);
     Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
     Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+    Route::get('/user-list', [AuthController::class, 'index']);
+    Route::post('/validate-token', [AuthController::class, 'validateToken']);
 
     // Versioned routes
     Route::prefix('v1')->group(function () {
@@ -122,4 +124,4 @@ Route::post('/login', [AuthController::class, 'login']);
 
         // });
     });
-// });
+});

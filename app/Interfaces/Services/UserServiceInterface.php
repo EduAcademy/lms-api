@@ -9,4 +9,5 @@ interface UserServiceInterface {
     public function login(array $data);
     public function forgotPassword(array $data);
     public function resetPassword(array $data);
+    public function validateToken(string $token);
 }
