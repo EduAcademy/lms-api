@@ -193,22 +193,18 @@ class UserService implements UserServiceInterface
         if (!$accessToken) {
             return [
                 'status' => 'invalid',
-                'message' => 'The token is invalid or not found.',
+                'message' => '',
             ];
+
+            return Result::error('The token is invalid or not found.', StatusResponse::HTTP_BAD_REQUEST);
         }
 
         // Check if the token is expired
         if ($accessToken->expires_at && $accessToken->expires_at->isPast()) {
-            return [
-                'status' => 'expired',
-                'message' => 'The token has expired.',
-            ];
+            return Result::error('The token is invalid or not found.', StatusResponse::HTTP_NOT_FOUND);
         }
 
         // Token is valid
-        return [
-            'status' => 'valid',
-            'message' => 'The token is valid.',
-        ];
+        return Result::success('The token is invalid or not found.', StatusResponse::HTTP_OK);
     }
 }
