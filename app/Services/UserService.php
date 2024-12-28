@@ -25,8 +25,8 @@ class UserService implements UserServiceInterface
     public function __construct(
         UserRepositoryInterface $userRepository,
         StudentServiceInterface $studentService,
-        InstructorServiceInterface $instructorService)
-    {
+        InstructorServiceInterface $instructorService
+    ) {
         $this->userRepository = $userRepository;
         $this->genericRepository = new GenericRepository(new User);
         $this->studentService = $studentService;
@@ -37,7 +37,7 @@ class UserService implements UserServiceInterface
     {
         // $result = $this->userRepository->getAll();
 
-        return ;
+        return;
         // return Result::success($result, 'Get All Users Successfully', StatusResponse::HTTP_OK);
     }
 
@@ -77,13 +77,11 @@ class UserService implements UserServiceInterface
         $user = $this->userRepository->findById($result->id);
 
 
-        if ($user->role->name == RoleEnum::Student)
-        {
+        if ($user->role->name == RoleEnum::Student) {
             $result = $this->studentService->createStudent();
         }
 
-        if ($user->role->name == RoleEnum::Instructor)
-        {
+        if ($user->role->name == RoleEnum::Instructor) {
             $result = $this->instructorService->createInstructor();
         }
 
@@ -102,7 +100,7 @@ class UserService implements UserServiceInterface
         }
 
         $user = auth()->user();
-        $token = $user->createToken("auth_token", ['*'], now()->addMinutes(1))->plainTextToken;
+        $token = $user->createToken("auth_token", ['*'], now()->addHours(24))->plainTextToken;
 
 
         return Result::success_with_token($user, $token, 'Logged in successfully', 200);
