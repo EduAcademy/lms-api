@@ -191,11 +191,6 @@ class UserService implements UserServiceInterface
 
         // If no token found, return invalid response
         if (!$accessToken) {
-            return [
-                'status' => 'invalid',
-                'message' => '',
-            ];
-
             return Result::error('The token is invalid or not found.', StatusResponse::HTTP_BAD_REQUEST);
         }
 

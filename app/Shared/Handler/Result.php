@@ -18,9 +18,9 @@ class Result
     }
 
     public static function success_with_token($data, $token, $message = 'Success', $status = 200){
-        
+
         return response()->json([
-            'status' => true,
+            'status' => $status,
             'message' => $message,
             'data' => $data,
             'token' => $token
@@ -30,7 +30,7 @@ class Result
     public static function error($message, $status = 400)
     {
         return response()->json([
-            'status' => false,
+            'status' => $status,
             'message' => $message,
         ], $status);
     }

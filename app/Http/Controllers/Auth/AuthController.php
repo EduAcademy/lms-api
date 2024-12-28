@@ -81,6 +81,6 @@ class AuthController extends Controller
 
         $result = $this->user_service->validateToken($request->token);
 
-        return response()->json($result);
+        return $result;
     }
 }
