@@ -30,6 +30,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/reset-password', [AuthController::class, 'resetPassword']);
         Route::get('/user-list', [AuthController::class, 'index']);
         Route::post('/validate-token', [AuthController::class, 'validateToken']);
+        Route::put('/update/{id}', [AuthController::class, 'update']);
+        Route::delete('/delete/{id}', [AuthController::class, 'delete']);
 
         // Admin-only routes
 
