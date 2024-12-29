@@ -181,6 +181,17 @@ class UserService implements UserServiceInterface
             : Result::error(__($status), 400);
     }
 
+
+    public function logout($user)
+    {
+        // Revoke current token
+        $user->currentAccessToken()->delete();
+
+        // Optionally, revoke all tokens if needed
+        // $user->tokens->each->delete();
+    }
+
+
     public function validateToken(string $token)
     {
         // Parse the token to retrieve the token model

@@ -26,6 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('v1')->group(function () {
         // User profile and password routes
         Route::get('/profile', [AuthController::class, 'profile']);
+        Route::post('/logout', [AuthController::class, 'logout']);
         Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
         Route::post('/reset-password', [AuthController::class, 'resetPassword']);
         Route::get('/user-list', [AuthController::class, 'index']);
