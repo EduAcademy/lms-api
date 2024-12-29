@@ -35,10 +35,9 @@ class UserService implements UserServiceInterface
 
     public function getAllUsers()
     {
-        // $result = $this->userRepository->getAll();
+        $result = $this->userRepository->getAll();
 
-        return;
-        // return Result::success($result, 'Get All Users Successfully', StatusResponse::HTTP_OK);
+        return Result::success($result, 'Get All Users Successfully', StatusResponse::HTTP_OK);
     }
 
     public function getUserById($id)
@@ -78,11 +77,11 @@ class UserService implements UserServiceInterface
 
 
         if ($user->role->name == RoleEnum::Student) {
-            $result = $this->studentService->createStudent();
+            // $result = $this->studentService->createStudent();
         }
 
         if ($user->role->name == RoleEnum::Instructor) {
-            $result = $this->instructorService->createInstructor();
+            // $result = $this->instructorService->createInstructor();
         }
 
         return Result::success($user, 'User registered successfully', 200);
@@ -106,7 +105,7 @@ class UserService implements UserServiceInterface
         return Result::success_with_token($user, $token, 'Logged in successfully', 200);
     }
 
-    public function update($id, array $data)
+    public function updateUser($id, array $data)
     {
         $validator = Validator::make($data, [
             'username' => 'required|string|max:255',
@@ -129,7 +128,7 @@ class UserService implements UserServiceInterface
         return Result::success($result, 'User is updated Successfully', StatusResponse::HTTP_OK);
     }
 
-    public function delete($id)
+    public function deleteUser($id)
     {
         $result = $this->genericRepository->delete($id);
 

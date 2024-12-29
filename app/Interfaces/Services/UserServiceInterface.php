@@ -10,4 +10,6 @@ interface UserServiceInterface {
     public function forgotPassword(array $data);
     public function resetPassword(array $data);
     public function validateToken(string $token);
+    public function updateUser($id, array $data);
+    public function deleteUser($id);
 }

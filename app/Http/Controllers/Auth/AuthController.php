@@ -69,9 +69,19 @@ class AuthController extends Controller
         return $response;
     }
 
-    public function update($id, Request $request) {}
+    public function update($id, Request $request)
+    {
+        $result = $this->user_service->updateUser($id, $request->all());
 
-    public function delete($id) {}
+        return $result;
+    }
+
+    public function delete($id)
+    {
+        $result = $this->user_service->deleteUser($id);
+
+        return $result;
+    }
 
     public function validateToken(Request $request)
     {
