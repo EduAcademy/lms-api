@@ -17,6 +17,7 @@ Route::prefix('v1')->group(
     function () {
         Route::post('/register', [AuthController::class, 'register']);
         Route::post('/login', [AuthController::class, 'login']);
+        Route::post('/validate-token', [AuthController::class, 'validateToken']);
     }
 );
 // Protected routes
@@ -30,7 +31,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
         Route::post('/reset-password', [AuthController::class, 'resetPassword']);
         Route::get('/user-list', [AuthController::class, 'index']);
-        Route::post('/validate-token', [AuthController::class, 'validateToken']);
         Route::put('/update/{id}', [AuthController::class, 'update']);
         Route::delete('/delete/{id}', [AuthController::class, 'delete']);
 
