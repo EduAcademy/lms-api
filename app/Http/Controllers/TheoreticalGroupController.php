@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TheoreticalGroupRequest;
 use App\Interfaces\Services\TheoreticalGroupServiceInterface;
 use Illuminate\Http\Request;
 
@@ -36,10 +37,11 @@ class TheoreticalGroupController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(TheoreticalGroupRequest $request)
     {
         //
-        $result = $this->theo_groupService->createTheoGroup($request->all());
+        $data = $request->validated();
+        $result = $this->theo_groupService->createTheoGroup($data);
         return $result;
     }
 

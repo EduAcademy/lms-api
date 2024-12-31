@@ -39,16 +39,16 @@ class TheoreticalGroupService implements TheoreticalGroupServiceInterface
 
     public function createTheoGroup(array $data)
     {
-
-        $validator = Validator::make($data, [
-            'name' => 'required|string|unique:theoretical_groups,name',
-        ]);
+        $validator = Validator::make($data, (new TheoreticalGroups())->rules());
 
         if ($validator->fails()) {
             Log::error('Validation Errors:', $validator->errors()->toArray());
             return Result::error('Validation failed', 422, $validator->errors());
         }
         $result = $this->theoreticalGroupRepository->create($data);
+        if (!$result) {
+            return Result::error('Failed in creating TheoreticalGroup', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
         return Result::success($result, 'Theo Group is Created Successfully', StatusResponse::HTTP_CREATED);
     }
 

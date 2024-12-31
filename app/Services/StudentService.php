@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Contracts\GenericRepositoryInterface;
 use App\Contracts\StudentRepositoryInterface;
+use App\Http\Requests\StudentRequest;
 use App\Interfaces\Services\StudentServiceInterface;
 use App\Models\Student;
 use App\Repositories\GenericRepository;
@@ -48,19 +49,20 @@ class StudentService implements StudentServiceInterface
         //     return Result::error('Student with the same UUID already exists', StatusResponse::HTTP_CONFLICT);
         // }
 
-        $validator = Validator::make($data, [
-            // 'uuid' => 'required|string|unique:students,uuid',
-            'department_id' => 'required|exists:departments,id',
-            'study_plan_id' => 'required|exists:study_plans,id',
-            'user_id' => 'required|exists:users,id',
-        ]);
+        $validator = Validator::make($data, (new StudentRequest())->rules());
 
         if ($validator->fails()) {
             return Result::error('Validation failed', 422, $validator->errors());
         }
 
         $result = $this->genericRepository->create($data);
-        return Result::success($result, 'Student Created Successfully', StatusResponse::HTTP_CREATED);
+
+        if(!$result)
+        {
+            return Result::error('Failed in creating Student', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return Result::success($result, 'Student is Created Successfully', StatusResponse::HTTP_CREATED);
     }
 
     public function updateStudent($id, array $data)

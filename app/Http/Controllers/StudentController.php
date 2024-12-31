@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Http\Requests\StudentRequest;
 use Illuminate\Http\Request;
 use App\Imports\StudentImport;
 use App\Interfaces\Services\StudentServiceInterface;
@@ -75,9 +77,10 @@ class StudentController extends Controller
         return $result;
     }
 
-    public function store(Request $request)
+    public function store(StudentRequest $request)
     {
-        $result = $this->studentService->createStudent($request->all());
+        $data = $request->validated();
+        $result = $this->studentService->createStudent($data);
         return $result;
     }
 

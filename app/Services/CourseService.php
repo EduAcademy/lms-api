@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Contracts\CourseRepositoryInterface;
+use App\Http\Requests\CourseRequest;
 use App\Interfaces\Services\CourseServiceInterface;
 use App\Models\Course;
 use App\Repositories\GenericRepository;
@@ -35,19 +36,17 @@ class CourseService implements CourseServiceInterface
 
     public function createCourse(array $data)
     {
-        $validator = Validator::make($data, [
-            'name' => 'required|string|unique:courses,name',
-            'description' => 'nullable|string',
-            'course_code' => 'required|string|min:2',
-            'course_hours' => 'required|integer',
-            'type' => 'required|in:core,elective',
-            'department_id' => 'required|integer|exists:departments,id',
-        ]);
+        $validator = Validator::make($data, (new CourseRequest())->rules());
 
         if ($validator->fails()) {
             return Result::error('Validation failed', 422, $validator->errors());
         }
         $result = $this->courseRepository->create($data);
+
+        if(!$result)
+        {
+            return Result::error('Failed in creating course', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
 
         return Result::success($result, 'Course is Created Successfully', StatusResponse::HTTP_CREATED);
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Course;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CourseRequest;
 use App\Interfaces\Services\CourseServiceInterface;
 use App\Models\Course;
 use Illuminate\Http\Request;
@@ -37,10 +38,11 @@ class CourseController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CourseRequest $request)
     {
         //
-        $result = $this->course_service->createCourse($request->all());
+        $data = $request->validated();
+        $result = $this->course_service->createCourse($data);
 
         return $result;
     }
@@ -71,7 +73,6 @@ class CourseController extends Controller
      */
     public function update($id, Request $request)
     {
-        //
 
         $result = $this->course_service->updateCourse($id, $request->all());
         return $result;

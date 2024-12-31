@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Contracts\StudyPlanRepositoryInterface;
+use App\Http\Requests\StudyPlanRequest;
 use App\Interfaces\Services\StudyPlanServiceInterface;
 use App\Models\Course;
 use App\Models\StudyPlan;
@@ -57,15 +58,7 @@ class StudyPlanService implements StudyPlanServiceInterface
 
     public function createStudyPlan(array $data)
     {
-        $validator = Validator::make($data, [
-            'study_plan_no' => 'required|integer|unique:study_plans,study_plan_no',
-            'level' => 'required|integer',
-            'semester' => 'required|integer',
-            'issued_at' => 'required|date',
-            'department_id' => 'required|integer|exists:departments,id',
-            'courses' => 'required|array',
-            'courses.*.course_id' => 'required|integer|exists:courses,id',
-        ]);
+        $validator = Validator::make($data, (new StudyPlanRequest())->rules());
 
         if ($validator->fails()) {
             return Result::error('Validation failed', 422, $validator->errors());

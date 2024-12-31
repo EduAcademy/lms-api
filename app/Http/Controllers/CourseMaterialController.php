@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CourseMaterialRequest;
 use App\Interfaces\Services\CourseMaterialServiceInterface;
 use App\Models\CourseMaterial;
 use Illuminate\Http\Request;
@@ -38,11 +39,12 @@ class CourseMaterialController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CourseMaterialRequest $request)
     {
         //
 
-        $result = $this->course_materialService->createCourseMaterial($request->all());
+        $data = $request->validated();
+        $result = $this->course_materialService->createCourseMaterial($data);
 
         return $result;
     }

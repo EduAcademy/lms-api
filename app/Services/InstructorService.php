@@ -3,8 +3,12 @@
 namespace App\Services;
 
 use App\Contracts\InstructorRepositoryInterface;
+use App\Http\Requests\InstructorRequest;
 use App\Interfaces\Services\InstructorServiceInterface;
 use App\Models\Instructor;
+use App\Shared\Constants\StatusResponse;
+use App\Shared\Handler\Result;
+use Illuminate\Support\Facades\Validator;
 
 class InstructorService implements InstructorServiceInterface
 {
@@ -24,9 +28,18 @@ class InstructorService implements InstructorServiceInterface
     public function getInstructorById($id) {}
     public function createInstructor(array $data)
     {
+        $validator = Validator::make($data, (new InstructorRequest())->rules());
+
+        if ($validator->fails()) {
+            return Result::error('Validation failed', 422, $validator->errors());
+        }
         $result = $this->InstructorRepository->createInstructor($data);
 
-        return $result;
+        if (!$result) {
+            return Result::error('Failed in creating Instructor', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return Result::success($result, 'Instructor is Created Successfully', StatusResponse::HTTP_CREATED);
     }
     public function updateInstructor($id, array $data) {}
     public function deleteInstructor($id) {}

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StudyPlanRequest;
 use App\Interfaces\Services\StudyPlanServiceInterface;
 use App\Models\StudyPlan;
 use Illuminate\Http\Request;
@@ -38,14 +39,13 @@ class StudyPlanController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StudyPlanRequest $request)
     {
         //
-        $result = $this->study_PlanService->createStudyPlan($request->all());
-
+        $data = $request->validated();
+        $result = $this->study_PlanService->createStudyPlan($data);
 
         return $result;
-
     }
 
     /**

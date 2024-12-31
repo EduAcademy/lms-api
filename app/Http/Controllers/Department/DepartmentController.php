@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Department;
 
 use App\Contracts\GenericRepositoryInterface;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DepartmentRequest;
 use App\Models\Department;
 use Illuminate\Http\Request;
 use App\Imports\DepartmentImport;
@@ -97,9 +98,10 @@ class DepartmentController extends Controller
         return $result;
     }
 
-    public function store(Request $request)
+    public function store(DepartmentRequest $request)
     {
-        $result = $this->departmentService->createDepartment($request->all());
+        $data = $request->validated();
+        $result = $this->departmentService->createDepartment($data);
         return $result;
     }
 

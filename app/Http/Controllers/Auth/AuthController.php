@@ -29,7 +29,8 @@ class AuthController extends Controller
 
     public function register(SignUpRequest $request)
     {
-        $response = $this->user_service->registerUser($request->all());
+        $data = $request->validated();
+        $response = $this->user_service->registerUser($data); // Pass validated data
         return $response;
     }
 
@@ -98,11 +99,8 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        try {
-            $this->user_service->logout($request->user());
-            return response()->json(['message' => 'Logged out successfully'], 200);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Logout failed: ' . $e->getMessage()], 500);
-        }
+        $result = $this->user_service->logout($request->user());
+
+        return $result;
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Contracts\LabGroupRepositoryInterface;
+use App\Http\Requests\LabGroupRequest;
 use App\Interfaces\Services\LabGroupServiceInterface;
 use App\Models\LabGroups;
 use App\Repositories\GenericRepository;
@@ -39,16 +40,18 @@ class LabGroupService implements LabGroupServiceInterface
 
     public function createLabGroup(array $data)
     {
-        $validator = Validator::make($data, [
-            'name' => 'required|string|unique:lab_groups,name',
-            'theoretical_groups_id' => 'required|integer|exists:theoretical_groups,id',
-            'instructor_id' => 'required|integer|exists:instructors,id',
-        ]);
+        $validator = Validator::make($data, (new LabGroupRequest())->rules());
 
         if ($validator->fails()) {
             return Result::error('Validation failed', 422, $validator->errors());
         }
         $result = $this->labGroupRepository->create($data);
+
+        if(!$result)
+        {
+            return Result::error('Failed in creating Lab gourps', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
         return Result::success($result, 'Lab is Created Successfully', StatusResponse::HTTP_CREATED);
     }
 

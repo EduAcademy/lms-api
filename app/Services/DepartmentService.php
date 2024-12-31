@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Contracts\DepartmentRepositoryInterface;
 use App\Contracts\GenericRepositoryInterface;
+use App\Http\Requests\DepartmentRequest;
 use App\Interfaces\Services\DepartmentServiceInterface;
 use App\Models\Department;
 use App\Repositories\GenericRepository;
@@ -48,17 +49,17 @@ class DepartmentService implements DepartmentServiceInterface
             return Result::error('Department with the same short name already exists', StatusResponse::HTTP_CONFLICT);
         }
 
-        $validator = Validator::make($data, [
-            'name' => 'required|string|unique:departments,name',
-            'short_name' => 'required|string|min:2',
-            'description' => 'nullable|string',
-        ]);
+        $validator = Validator::make($data, (new DepartmentRequest())->rules());
 
         if ($validator->fails()) {
             return Result::error('Validation failed', 422, $validator->errors());
         }
 
         $result = $this->genericRepository->create($data);
+
+        if (!$result) {
+            return Result::error('Failed in creating Department', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
         return Result::success($result, 'Department Created Successfully', StatusResponse::HTTP_CREATED);
     }
 

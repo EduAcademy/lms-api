@@ -29,6 +29,8 @@ class SignUpRequest extends FormRequest
             'last_name' => 'required|string',
             'phone' => 'nullable|string',
             'address' => 'nullable|string',
+            'status' => 'nullable|in:active,inactive',
+            'gender' => 'required|in:male,female',
             'role_id' => 'integer',
         ];
     }
@@ -36,7 +38,7 @@ class SignUpRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'role' => $this->role ?? 3, // Set default role ID to 3 if not provided
+            'role_id' => $this->role ?? 3, // Set default role ID to 3 if not provided
         ]);
     }
 }

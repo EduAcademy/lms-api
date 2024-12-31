@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Contracts\CourseMaterialRepositoryInterface;
+use App\Http\Requests\CourseMaterialRequest;
 use App\Interfaces\Services\CourseMaterialServiceInterface;
 use App\Models\CourseMaterial;
 use App\Repositories\GenericRepository;
@@ -55,18 +56,16 @@ class CourseMaterialService implements CourseMaterialServiceInterface
 
     public function createCourseMaterial(array $data)
     {
-        $validator = Validator::make($data, [
-            'name' => 'required|string',
-            'type' => 'required|in:theoretical,practical',
-            'url' => 'nullable|url',
-            'course_id' => 'required|integer|exists:courses,id',
-            'instructor_id' => 'required|integer|exists:instructors,id'
-        ]);
+        $validator = Validator::make($data, (new CourseMaterialRequest())->rules());
 
         if ($validator->fails()) {
             return Result::error('Validation failed', 422, $validator->errors());
         }
         $result = $this->courseMaterialRepository->create($data);
+
+        if (!$result) {
+            return Result::error('Failed in creating course', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
 
         return Result::success($result, 'Course Material is Created Successfully', StatusResponse::HTTP_CREATED);
     }
@@ -95,6 +94,4 @@ class CourseMaterialService implements CourseMaterialServiceInterface
 
         return Result::success($result, 'Course Material is deleted Successfully', StatusResponse::HTTP_CREATED);
     }
-
-
 }

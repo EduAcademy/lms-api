@@ -3,12 +3,13 @@
 namespace App\Services;
 
 use App\Contracts\UserRepositoryInterface;
+use App\Enums\RoleType;
 use App\Interfaces\Services\InstructorServiceInterface;
 use App\Interfaces\Services\StudentServiceInterface;
 use App\Interfaces\Services\UserServiceInterface;
 use App\Models\User;
 use App\Repositories\GenericRepository;
-use App\Shared\Constants\RoleEnum;
+use App\Http\Requests\SignUpRequest;
 use App\Shared\Constants\StatusResponse;
 use App\Shared\Handler\Result;
 use Illuminate\Support\Facades\Hash;
@@ -53,16 +54,7 @@ class UserService implements UserServiceInterface
     public function registerUser(array $data)
     {
 
-        $validator = Validator::make($data, [
-            'username' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6',
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'phone' => 'nullable|string',
-            'address' => 'nullable|string',
-            'role_id' => 'integer',
-        ]);
+        $validator = Validator::make($data, (new SignUpRequest())->rules());
 
         if ($validator->fails()) {
             return Result::error('Validation failed', 422, $validator->errors());
@@ -73,26 +65,28 @@ class UserService implements UserServiceInterface
 
         $result = $this->userRepository->createUser($data);
 
-        $user = $this->userRepository->findById($result->id);
-
-
-        if ($user->role->name == RoleEnum::Student) {
-            // $result = $this->studentService->createStudent();
+        if (!$result) {
+            return Result::error('Failed to create user', 500);
         }
 
-        if ($user->role->name == RoleEnum::Instructor) {
-            // $result = $this->instructorService->createInstructor();
-        }
+        // $user = $this->userRepository->findById($result->id);
 
-        return Result::success($user, 'User registered successfully', 200);
+        // if($user){
+        //     return Result::success($user->role->name, 'User found bla', 200);
+        // }
+        // if ($user->role->name == RoleType::Student) {
+        //     // $result = $this->studentService->createStudent();
+        // }
+
+        // if ($user->role->name == RoleType::Instructor) {
+        //     // $result = $this->instructorService->createInstructor();
+        // }
+
+        return Result::success($result, 'User registered successfully', 200);
     }
 
     public function login(array $data)
     {
-
-        // if (!$user) {
-        //     return Result::error('Username or password is invalid', 401);
-        // }
 
         if (!auth()->attempt($data)) {
             return Result::error('Invalid credentials', 401);
@@ -185,10 +179,12 @@ class UserService implements UserServiceInterface
     public function logout($user)
     {
         // Revoke current token
-        $user->currentAccessToken()->delete();
-
-        // Optionally, revoke all tokens if needed
-        // $user->tokens->each->delete();
+        try {
+            $user->currentAccessToken()->delete();
+            return Result::success(null, 'Logged out successfully', StatusResponse::HTTP_OK);
+        } catch (\Exception $e) {
+            return Result::error("Logout failed: . {$e}", StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
 
