@@ -63,8 +63,8 @@ class UserService implements UserServiceInterface
 
         $data['password'] = Hash::make($data['password']);
         $data['role_id'] = $data['role_id'] ?? Role::query()
-        ->select('id')
-        ->where("name", 'Like',  '%'. RoleType::Student . '%');
+            ->select('id')
+            ->where("name", 'Like',  '%' . RoleType::Student . '%');
 
         // TODO: if not $data['role_id'] throw error, or return
 
