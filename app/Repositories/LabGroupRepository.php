@@ -3,37 +3,36 @@
 namespace App\Repositories;
 
 use App\Contracts\LabGroupRepositoryInterface;
-use App\Models\LabGroups;
+use App\Models\SubGroups;
 
 class LabGroupRepository implements LabGroupRepositoryInterface
 {
     public function getAll()
     {
-        return LabGroups::all();
+        return SubGroups::all();
     }
 
     public function getById($id)
     {
-        $result = LabGroups::find($id);
+        $result = SubGroups::find($id);
         return $result;
     }
 
     public function getByTheoGroupId($theogroupId)
     {
-        $result = LabGroups::with('theoretical_group')->get();
+        $result = SubGroups::with('theoretical_group')->get();
         return $result;
     }
 
     public function getByInstructorId($instructorId)
     {
-        $result = LabGroups::with('instructor')->get();
+        $result = SubGroups::with('instructor')->get();
         return $result;
     }
 
     public function create(array $data)
     {
-        $result = LabGroups::create($data);
+        $result = SubGroups::create($data);
         return $result;
     }
-
 }

@@ -50,6 +50,6 @@ class Instructor extends Model
 
     public function sub_groups()
     {
-        return $this->hasMany(LabGroups::class);
+        return $this->hasMany(SubGroups::class);
     }
 }

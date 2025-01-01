@@ -3,25 +3,24 @@
 namespace App\Repositories;
 
 use App\Contracts\TheoreticalGroupRepositoryInterface;
-use App\Models\TheoreticalGroups;
+use App\Models\Groups;
 
 class TheoreticalGroupRepository implements TheoreticalGroupRepositoryInterface
 {
     public function getAll()
     {
-        return TheoreticalGroups::all();
+        return Groups::all();
     }
 
     public function getById($id)
     {
-        $result = TheoreticalGroups::find($id);
+        $result = Groups::find($id);
         return $result;
     }
 
     public function create(array $data)
     {
-        $result = TheoreticalGroups::create($data);
+        $result = Groups::create($data);
         return $result;
     }
-
 }

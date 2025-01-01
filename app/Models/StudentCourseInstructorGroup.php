@@ -35,6 +35,6 @@ class StudentCourseInstructorGroup extends Model
 
     public function theoreticalGroup()
     {
-        return $this->belongsTo(TheoreticalGroups::class);
+        return $this->belongsTo(Groups::class);
     }
 }

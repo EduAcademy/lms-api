@@ -5,19 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class LabGroups extends Model
+class SubGroups extends Model
 {
     //
     use HasFactory;
 
     protected $fillable = [
-        'name', 'groups_id', 'instructor_id',
+        'name',
+        'groups_id',
+        'instructor_id',
     ];
 
 
     public function theoretical_group()
     {
-        return $this->belongsTo(TheoreticalGroups::class);
+        return $this->belongsTo(Groups::class);
     }
 
     public function instructor()

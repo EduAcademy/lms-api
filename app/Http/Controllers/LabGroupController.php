@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LabGroupRequest;
-use App\Interfaces\Services\LabGroupServiceInterface;
+use App\Interfaces\Services\SubGroupserviceInterface;
 use Illuminate\Http\Request;
 
 class LabGroupController extends Controller
@@ -11,9 +11,9 @@ class LabGroupController extends Controller
     //
 
     protected $sub_groupservice;
-    public function __construct(LabGroupServiceInterface $labGroupService)
+    public function __construct(SubGroupserviceInterface $SubGroupservice)
     {
-        $this->sub_groupservice = $labGroupService;
+        $this->sub_groupservice = $SubGroupservice;
     }
 
     /**

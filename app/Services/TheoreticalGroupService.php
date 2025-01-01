@@ -3,15 +3,15 @@
 namespace App\Services;
 
 use App\Contracts\TheoreticalGroupRepositoryInterface;
-use App\Interfaces\Services\TheoreticalGroupServiceInterface;
-use App\Models\TheoreticalGroups;
+use App\Interfaces\Services\GroupserviceInterface;
+use App\Models\Groups;
 use App\Repositories\GenericRepository;
 use App\Shared\Constants\StatusResponse;
 use App\Shared\Handler\Result;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
-class TheoreticalGroupService implements TheoreticalGroupServiceInterface
+class Groupservice implements GroupserviceInterface
 {
     /**
      * Create a new class instance.
@@ -22,7 +22,7 @@ class TheoreticalGroupService implements TheoreticalGroupServiceInterface
     {
         //
         $this->theoreticalGroupRepository = $theoreticalGroupRepository;
-        $this->genericRepository = new GenericRepository(new TheoreticalGroups);
+        $this->genericRepository = new GenericRepository(new Groups);
     }
 
     public function getAllTheoGroups()
@@ -39,7 +39,7 @@ class TheoreticalGroupService implements TheoreticalGroupServiceInterface
 
     public function createTheoGroup(array $data)
     {
-        $validator = Validator::make($data, (new TheoreticalGroups())->rules());
+        $validator = Validator::make($data, (new Groups())->rules());
 
         if ($validator->fails()) {
             Log::error('Validation Errors:', $validator->errors()->toArray());
