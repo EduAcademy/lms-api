@@ -17,7 +17,6 @@ return new class extends Migration
             $table->integer('name')->nullable();
             $table->integer('number');
             $table->date('start_date')->default(Date::now());
-
             $table->timestamps();
         });
     }

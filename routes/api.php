@@ -111,14 +111,6 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::delete('/{id}', [LabGroupController::class, 'delete']);
         });
 
-        // StuCouInstGroup routes
-        Route::prefix('stucouinstgroups')->group(function () {
-            Route::get('/', [StudentCourseInstructorGroupController::class, 'index']);
-            Route::get('/{id}', [StudentCourseInstructorGroupController::class, 'show']);
-            Route::post('/', [StudentCourseInstructorGroupController::class, 'store']);
-            Route::put('/{id}', [StudentCourseInstructorGroupController::class, 'update']);
-            Route::delete('/{id}', [StudentCourseInstructorGroupController::class, 'delete']);
-        });
 
         Route::prefix('course_materials')->group(function () {
             Route::get('/', [CourseMaterialController::class, 'index']);
