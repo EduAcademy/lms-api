@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TheoreticalGroupRequest;
-use App\Interfaces\Services\TheoreticalGroupServiceInterface;
+use App\Interfaces\Services\GroupserviceInterface;
 use Illuminate\Http\Request;
 
 class TheoreticalGroupController extends Controller
@@ -11,9 +11,9 @@ class TheoreticalGroupController extends Controller
     //
 
     protected $theo_groupService;
-    public function __construct(TheoreticalGroupServiceInterface $theoreticalGroupService)
+    public function __construct(GroupserviceInterface $Groupservice)
     {
-        $this->theo_groupService = $theoreticalGroupService;
+        $this->theo_groupService = $Groupservice;
     }
 
     /**

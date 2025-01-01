@@ -4,14 +4,14 @@ namespace App\Services;
 
 use App\Contracts\LabGroupRepositoryInterface;
 use App\Http\Requests\LabGroupRequest;
-use App\Interfaces\Services\LabGroupServiceInterface;
-use App\Models\LabGroups;
+use App\Interfaces\Services\SubGroupserviceInterface;
+use App\Models\SubGroups;
 use App\Repositories\GenericRepository;
 use App\Shared\Constants\StatusResponse;
 use App\Shared\Handler\Result;
 use Illuminate\Support\Facades\Validator;
 
-class LabGroupService implements LabGroupServiceInterface
+class SubGroupservice implements SubGroupserviceInterface
 {
     /**
      * Create a new class instance.
@@ -22,7 +22,7 @@ class LabGroupService implements LabGroupServiceInterface
     {
         //
         $this->labGroupRepository = $labGroupRepository;
-        $this->genericRepository = new GenericRepository(new LabGroups);
+        $this->genericRepository = new GenericRepository(new SubGroups);
     }
 
 
@@ -47,8 +47,7 @@ class LabGroupService implements LabGroupServiceInterface
         }
         $result = $this->labGroupRepository->create($data);
 
-        if(!$result)
-        {
+        if (!$result) {
             return Result::error('Failed in creating Lab gourps', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
 
@@ -96,5 +95,4 @@ class LabGroupService implements LabGroupServiceInterface
 
         return Result::success($result, 'Lab is Deleted Successfully', StatusResponse::HTTP_OK);
     }
-
 }

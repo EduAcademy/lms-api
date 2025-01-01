@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class TheoreticalGroups extends Model
+class Groups extends Model
 {
     //
     use HasFactory;
@@ -23,6 +23,6 @@ class TheoreticalGroups extends Model
 
     public function sub_groups()
     {
-        return $this->hasMany(LabGroups::class);
+        return $this->hasMany(SubGroups::class);
     }
 }

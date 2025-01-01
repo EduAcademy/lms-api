@@ -2,7 +2,7 @@
 
 namespace App\Interfaces\Services;
 
-interface TheoreticalGroupServiceInterface
+interface GroupserviceInterface
 {
     //
     public function getAllTheoGroups();

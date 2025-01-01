@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Enums\RoleType;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,7 +14,7 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        $this->call(RoleType::class);
+        $this->call(RoleSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(InstructorSeeder::class);
     }
