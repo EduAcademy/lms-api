@@ -10,10 +10,10 @@ class LabGroupController extends Controller
 {
     //
 
-    protected $lab_groupService;
+    protected $sub_groupservice;
     public function __construct(LabGroupServiceInterface $labGroupService)
     {
-        $this->lab_groupService = $labGroupService;
+        $this->sub_groupservice = $labGroupService;
     }
 
     /**
@@ -22,7 +22,7 @@ class LabGroupController extends Controller
     public function index()
     {
         //
-        $result = $this->lab_groupService->getAllLabGroup();
+        $result = $this->sub_groupservice->getAllLabGroup();
         return $result;
     }
 
@@ -41,7 +41,7 @@ class LabGroupController extends Controller
     {
         //
         $data = $request->validated();
-        $result = $this->lab_groupService->createLabGroup($data);
+        $result = $this->sub_groupservice->createLabGroup($data);
         return $result;
     }
 
@@ -51,7 +51,7 @@ class LabGroupController extends Controller
     public function show($id)
     {
         //
-        $result = $this->lab_groupService->getLabById($id);
+        $result = $this->sub_groupservice->getLabById($id);
         return $result;
     }
 
@@ -69,7 +69,7 @@ class LabGroupController extends Controller
     public function update($id, Request $request)
     {
         //
-        $result = $this->lab_groupService->updateLabGroup($id, $request->all());
+        $result = $this->sub_groupservice->updateLabGroup($id, $request->all());
         return $result;
     }
 
@@ -79,7 +79,7 @@ class LabGroupController extends Controller
     public function delete($id)
     {
         //
-        $result = $this->lab_groupService->deleteLabGroup($id);
+        $result = $this->sub_groupservice->deleteLabGroup($id);
         return $result;
     }
 }

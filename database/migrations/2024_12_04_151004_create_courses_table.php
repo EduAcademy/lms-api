@@ -18,14 +18,9 @@ return new class extends Migration
             $table->string('course_code')->nullable();
             $table->integer('course_hours')->nullable();
             $table->enum('type', ['core', 'elective'])->default('core');
-
-            $table->foreignId('department_id')
-                ->unsignedBigInteger()
-                ->references('id')
-                ->on('departments')
-                ->nullable(false)
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+            $table->time('lab_hours')->default(0);
+            $table->time('theo_hours')->default(0);
+            
 
             $table->timestamps();
         });

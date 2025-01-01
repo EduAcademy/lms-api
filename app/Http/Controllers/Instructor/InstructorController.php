@@ -9,30 +9,30 @@ use Illuminate\Http\Request;
 
 class InstructorController extends Controller
 {
-    protected $teacherService;
+    protected $instructorService;
 
 
-    public function __construct(InstructorService $teacherService)
+    public function __construct(InstructorService $instructorService)
     {
-        $this->teacherService = $teacherService;
+        $this->instructorService = $instructorService;
     }
 
     public function index()
     {
-        $teachers = $this->teacherService->getAll();
-        return response()->json($teachers);
+        $instructors = $this->instructorService->getAll();
+        return response()->json($instructors);
     }
 
 
     public function show($id)
     {
-        $teacher = $this->teacherService->findById($id);
+        $instructor = $this->instructorService->findById($id);
 
-        if ($teacher) {
-            return response()->json($teacher);
+        if ($instructor) {
+            return response()->json($instructor);
         }
 
-        return response()->json(['message' => 'Teacher not found'], 404);
+        return response()->json(['message' => 'instructor not found'], 404);
     }
 
 
@@ -40,9 +40,9 @@ class InstructorController extends Controller
     {
 
         $data = $request->validated();
-        $teacher = $this->teacherService->createInstructor($data);
+        $instructor = $this->instructorService->createInstructor($data);
 
-        return response()->json($teacher, 201);
+        return response()->json($instructor, 201);
     }
 
     public function update(Request $request, $id)
@@ -55,23 +55,23 @@ class InstructorController extends Controller
             'user_id' => 'required|integer|exists:users,id',
         ]);
 
-        $teacher = $this->teacherService->updateInstructor($id, $validated);
+        $instructor = $this->instructorService->updateInstructor($id, $validated);
 
-        if ($teacher) {
-            return response()->json($teacher);
+        if ($instructor) {
+            return response()->json($instructor);
         }
 
-        return response()->json(['message' => 'Teacher not found'], 404);
+        return response()->json(['message' => 'instructor not found'], 404);
     }
 
     public function destroy($id)
     {
-        $deleted = $this->teacherService->deleteInstructor($id);
+        $deleted = $this->instructorService->deleteInstructor($id);
 
         if ($deleted) {
-            return response()->json(['message' => 'Teacher deleted successfully']);
+            return response()->json(['message' => 'instructor deleted successfully']);
         }
 
-        return response()->json(['message' => 'Teacher not found'], 404);
+        return response()->json(['message' => 'instructor not found'], 404);
     }
 }

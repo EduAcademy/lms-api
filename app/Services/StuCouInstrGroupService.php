@@ -67,7 +67,7 @@ class StuCouInstrGroupService implements StuCouInstrGroupServiceInterface
             'student_id' => 'required|integer|exists:students,id',
             'instructor_id' => 'required|integer|exists:instructors,id',
             'course_id' => 'required|integer|exists:courses,id',
-            'theoretical_groups_id' => 'required|integer|exists:theoretical_groups,id',
+            'groups_id' => 'required|integer|exists:groups,id',
         ]);
 
         if ($validator->fails()) {
@@ -86,7 +86,7 @@ class StuCouInstrGroupService implements StuCouInstrGroupServiceInterface
             'student_id' => 'required|integer|exists:students,id',
             'instructor_id' => 'required|integer|exists:instructors,id',
             'course_id' => 'required|integer|exists:courses,id',
-            'theoretical_groups_id' => 'required|integer|exists:theoretical_groups,id',
+            'groups_id' => 'required|integer|exists:groups,id',
         ]);
 
         if ($validator->fails()) {

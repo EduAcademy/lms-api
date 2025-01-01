@@ -24,6 +24,21 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
+            $table->foreignId('study_plan_course_instructor_id')
+                ->unsignedBigInteger()
+                ->references('id')
+                ->on('spc_instructor')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+
+            $table->foreignId('study_plan_course_instructor_sub_group_id')
+                ->unsignedBigInteger()
+                ->references('id')
+                ->on('spc_instructor_sub')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+
+
             $table->timestamps();
         });
     }

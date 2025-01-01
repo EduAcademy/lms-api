@@ -15,13 +15,13 @@ class TheoreticalGroups extends Model
         'name'
     ];
 
-    // do you hear me 
+    // do you hear me
     public function studentCourseInstructorsGroups()
     {
         return $this->hasMany(StudentCourseInstructorGroup::class);
-    }    
+    }
 
-    public function lab_groups()
+    public function sub_groups()
     {
         return $this->hasMany(LabGroups::class);
     }

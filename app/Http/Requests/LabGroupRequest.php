@@ -23,8 +23,8 @@ class LabGroupRequest extends FormRequest
     {
         return [
             //
-            'name' => 'required|string|unique:lab_groups,name',
-            'theoretical_groups_id' => 'required|integer|exists:theoretical_groups,id',
+            'name' => 'required|string|unique:sub_groups,name',
+            'groups_id' => 'required|integer|exists:groups,id',
             'instructor_id' => 'required|integer|exists:instructors,id',
         ];
     }

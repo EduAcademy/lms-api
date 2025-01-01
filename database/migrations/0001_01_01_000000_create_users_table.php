@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('address', 255)->nullable(false);
             $table->enum('status', ['active', 'inactive'])->default('inactive');
             $table->enum('gender', ['male', 'female'])->default('male');
+            #TODO: Add soft delete
             $table->rememberToken();
             $table->timestamps();
         });

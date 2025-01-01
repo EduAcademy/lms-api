@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 
 return new class extends Migration
 {
@@ -12,33 +11,25 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('students', function (Blueprint $table) {
+        Schema::create('assignment_submissions', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->default(Str::uuid()->toString());
+            $table->text('data')->nullable();
+            $table->string('file_url')->nullable();
 
-            $table->foreignId('department_id')
+            $table->foreignId('assignment_status_id')
                 ->unsignedBigInteger()
                 ->references('id')
-                ->on('departments')
-                ->nullable(false)
+                ->on('assignment_status')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
-            $table->foreignId('study_plan_id')
+            $table->foreignId('assignment_id')
                 ->unsignedBigInteger()
                 ->references('id')
-                ->on('study_plans')
-                ->nullable(false)
+                ->on('assignments')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
-            $table->foreignId('user_id')
-                ->unsignedBigInteger()
-                ->references('id')
-                ->on('users')
-                ->nullable(false)
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -48,6 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('students');
+        Schema::dropIfExists('assignment_submissions');
     }
 };

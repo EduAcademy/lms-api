@@ -103,7 +103,7 @@ Route::middleware('auth:sanctum')->group(function () {
         });
 
         // Lab Group routes
-        Route::prefix('lab_groups')->group(function () {
+        Route::prefix('sub_groups')->group(function () {
             Route::get('/', [LabGroupController::class, 'index']);
             Route::get('/{id}', [LabGroupController::class, 'show']);
             Route::post('/', [LabGroupController::class, 'store']);

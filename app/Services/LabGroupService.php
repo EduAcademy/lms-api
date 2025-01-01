@@ -70,8 +70,8 @@ class LabGroupService implements LabGroupServiceInterface
     public function updateLabGroup($id, array $data)
     {
         $validator = Validator::make($data, [
-            'name' => "required|string|unique:lab_groups,name,{$id}",
-            'theoretical_groups_id' => 'required|integer|exists:theoretical_groups,id',
+            'name' => "required|string|unique:sub_groups,name,{$id}",
+            'groups_id' => 'required|integer|exists:groups,id',
             'instructor_id' => 'required|integer|exists:instructors,id',
         ]);
 

@@ -10,6 +10,7 @@ use App\Interfaces\Services\UserServiceInterface;
 use App\Models\User;
 use App\Repositories\GenericRepository;
 use App\Http\Requests\SignUpRequest;
+use App\Models\Role;
 use App\Shared\Constants\StatusResponse;
 use App\Shared\Handler\Result;
 use Illuminate\Support\Facades\Hash;
@@ -61,7 +62,11 @@ class UserService implements UserServiceInterface
         }
 
         $data['password'] = Hash::make($data['password']);
-        $data['role_id'] = $data['role_id'] ?? 3;
+        $data['role_id'] = $data['role_id'] ?? Role::query()
+        ->select('id')
+        ->where("name", 'Like',  '%'. RoleType::Student . '%');
+
+        // TODO: if not $data['role_id'] throw error, or return
 
         $result = $this->userRepository->createUser($data);
 

@@ -55,7 +55,7 @@ class TheoreticalGroupService implements TheoreticalGroupServiceInterface
     public function updateLabGroup($id, array $data)
     {
         $validator = Validator::make($data, [
-            'name' => "required|string|unique:theoretical_groups,name,{$id}",
+            'name' => "required|string|unique:groups,name,{$id}",
         ]);
 
         if ($validator->fails()) {

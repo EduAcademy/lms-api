@@ -15,7 +15,7 @@ class StudentCourseInstructorGroup extends Model
         'student_id',
         'instructor_id',
         'course_id',
-        'theoretical_groups_id',
+        'groups_id',
     ];
 
     public function student()

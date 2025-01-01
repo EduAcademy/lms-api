@@ -48,7 +48,7 @@ class Instructor extends Model
         return $this->hasMany(StudentCourseInstructorGroup::class);
     }
 
-    public function lab_groups()
+    public function sub_groups()
     {
         return $this->hasMany(LabGroups::class);
     }

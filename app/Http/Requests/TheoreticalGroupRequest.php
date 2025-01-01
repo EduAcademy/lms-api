@@ -23,7 +23,7 @@ class TheoreticalGroupRequest extends FormRequest
     {
         return [
             //
-            'name' => 'required|string|unique:theoretical_groups,name',
+            'name' => 'required|string|unique:groups,name',
         ];
     }
 }

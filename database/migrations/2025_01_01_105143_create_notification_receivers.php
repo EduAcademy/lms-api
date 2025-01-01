@@ -11,18 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('assignment_submissions', function (Blueprint $table) {
+        Schema::create('notification_receivers', function (Blueprint $table) {
             $table->id();
-            $table->text('data')->nullable();
-            $table->string('file_url')->nullable();
-
-            $table->foreignId('assignment_status_id')
+            $table->foreignId('notification_id')
                 ->unsignedBigInteger()
                 ->references('id')
-                ->on('assignment_status')
+                ->on('notifications')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-
+            $table->foreignId('receiver_id')
+                ->unsignedBigInteger()
+                ->references('id')
+                ->on('users')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -32,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('assignment_submissions');
+        Schema::dropIfExists('notification_receivers');
     }
 };
