@@ -20,6 +20,7 @@ Route::prefix('v1')->group(
         Route::post('/validate-token', [AuthController::class, 'validateToken']);
     }
 );
+
 // Protected routes
 // Commented out auth:sanctum middleware for testing purposes
 Route::middleware('auth:sanctum')->group(function () {
@@ -35,11 +36,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/delete/{id}', [AuthController::class, 'delete']);
 
         // Admin-only routes
-
-        // Commented out role:admin middleware for testing purposes
-        // Route::middleware(['role:admin'])->group(function () {
-
-
         // Excel Import routes
         Route::post('/upload-students', [StudentController::class, 'uploadStudents']);
         Route::post('/upload-depts', [DepartmentController::class, 'createDepartment']);
@@ -70,7 +66,6 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::put('/{id}', [StudentController::class, 'update']);
             Route::delete('/{id}', [StudentController::class, 'destroy']);
         });
-        // });
 
         // Courses routes
         Route::prefix('courses')->group(function () {
@@ -111,7 +106,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::delete('/{id}', [LabGroupController::class, 'delete']);
         });
 
-
+        // Course Materials routes
         Route::prefix('course_materials')->group(function () {
             Route::get('/', [CourseMaterialController::class, 'index']);
             Route::get('/{id}', [CourseMaterialController::class, 'show']);
@@ -119,7 +114,5 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::put('/{id}', [CourseMaterialController::class, 'update']);
             Route::delete('/{id}', [CourseMaterialController::class, 'delete']);
         });
-
-        // });
     });
 });
