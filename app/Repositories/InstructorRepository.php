@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Repositories;
 
 use App\Contracts\InstructorRepositoryInterface;
@@ -22,7 +21,7 @@ class InstructorRepository implements InstructorRepositoryInterface
         return Instructor::where('email', $email)->first();
     }
 
-    public function createInstructor(array $data)
+    public function create(array $data)
     {
         return Instructor::create($data);
     }
