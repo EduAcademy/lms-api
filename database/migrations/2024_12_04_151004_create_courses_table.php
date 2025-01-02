@@ -18,9 +18,9 @@ return new class extends Migration
             $table->string('course_code')->nullable();
             $table->integer('course_hours')->nullable();
             $table->enum('type', ['core', 'elective'])->default('core');
-            $table->time('lab_hours')->default(0);
-            $table->time('theo_hours')->default(0);
-            
+            $table->integer('group_hours')->default(0);
+            $table->integer('sub_group_hours')->default(0);
+
 
             $table->timestamps();
         });

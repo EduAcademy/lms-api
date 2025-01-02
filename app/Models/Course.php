@@ -16,21 +16,15 @@ class Course extends Model
         'course_code',
         'course_hours',
         'type',
-        'department_id',
     ];
-
-    public function department()
-    {
-        return $this->belongsTo(Department::class);
-    }
 
     public function materials()
     {
         return $this->hasMany(CourseMaterial::class);
     }
 
-    public function studentCourseInstructorsGroups()
+    public function sp_courses()
     {
-        return $this->hasMany(StudentCourseInstructorGroup::class);
+        return $this->hasMany(StudyPlanCourse::class);
     }
 }

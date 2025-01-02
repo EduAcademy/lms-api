@@ -8,7 +8,5 @@ interface InstructorRepositoryInterface
 {
     public function getAll();
     public function findById($id);
-    public function createInstructor(array $data);
-    public function updateInstructor(Instructor $instructor, array $data);
-    public function deleteInstructor(Instructor $instructor);
+    public function create(array $data);
 }

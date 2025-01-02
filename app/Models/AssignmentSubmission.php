@@ -15,10 +15,16 @@ class AssignmentSubmission extends Model
         'data',
         'file_url',
         'assignment_status_id',
+        'assignment_id',
     ];
 
     public function assignment_status()
     {
         return $this->belongsTo(AssignmentStatus::class);
+    }
+
+    public function assignment()
+    {
+        return $this->belongsTo(Assignment::class);
     }
 }

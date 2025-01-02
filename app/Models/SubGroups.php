@@ -17,7 +17,7 @@ class SubGroups extends Model
     ];
 
 
-    public function theoretical_group()
+    public function group()
     {
         return $this->belongsTo(Groups::class);
     }
@@ -25,5 +25,15 @@ class SubGroups extends Model
     public function instructor()
     {
         return $this->belongsTo(Instructor::class);
+    }
+
+    public function students()
+    {
+        return $this->hasMany(Student::class);
+    }
+
+    public function spci_sub_groups()
+    {
+        return $this->hasMany(StudyPlanCourseInstructorSubGroup::class);
     }
 }

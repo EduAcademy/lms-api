@@ -27,14 +27,14 @@ return new class extends Migration
             $table->foreignId('study_plan_course_instructor_id')
                 ->unsignedBigInteger()
                 ->references('id')
-                ->on('spc_instructor')
+                ->on('spc_instructors')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
             $table->foreignId('study_plan_course_instructor_sub_group_id')
                 ->unsignedBigInteger()
                 ->references('id')
-                ->on('spc_instructor_sub')
+                ->on('spc_instructor_sub_groups')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 

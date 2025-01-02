@@ -15,6 +15,8 @@ class Student extends Model
         'department_id',
         'study_plan_id',
         'user_id',
+        'group_id',
+        'sub_group_id'
     ];
     /**
      * The department that the student belongs to
@@ -38,8 +40,13 @@ class Student extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function studentCourseInstructorsGroups()
+    public function group()
     {
-        return $this->hasMany(StudentCourseInstructorGroup::class);
+        return $this->belongsTo(Groups::class);
+    }
+
+    public function sub_group()
+    {
+        return $this->belongsTo(SubGroups::class);
     }
 }

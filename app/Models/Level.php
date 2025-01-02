@@ -16,8 +16,8 @@ class Level extends Model
     ];
 
     // Relationships
-    public function studyPlans()
+    public function sp_courses()
     {
-        return $this->hasMany(StudyPlan::class);
+        return $this->hasMany(StudyPlanCourse::class);
     }
 }

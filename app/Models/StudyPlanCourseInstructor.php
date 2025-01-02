@@ -12,13 +12,13 @@ class StudyPlanCourseInstructor extends Model
     protected $table = 'spc_instructor';
 
     protected $fillable = [
-        'study_plan_courses_id',
+        'study_plan_course_id',
         'group_id',
         'instructor_id'
     ];
 
     // Relationships
-    public function studyPlanCourse()
+    public function sp_course()
     {
         return $this->belongsTo(StudyPlanCourse::class, 'study_plan_courses_id');
     }
@@ -33,8 +33,13 @@ class StudyPlanCourseInstructor extends Model
         return $this->belongsTo(Instructor::class);
     }
 
-    public function subGroups()
+    public function spci_sub_groups()
     {
         return $this->hasMany(StudyPlanCourseInstructorSubGroup::class, 'study_plan_course_instructors_id');
+    }
+
+    public function assignments()
+    {
+        return $this->hasMany(Assignment::class);
     }
 }

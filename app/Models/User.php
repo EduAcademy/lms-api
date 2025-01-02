@@ -66,17 +66,17 @@ class User extends Authenticatable
 
     public function admin()
     {
-        return $this->belongsTo(Admin::class);
+        return $this->hasMany(Admin::class);
     }
 
     public function instructor()
     {
-        return $this->hasOne(Instructor::class);
+        return $this->hasMany(Instructor::class);
     }
 
     public function student()
     {
-        return $this->hasOne(Student::class);
+        return $this->hasMany(Student::class);
     }
 
     public function getJWTIdentifier()

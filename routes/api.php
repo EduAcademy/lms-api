@@ -7,7 +7,6 @@ use App\Http\Controllers\Department\DepartmentController;
 use App\Http\Controllers\Instructor\InstructorController;
 use App\Http\Controllers\LabGroupController;
 use App\Http\Controllers\StudentController;
-use App\Http\Controllers\StudentCourseInstructorGroupController;
 use App\Http\Controllers\StudyPlanController;
 use App\Http\Controllers\TheoreticalGroupController;
 use Illuminate\Support\Facades\Route;

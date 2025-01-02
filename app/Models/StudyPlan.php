@@ -12,12 +12,9 @@ class StudyPlan extends Model
 
     protected $table = 'study_plans';
     protected $fillable = [
-        'study_plan_no',
-        'level',
-        'semester',
-        'issued_at',
-        'department_id',
-        'course_id',
+        'name',
+        'number',
+        'start_date'
     ];
 
     public function students()
@@ -25,13 +22,10 @@ class StudyPlan extends Model
         return $this->hasMany(Student::class);
     }
 
-    public function course()
+    public function sp_courses()
     {
-        return $this->belongsTo(Course::class);
+        return $this->hasMany(StudyPlanCourse::class);
     }
 
-    public function department()
-    {
-        return $this->belongsTo(Department::class);
-    }
+
 }

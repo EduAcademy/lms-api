@@ -12,17 +12,27 @@ class Groups extends Model
 
 
     protected $fillable = [
-        'name'
+        'name', 'department_id'
     ];
-
-    // do you hear me
-    public function studentCourseInstructorsGroups()
-    {
-        return $this->hasMany(StudentCourseInstructorGroup::class);
-    }
 
     public function sub_groups()
     {
         return $this->hasMany(SubGroups::class);
     }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
+
+    public function students()
+    {
+        return $this->hasMany(Student::class);
+    }
+
+    public function spc_instructors()
+    {
+        return $this->hasMany(StudyPlanCourseInstructor::class);
+    }
+
 }

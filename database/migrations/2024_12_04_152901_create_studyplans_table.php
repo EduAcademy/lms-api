@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('study_plans', function (Blueprint $table) {
             $table->id();
-            $table->integer('name')->nullable();
+            $table->string('name')->unique()->nullable();
             $table->integer('number');
             $table->date('start_date')->default(Date::now());
             $table->timestamps();

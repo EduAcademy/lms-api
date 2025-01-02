@@ -15,28 +15,28 @@ return new class extends Migration
     public function up(): void
     {
         //
-        Schema::create('spc_instructor', function (Blueprint $table) {
+        Schema::create('spc_instructors', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('study_plan_courses_id')
-            ->unsignedBigInteger()
-            ->references('id')
-            ->on('study_plan_courses')
-            ->cascadeOnUpdate()
-            ->cascadeOnDelete();
+            $table->foreignId('study_plan_course_id')
+                ->unsignedBigInteger()
+                ->references('id')
+                ->on('study_plan_courses')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
 
             $table->foreignId('group_id')
-            ->unsignedBigInteger()
-            ->references('id')
-            ->on('groups')
-            ->cascadeOnUpdate()
-            ->cascadeOnDelete();
+                ->unsignedBigInteger()
+                ->references('id')
+                ->on('groups')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
 
             $table->foreignId('instructor_id')
-            ->unsignedBigInteger()
-            ->references('id')
-            ->on('instructors')
-            ->cascadeOnUpdate()
-            ->cascadeOnDelete();
+                ->unsignedBigInteger()
+                ->references('id')
+                ->on('instructors')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->timestamps();
 
         });
@@ -48,6 +48,6 @@ return new class extends Migration
     public function down(): void
     {
         //
-        Schema::dropIfExists('study_plan_course_instructors');
+        Schema::dropIfExists('spc_instructors');
     }
 };
