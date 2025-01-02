@@ -41,6 +41,7 @@ return new class extends Migration
             ->on('levels')
             ->cascadeOnUpdate()
             ->cascadeOnDelete();
+            
             $table->enum('semester', ['1', '2'])->default('1');
             $table->timestamps();
 

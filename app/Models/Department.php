@@ -22,18 +22,18 @@ class Department extends Model
     //     $this->department = $department;
     // }
 
-    public function courses()
-    {
-        return $this->hasMany(Course::class);
-    }
-
     public function students()
     {
         return $this->hasMany(Student::class);
     }
 
-    public function study_plans()
+    public function sp_courses()
     {
-        return $this->hasMany(StudyPlan::class);
+        return $this->hasMany(StudyPlanCourse::class);
+    }
+
+    public function groups()
+    {
+        return $this->hasMany(Groups::class);
     }
 }

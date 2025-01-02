@@ -9,10 +9,10 @@ class StudyPlanCourseInstructorSubGroup extends Model
 {
     use HasFactory;
 
-    protected $table = 'spc_instructor_sub';
+    protected $table = 'spc_instructor_sub_groups';
 
     protected $fillable = [
-        'study_plan_course_instructors_id',
+        'spc_instructor_id',
         'sub_group_id',
         'instructor_id'
     ];
@@ -31,5 +31,10 @@ class StudyPlanCourseInstructorSubGroup extends Model
     public function instructor()
     {
         return $this->belongsTo(Instructor::class);
+    }
+
+    public function assignments()
+    {
+        return $this->hasMany(Assignment::class);
     }
 }

@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         //
-        Schema::create('spc_instructor_sub', function (Blueprint $table) {
+        Schema::create('spc_instructor_sub_groups', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('study_plan_course_instructors_id')
+            $table->foreignId('spc_instructor_id')
             ->unsignedBigInteger()
             ->references('id')
-            ->on('spc_instructor')
+            ->on('spc_instructors')
             ->cascadeOnUpdate()
             ->cascadeOnDelete();
 

@@ -43,13 +43,19 @@ class Instructor extends Model
         return $this->hasMany(AssignmentStatus::class);
     }
 
-    public function studentCourseInstructorsGroups()
-    {
-        return $this->hasMany(StudentCourseInstructorGroup::class);
-    }
 
     public function sub_groups()
     {
         return $this->hasMany(SubGroups::class);
+    }
+
+    public function spc_instructors()
+    {
+        return $this->hasMany(StudyPlanCourseInstructor::class);
+    }
+
+    public function spci_sub_groups()
+    {
+        return $this->hasMany(StudyPlanCourseInstructorSubGroup::class);
     }
 }

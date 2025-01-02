@@ -16,6 +16,8 @@ class Assignment extends Model
         'instructions',
         'due_date',
         'instructor_id',
+        'study_plan_course_instructor_id',
+        'study_plan_course_instructor_sub_group_id'
     ];
 
     public function instructor()
@@ -23,9 +25,18 @@ class Assignment extends Model
         return $this->belongsTo(Instructor::class);
     }
 
-
-    public function status()
+    public function spc_instructor()
     {
-        return $this->hasOne(AssignmentStatus::class);
+        return $this->belongsTo(StudyPlanCourseInstructor::class);
+    }
+
+    public function spci_sub_group()
+    {
+        return $this->belongsTo(StudyPlanCourseInstructorSubGroup::class);
+    }
+
+    public function assignment_submissions()
+    {
+        return $this->hasMany(AssignmentSubmission::class);
     }
 }

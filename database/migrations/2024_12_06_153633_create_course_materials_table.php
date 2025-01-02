@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('course_materials', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-            $table->enum('type', ['theoretical', 'practical'])->default('theoretical');
+            $table->enum('type', ['group', 'sub_group'])->default('group');
             $table->string('url');
 
             $table->foreignId('course_id')

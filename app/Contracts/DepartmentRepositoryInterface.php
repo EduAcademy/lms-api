@@ -8,6 +8,4 @@ interface DepartmentRepositoryInterface
     public function findById($id);
     public function findByShortName($shortName);
     public function create(array $data);
-    public function update(Department $department, array $data);
-
 }

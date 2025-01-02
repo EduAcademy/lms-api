@@ -41,7 +41,6 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(CourseRepositoryInterface::class, CourseRepository::class);
         $this->app->bind(StudentRepositoryInterface::class, StudentRepository::class);
         $this->app->bind(StudyPlanRepositoryInterface::class, StudyPlanRepository::class);
-        $this->app->bind(StuCouInstrGroupRepositoryInterface::class, StuCouInstrGroupRepository::class);
         $this->app->bind(LabGroupRepositoryInterface::class, LabGroupRepository::class);
         $this->app->bind(TheoreticalGroupRepositoryInterface::class, TheoreticalGroupRepository::class);
         $this->app->bind(CourseMaterialRepositoryInterface::class, CourseMaterialRepository::class);
