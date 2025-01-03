@@ -16,6 +16,8 @@ class Course extends Model
         'course_code',
         'course_hours',
         'type',
+        'group_hours',
+        'sub_group_hours',
     ];
 
     public function materials()

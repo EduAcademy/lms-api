@@ -90,12 +90,11 @@ class AuthController extends Controller
             'token' => 'required|string',
         ]);
 
+
         $result = $this->user_service->validateToken($request->token);
 
         return $result;
     }
-
-
 
     public function logout(Request $request)
     {

@@ -21,7 +21,7 @@ Route::prefix('v1')->group(
 );
 // Protected routes
 // Commented out auth:sanctum middleware for testing purposes
-Route::middleware('auth:sanctum')->group(function () {
+// Route::middleware('auth:sanctum')->group(function () {
     // Versioned routes
     Route::prefix('v1')->group(function () {
         // User profile and password routes
@@ -121,4 +121,4 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // });
     });
-});
+// });

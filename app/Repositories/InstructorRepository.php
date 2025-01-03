@@ -12,28 +12,13 @@ class InstructorRepository implements InstructorRepositoryInterface
         return Instructor::all();
     }
 
-    public function findById($id)
+    public function getById($id)
     {
         return Instructor::find($id);
     }
 
-    public function findByEmail($email)
-    {
-        return Instructor::where('email', $email)->first();
-    }
-
-    public function createInstructor(array $data)
+    public function create(array $data)
     {
         return Instructor::create($data);
-    }
-
-    public function updateInstructor(Instructor $instructor, array $data)
-    {
-        return $instructor->update($data);
-    }
-
-    public function deleteInstructor(Instructor $instructor)
-    {
-        return $instructor->delete();
     }
 }

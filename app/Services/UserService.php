@@ -10,6 +10,7 @@ use App\Interfaces\Services\UserServiceInterface;
 use App\Models\User;
 use App\Repositories\GenericRepository;
 use App\Http\Requests\SignUpRequest;
+use App\Mail\EmailSender;
 use App\Models\Role;
 use App\Shared\Constants\StatusResponse;
 use App\Shared\Handler\Result;
@@ -17,6 +18,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Sanctum\PersonalAccessToken;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class UserService implements UserServiceInterface
 {
@@ -24,15 +27,18 @@ class UserService implements UserServiceInterface
     protected $studentService;
     protected $instructorService;
     private $genericRepository;
+    private $roleService;
     public function __construct(
         UserRepositoryInterface $userRepository,
         StudentServiceInterface $studentService,
-        InstructorServiceInterface $instructorService
+        InstructorServiceInterface $instructorService,
+        RoleService $roleService
     ) {
         $this->userRepository = $userRepository;
         $this->genericRepository = new GenericRepository(new User);
         $this->studentService = $studentService;
         $this->instructorService = $instructorService;
+        $this->roleService = $roleService;
     }
 
     public function getAllUsers()
@@ -44,12 +50,12 @@ class UserService implements UserServiceInterface
 
     public function getUserById($id)
     {
-        return $this->userRepository->findById($id);
+        return $this->userRepository->getById($id);
     }
 
     public function getUserByEmail($email)
     {
-        return $this->userRepository->findByEmail($email);
+        return $this->userRepository->getByEmail($email);
     }
 
     public function registerUser(array $data)
@@ -62,13 +68,10 @@ class UserService implements UserServiceInterface
         }
 
         $data['password'] = Hash::make($data['password']);
-        $data['role_id'] = $data['role_id'] ?? Role::query()
-            ->select('id')
-            ->where("name", 'Like',  '%' . RoleType::Student . '%');
+        $role = $this->roleService->getRoleByName(RoleType::Student);
+        $data['role_id'] = $data['role_id'] ?? $role;
 
-        // TODO: if not $data['role_id'] throw error, or return
-
-        $result = $this->userRepository->createUser($data);
+        $result = $this->userRepository->create($data);
 
         if (!$result) {
             return Result::error('Failed to create user', 500);
@@ -144,11 +147,18 @@ class UserService implements UserServiceInterface
             return Result::error('Validation failed', 422, $validator->errors());
         }
 
-        $status = Password::sendResetLink($data);
+        // Generate the reset token
+        $status = Password::sendResetLink($data, function ($user, $token) use ($data) {
+            $resetUrl = url('/reset-password?token=' . $token . '&email=' . urlencode($data['email']));
+
+            Log::info($resetUrl);
+            // Send custom email
+            Mail::to($data['email'])->send(new EmailSender($resetUrl));
+        });
 
         return $status === Password::RESET_LINK_SENT
-            ? Result::success([], __($status))
-            : Result::error(__($status), 400);
+            ? Result::success([], __('A password reset link has been sent to your email address.'))
+            : Result::error(__('Unable to send reset link.'), 400);
     }
 
     public function resetPassword(array $data)
@@ -156,7 +166,7 @@ class UserService implements UserServiceInterface
         $validator = Validator::make($data, [
             'token' => 'required',
             'email' => 'required|email',
-            'password' => 'required|min:6|confirmed',
+            'password' => 'required|min:6',
         ]);
 
         if ($validator->fails()) {
@@ -177,7 +187,7 @@ class UserService implements UserServiceInterface
 
         return $status === Password::PASSWORD_RESET
             ? Result::success([], __($status))
-            : Result::error(__($status), 400);
+            : Result::error(__($status), StatusResponse::HTTP_BAD_REQUEST);
     }
 
 
@@ -209,6 +219,6 @@ class UserService implements UserServiceInterface
         }
 
         // Token is valid
-        return Result::success('The token is invalid or not found.', StatusResponse::HTTP_OK);
+        return Result::success('The token is valid', StatusResponse::HTTP_OK);
     }
 }
