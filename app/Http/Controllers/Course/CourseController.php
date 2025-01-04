@@ -58,16 +58,6 @@ class CourseController extends Controller
         return $result;
     }
 
-    public function showbyDepartment($departmentId)
-    {
-
-        $result = $this->course_service->getCourseByDepartmentId($departmentId);
-
-        return $result;
-    }
-
-
-
     /**
      * Update the specified resource in storage.
      */

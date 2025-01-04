@@ -9,7 +9,7 @@ class CourseMaterialRepository implements CourseMaterialRepositoryInterface
 {
     public function getAll()
     {
-        $result = CourseMaterial::all();
+        $result = CourseMaterial::with('course', 'instructor')->get();
         return $result;
     }
 
@@ -21,13 +21,13 @@ class CourseMaterialRepository implements CourseMaterialRepositoryInterface
 
     public function getByInstructorId($instructorId)
     {
-        $result = CourseMaterial::with('instructor')->get();
+        $result = CourseMaterial::where('instructor_id', $instructorId)->get();
         return $result;
     }
 
     public function getByCourseId($courseId)
     {
-        $result = CourseMaterial::with('course')->get();
+        $result = CourseMaterial::where('course_id', $courseId)->get();
         return $result;
     }
 

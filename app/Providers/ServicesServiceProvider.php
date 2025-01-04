@@ -15,6 +15,7 @@ use App\Interfaces\Services\StuCouInstrGroupServiceInterface as ServicesStuCouIn
 use App\Interfaces\Services\StudentServiceInterface;
 use App\Interfaces\Services\StudyPlanServiceInterface;
 use App\Interfaces\Services\GroupserviceInterface as ServicesGroupserviceInterface;
+use App\Interfaces\Services\RoleServiceInterface;
 use App\Interfaces\Services\UserServiceInterface;
 use App\Services\CourseMaterialService;
 use App\Services\CourseService;
@@ -24,6 +25,7 @@ use App\Services\StuCouInstrGroupService;
 use App\Services\StudentService;
 use App\Services\StudyPlanService;
 use App\Services\Groupservice;
+use App\Services\RoleService;
 use App\Services\UserService;
 use Illuminate\Support\ServiceProvider;
 
@@ -44,6 +46,7 @@ class ServicesServiceProvider extends ServiceProvider
         $this->app->bind(GroupserviceInterface::class, Groupservice::class);
         $this->app->bind(CourseMaterialServiceInterface::class, CourseMaterialService::class);
         $this->app->bind(InstructorServiceInterface::class, InstructorService::class);
+        $this->app->bind(RoleServiceInterface::class, RoleService::class);
     }
 
     /**

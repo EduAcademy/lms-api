@@ -25,19 +25,19 @@ class UserService implements UserServiceInterface
 {
     protected $userRepository;
     protected $studentService;
-    protected $instructorService;
+    // protected $instructorService;
     private $genericRepository;
     private $roleService;
     public function __construct(
         UserRepositoryInterface $userRepository,
         StudentServiceInterface $studentService,
-        InstructorServiceInterface $instructorService,
+        // InstructorServiceInterface $instructorService,
         RoleService $roleService
     ) {
         $this->userRepository = $userRepository;
         $this->genericRepository = new GenericRepository(new User);
         $this->studentService = $studentService;
-        $this->instructorService = $instructorService;
+        // $this->instructorService = $instructorService;
         $this->roleService = $roleService;
     }
 
@@ -51,6 +51,13 @@ class UserService implements UserServiceInterface
     public function getUserById($id)
     {
         return $this->userRepository->getById($id);
+    }
+
+    public function isRoleAllowed($userId, $allowedRole)
+    {
+        $user = $this->getUserById($userId);
+
+        return $user->role->name == $allowedRole ? true : false;
     }
 
     public function getUserByEmail($email)
@@ -93,6 +100,33 @@ class UserService implements UserServiceInterface
         return Result::success($result, 'User registered successfully', 200);
     }
 
+    public function generateTokens($user)
+    {
+        $accessToken = $user->createToken('auth_token', ['*'], now()->addHours(24))->plainTextToken;
+
+        // Generate refresh token
+        $refreshToken = bin2hex(random_bytes(40));
+        $refreshTokenExpiresAt = now()->addDays(7);
+
+        // Retrieve the newly created token
+        $personalAccessToken = $user->tokens()->latest('id')->first();
+
+
+        if ($personalAccessToken) {
+            $personalAccessToken->update([
+                'refresh_token' => $refreshToken,
+                'refresh_token_expires_at' => $refreshTokenExpiresAt,
+            ]);
+        }
+
+        return [
+            'access_token' => $accessToken,
+            'refresh_token' => $refreshToken,
+            'expires_in' => 24 * 60 * 60, // Access token expiry in seconds
+        ];
+    }
+
+
     public function login(array $data)
     {
 
@@ -101,10 +135,31 @@ class UserService implements UserServiceInterface
         }
 
         $user = auth()->user();
-        $token = $user->createToken("auth_token", ['*'], now()->addHours(24))->plainTextToken;
+        $tokens = $this->generateTokens($user);
+
+        return Result::success_with_token($user, $tokens, 'Logged in successfully', 200);
+    }
 
 
-        return Result::success_with_token($user, $token, 'Logged in successfully', 200);
+    public function refreshAccessToken($refreshToken)
+    {
+        $tokenRecord = PersonalAccessToken::where('refresh_token', $refreshToken)
+            ->where('refresh_token_expires_at', '>', now())
+            ->first();
+
+        if (!$tokenRecord) {
+            return Result::error('Invalid or expired refresh token', 401);
+        }
+
+        $user = $tokenRecord->tokenable;
+
+        // Generate new tokens
+        $newTokens = $this->generateTokens($user);
+
+        // Delete the old token to avoid reuse
+        $tokenRecord->delete();
+
+        return Result::success($newTokens, 'Token refreshed successfully', 200);
     }
 
     public function updateUser($id, array $data)

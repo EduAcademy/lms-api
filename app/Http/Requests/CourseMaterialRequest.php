@@ -24,7 +24,7 @@ class CourseMaterialRequest extends FormRequest
         return [
             //
             'name' => 'required|string',
-            'type' => 'required|in:theoretical,practical',
+            'type' => 'required|in:group,sub_group',
             'url' => 'nullable|url',
             'course_id' => 'required|integer|exists:courses,id',
             'instructor_id' => 'required|integer|exists:instructors,id'

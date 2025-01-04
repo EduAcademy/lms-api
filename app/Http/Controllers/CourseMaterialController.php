@@ -60,6 +60,21 @@ class CourseMaterialController extends Controller
         return $result;
     }
 
+    public function showbyCourse($id)
+    {
+        //
+        $result = $this->course_materialService->getCourseMaterialByCourseId($id);
+
+        return $result;
+    }
+
+    public function showbyInstructor($id)
+    {
+        //
+        $result = $this->course_materialService->getCourseMaterialByInstructorId($id);
+
+        return $result;
+    }
     /**
      * Show the form for editing the specified resource.
      */

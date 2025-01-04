@@ -81,7 +81,8 @@ class CourseService implements CourseServiceInterface
             'course_code' => 'required|string|min:2',
             'course_hours' => 'required|integer',
             'type' => 'required|in:core,elective',
-            'department_id' => 'required|integer|exists:departments,id',
+            'group_hours' => 'required|integer',
+            'sub_group_hours' => 'required|integer',
         ]);
 
         if ($validator->fails()) {

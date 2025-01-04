@@ -50,12 +50,13 @@ class AuthController extends Controller
     {
         $user = $request->user();
 
+        return Result::success($user, 'Found profile Successfully', StatusResponse::HTTP_OK);
+        return $user;
+
         if ($user == null) {
 
             return Result::error('Token is expired or invalid', StatusResponse::HTTP_UNAUTHORIZED);
         }
-
-        return Result::success($user, 'Found profile Successfully', StatusResponse::HTTP_OK);
     }
 
     public function forgotPassword(Request $request)
@@ -101,5 +102,15 @@ class AuthController extends Controller
         $result = $this->user_service->logout($request->user());
 
         return $result;
+    }
+
+    public function refreshToken(Request $request)
+    {
+        $data = $request->validate([
+            'refresh_token' => 'required|string',
+        ]);
+
+        $response = $this->user_service->refreshAccessToken($data['refresh_token']);
+        return $response;
     }
 }

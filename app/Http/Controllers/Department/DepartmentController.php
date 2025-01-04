@@ -30,17 +30,9 @@ class DepartmentController extends Controller
 
     public function index()
     {
-        // return Department::all();
 
         $result = $this->departmentService->getAllDepartments();
-
-        // return 'hwllo';
-        // return response()->json(
-        //     [
-        //         'messgae' => 'fetch all departs successfully'
-        //     ]
-        // );
-
+        
         return $result;
 
     }

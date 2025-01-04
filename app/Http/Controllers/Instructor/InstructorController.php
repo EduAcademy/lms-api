@@ -19,20 +19,17 @@ class InstructorController extends Controller
 
     public function index()
     {
-        $instructors = $this->instructorService->getAll();
-        return response()->json($instructors);
+        $result = $this->instructorService->getAllInstructors();
+
+        return $result;
     }
 
 
     public function show($id)
     {
-        $instructor = $this->instructorService->findById($id);
+        $result = $this->instructorService->getInstructorById($id);
 
-        if ($instructor) {
-            return response()->json($instructor);
-        }
-
-        return response()->json(['message' => 'instructor not found'], 404);
+        return $result;
     }
 
 
@@ -40,38 +37,23 @@ class InstructorController extends Controller
     {
 
         $data = $request->validated();
-        $instructor = $this->instructorService->createInstructor($data);
+        $result = $this->instructorService->createInstructor($data);
 
-        return response()->json($instructor, 201);
+        return $result;
     }
 
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'uuid' => 'required|uuid',
-            'professional_title' => 'required|string|max:255',
-            'about_me' => 'nullable|string',
-            'social_links' => 'nullable|url',
-            'user_id' => 'required|integer|exists:users,id',
-        ]);
 
-        $instructor = $this->instructorService->updateInstructor($id, $validated);
+        $result = $this->instructorService->updateInstructor($id, $request->all());
 
-        if ($instructor) {
-            return response()->json($instructor);
-        }
-
-        return response()->json(['message' => 'instructor not found'], 404);
+        return $result;
     }
 
-    public function destroy($id)
+    public function delete($id)
     {
-        $deleted = $this->instructorService->deleteInstructor($id);
+        $result = $this->instructorService->deleteInstructor($id);
 
-        if ($deleted) {
-            return response()->json(['message' => 'instructor deleted successfully']);
-        }
-
-        return response()->json(['message' => 'instructor not found'], 404);
+        return $result;
     }
 }

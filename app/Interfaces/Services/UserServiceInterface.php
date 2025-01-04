@@ -12,4 +12,7 @@ interface UserServiceInterface {
     public function validateToken(string $token);
     public function updateUser($id, array $data);
     public function deleteUser($id);
+    public function isRoleAllowed($userId, $allowedRole);
+    public function generateTokens($user);
+    public function refreshAccessToken($refreshToken);
 }

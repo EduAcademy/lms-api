@@ -8,7 +8,7 @@ class InstructorRepository implements InstructorRepositoryInterface
 {
     public function getAll()
     {
-        return Instructor::all();
+        return Instructor::with('user')->get();
     }
 
     public function getById($id)

@@ -22,7 +22,7 @@ Route::prefix('v1')->group(
 
 // Protected routes
 // Commented out auth:sanctum middleware for testing purposes
-// Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     // Versioned routes
     Route::prefix('v1')->group(function () {
         // User profile and password routes
@@ -33,6 +33,7 @@ Route::prefix('v1')->group(
         Route::get('/user-list', [AuthController::class, 'index']);
         Route::put('/update/{id}', [AuthController::class, 'update']);
         Route::delete('/delete/{id}', [AuthController::class, 'delete']);
+        Route::post('/refresh-token', [AuthController::class, 'refreshToken']);
 
         // Admin-only routes
         // Excel Import routes
@@ -54,7 +55,7 @@ Route::prefix('v1')->group(
             Route::get('/{id}', [InstructorController::class, 'show']);
             Route::post('/', [InstructorController::class, 'store']);
             Route::put('/{id}', [InstructorController::class, 'update']);
-            Route::delete('/{id}', [InstructorController::class, 'destroy']);
+            Route::delete('/{id}', [InstructorController::class, 'delete']);
         });
 
         // Students CRUD
@@ -109,9 +110,11 @@ Route::prefix('v1')->group(
         Route::prefix('course_materials')->group(function () {
             Route::get('/', [CourseMaterialController::class, 'index']);
             Route::get('/{id}', [CourseMaterialController::class, 'show']);
+            Route::get('/course/{id}', [CourseMaterialController::class, 'showbyCourse']);
+            Route::get('/instructor/{id}', [CourseMaterialController::class, 'showbyInstructor']);
             Route::post('/', [CourseMaterialController::class, 'store']);
             Route::put('/{id}', [CourseMaterialController::class, 'update']);
             Route::delete('/{id}', [CourseMaterialController::class, 'delete']);
         });
     });
-// });
+});

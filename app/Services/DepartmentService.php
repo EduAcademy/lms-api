@@ -78,7 +78,7 @@ class DepartmentService implements DepartmentServiceInterface
     {
 
         $validator = Validator::make($data, [
-            'name' => 'required|string|unique:departments,name',
+            'name' => "required|string|unique:departments,name,{$id}",
             'short_name' => 'required|string|min:2',
             'description' => 'nullable|string',
         ]);

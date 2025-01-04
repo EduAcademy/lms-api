@@ -9,7 +9,7 @@ class CourseRepository implements CourseRepositoryInterface
 {
     public function getAll()
     {
-        $courses =  Course::with('department')->get();
+        $courses =  Course::all();
 
         return $courses;
     }
@@ -31,7 +31,7 @@ class CourseRepository implements CourseRepositoryInterface
 
     public function update($id, array $data)
     {
-        
+
     }
     public function delete($id)
     {
