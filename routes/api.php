@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Route;
 // Public routes
 Route::prefix('v1')->group(
     function () {
-        Route::post('/register', [AuthController::class, 'register']);
         Route::post('/login', [AuthController::class, 'login']);
         Route::post('/validate-token', [AuthController::class, 'validateToken']);
     }
@@ -22,7 +21,7 @@ Route::prefix('v1')->group(
 
 // Protected routes
 // Commented out auth:sanctum middleware for testing purposes
-// Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     // Versioned routes
     Route::prefix('v1')->group(function () {
         // User profile and password routes
@@ -30,6 +29,7 @@ Route::prefix('v1')->group(
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
         Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+        Route::post('/register', [AuthController::class, 'register']);
         Route::get('/user-list', [AuthController::class, 'index']);
         Route::put('/update/{id}', [AuthController::class, 'update']);
         Route::delete('/delete/{id}', [AuthController::class, 'delete']);
@@ -114,4 +114,4 @@ Route::prefix('v1')->group(
             Route::delete('/{id}', [CourseMaterialController::class, 'delete']);
         });
     });
-// });
+ });
