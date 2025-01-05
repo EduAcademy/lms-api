@@ -12,29 +12,30 @@ use App\Http\Controllers\TheoreticalGroupController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
-Route::prefix('v1')->group(
-    function () {
-        Route::post('/login', [AuthController::class, 'login']);
-        Route::post('/validate-token', [AuthController::class, 'validateToken']);
-    }
-);
+Route::prefix('v1')->group(function () {
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/validate-token', [AuthController::class, 'validateToken']);
+});
 
 // Protected routes
-// Commented out auth:sanctum middleware for testing purposes
-//Route::middleware('auth:sanctum')->group(function () {
-    // Versioned routes
+Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('v1')->group(function () {
-        // User profile and password routes
-        Route::get('/profile', [AuthController::class, 'profile']);
-        Route::post('/logout', [AuthController::class, 'logout']);
-        Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
-        Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+        // User profile and authentication
+        Route::prefix('auth')->group(function () {
+            Route::get('/profile', [AuthController::class, 'profile']);
+            Route::post('/logout', [AuthController::class, 'logout']);
+            Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+            Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+        });
 
-        Route::post('/users', [AuthController::class, 'register']);
-        Route::get('/users', [AuthController::class, 'index']);
-        Route::get('/users/{id}', [AuthController::class, 'show']);
-        Route::put('/users/{id}', [AuthController::class, 'update']);
-        Route::delete('/users/{id}', [AuthController::class, 'delete']);
+        // User management
+        Route::prefix('users')->group(function () {
+            Route::post('/', [AuthController::class, 'register']);
+            Route::get('/', [AuthController::class, 'index']);
+            Route::get('/{id}', [AuthController::class, 'show']);
+            Route::put('/{id}', [AuthController::class, 'update']);
+            Route::delete('/{id}', [AuthController::class, 'delete']);
+        });
 
         // Admin-only routes
         // Excel Import routes
@@ -59,7 +60,7 @@ Route::prefix('v1')->group(
             Route::delete('/{id}', [InstructorController::class, 'destroy']);
         });
 
-        // Students CRUD
+        // Student routes
         Route::prefix('students')->group(function () {
             Route::get('/', [StudentController::class, 'index']);
             Route::get('/{id}', [StudentController::class, 'show']);
@@ -68,7 +69,7 @@ Route::prefix('v1')->group(
             Route::delete('/{id}', [StudentController::class, 'destroy']);
         });
 
-        // Courses routes
+        // Course routes
         Route::prefix('courses')->group(function () {
             Route::get('/', [CourseController::class, 'index']);
             Route::get('/{id}', [CourseController::class, 'show']);
@@ -78,7 +79,7 @@ Route::prefix('v1')->group(
             Route::delete('/{id}', [CourseController::class, 'delete']);
         });
 
-        // StudyPlan routes
+        // Study Plan routes
         Route::prefix('study_plans')->group(function () {
             Route::get('/', [StudyPlanController::class, 'index']);
             Route::get('/{id}', [StudyPlanController::class, 'show']);
@@ -116,4 +117,4 @@ Route::prefix('v1')->group(
             Route::delete('/{id}', [CourseMaterialController::class, 'delete']);
         });
     });
- //});
+});
