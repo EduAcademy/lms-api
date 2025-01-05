@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class UserSeeder extends Seeder
 {
@@ -17,8 +18,8 @@ class UserSeeder extends Seeder
         $chunks = 99; // Insert rows in chunks
         $total = 99; // Total rows
 
-        User::factory()->count(1)->create(
-            [
+        if (!User::where('email', 'test@test.com')->exists()) {
+            User::factory()->create([
                 'email' => 'test@test.com',
                 'password' => bcrypt('123456'),
                 'role_id' => 1,
@@ -30,8 +31,9 @@ class UserSeeder extends Seeder
                 'status' => 'active',
                 'gender' => 'male',
                 'remember_token' => Str::random(10),
-            ]
-        );
+            ]);
+        }
+
         for ($i = 0; $i < $total / $chunks; $i++) {
             User::factory()->count($chunks)->create();
         }
