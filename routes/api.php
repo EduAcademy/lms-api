@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Route;
 // Public routes
 Route::prefix('v1')->group(
     function () {
-        Route::post('/register', [AuthController::class, 'register']);
         Route::post('/login', [AuthController::class, 'login']);
         Route::post('/validate-token', [AuthController::class, 'validateToken']);
     }
@@ -22,7 +21,7 @@ Route::prefix('v1')->group(
 
 // Protected routes
 // Commented out auth:sanctum middleware for testing purposes
-Route::middleware('auth:sanctum')->group(function () {
+//Route::middleware('auth:sanctum')->group(function () {
     // Versioned routes
     Route::prefix('v1')->group(function () {
         // User profile and password routes
@@ -30,10 +29,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
         Route::post('/reset-password', [AuthController::class, 'resetPassword']);
-        Route::get('/user-list', [AuthController::class, 'index']);
-        Route::put('/update/{id}', [AuthController::class, 'update']);
-        Route::delete('/delete/{id}', [AuthController::class, 'delete']);
-        Route::post('/refresh-token', [AuthController::class, 'refreshToken']);
+
+        Route::post('/users', [AuthController::class, 'register']);
+        Route::get('/users', [AuthController::class, 'index']);
+        Route::get('/users/{id}', [AuthController::class, 'show']);
+        Route::put('/users/{id}', [AuthController::class, 'update']);
+        Route::delete('/users/{id}', [AuthController::class, 'delete']);
 
         // Admin-only routes
         // Excel Import routes
@@ -55,7 +56,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/{id}', [InstructorController::class, 'show']);
             Route::post('/', [InstructorController::class, 'store']);
             Route::put('/{id}', [InstructorController::class, 'update']);
-            Route::delete('/{id}', [InstructorController::class, 'delete']);
+            Route::delete('/{id}', [InstructorController::class, 'destroy']);
         });
 
         // Students CRUD
@@ -110,11 +111,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::prefix('course_materials')->group(function () {
             Route::get('/', [CourseMaterialController::class, 'index']);
             Route::get('/{id}', [CourseMaterialController::class, 'show']);
-            Route::get('/course/{id}', [CourseMaterialController::class, 'showbyCourse']);
-            Route::get('/instructor/{id}', [CourseMaterialController::class, 'showbyInstructor']);
             Route::post('/', [CourseMaterialController::class, 'store']);
             Route::put('/{id}', [CourseMaterialController::class, 'update']);
             Route::delete('/{id}', [CourseMaterialController::class, 'delete']);
         });
     });
-});
+ //});

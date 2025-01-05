@@ -47,12 +47,16 @@ class UserService implements UserServiceInterface
 
         return Result::success($result, 'Get All Users Successfully', StatusResponse::HTTP_OK);
     }
-
     public function getUserById($id)
     {
-        return $this->userRepository->getById($id);
-    }
+        $result = $this->userRepository->findById($id);
 
+        if (!$result) {
+            return Result::error('User not found', StatusResponse::HTTP_NOT_FOUND);
+        }
+
+        return Result::success($result, 'User found Successfully by Id', StatusResponse::HTTP_OK);
+    }
     public function isRoleAllowed($userId, $allowedRole)
     {
         $user = $this->getUserById($userId);

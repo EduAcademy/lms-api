@@ -113,4 +113,10 @@ class AuthController extends Controller
         $response = $this->user_service->refreshAccessToken($data['refresh_token']);
         return $response;
     }
+    public function show($id)
+    {
+        $result = $this->user_service->getUserById($id);
+
+        return $result;
+    }
 }
