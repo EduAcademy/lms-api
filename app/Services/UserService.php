@@ -14,6 +14,7 @@ use App\Mail\EmailSender;
 use App\Models\Role;
 use App\Shared\Constants\StatusResponse;
 use App\Shared\Handler\Result;
+use Exception;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
@@ -49,7 +50,8 @@ class UserService implements UserServiceInterface
     }
     public function getUserById($id)
     {
-        $result = $this->userRepository->findById($id);
+
+        $result = $this->userRepository->getById($id);
 
         if (!$result) {
             return Result::error('User not found', StatusResponse::HTTP_NOT_FOUND);
@@ -59,7 +61,7 @@ class UserService implements UserServiceInterface
     }
     public function isRoleAllowed($userId, $allowedRole)
     {
-        $user = $this->getUserById($userId);
+        $user = $this->userRepository->getById($userId);
 
         return $user->role->name == $allowedRole ? true : false;
     }
@@ -72,36 +74,41 @@ class UserService implements UserServiceInterface
     public function registerUser(array $data)
     {
 
-        $validator = Validator::make($data, (new SignUpRequest())->rules());
 
-        if ($validator->fails()) {
-            return Result::error('Validation failed', 422, $validator->errors());
+        try {
+            $validator = Validator::make($data, (new SignUpRequest())->rules());
+
+            if ($validator->fails()) {
+                return Result::error('Validation failed', 422, $validator->errors());
+            }
+
+            $data['password'] = Hash::make($data['password']);
+            $role = $this->roleService->getRoleByName(RoleType::Student);
+            $data['role_id'] = $data['role_id'] ?? $role;
+
+            $result = $this->userRepository->create($data);
+
+            if (!$result) {
+                return Result::error('Failed to create user', 500);
+            }
+
+            // $user = $this->userRepository->findById($result->id);
+
+            // if($user){
+            //     return Result::success($user->role->name, 'User found bla', 200);
+            // }
+            // if ($user->role->name == RoleType::Student) {
+            //     // $result = $this->studentService->createStudent();
+            // }
+
+            // if ($user->role->name == RoleType::Instructor) {
+            //     // $result = $this->instructorService->createInstructor();
+            // }
+
+            return Result::success($result, 'User registered successfully', 200);
+        } catch (Exception $ex) {
+            return Result::error($ex, StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-        $data['password'] = Hash::make($data['password']);
-        $role = $this->roleService->getRoleByName(RoleType::Student);
-        $data['role_id'] = $data['role_id'] ?? $role;
-
-        $result = $this->userRepository->create($data);
-
-        if (!$result) {
-            return Result::error('Failed to create user', 500);
-        }
-
-        // $user = $this->userRepository->findById($result->id);
-
-        // if($user){
-        //     return Result::success($user->role->name, 'User found bla', 200);
-        // }
-        // if ($user->role->name == RoleType::Student) {
-        //     // $result = $this->studentService->createStudent();
-        // }
-
-        // if ($user->role->name == RoleType::Instructor) {
-        //     // $result = $this->instructorService->createInstructor();
-        // }
-
-        return Result::success($result, 'User registered successfully', 200);
     }
 
     public function generateTokens($user)
@@ -168,25 +175,31 @@ class UserService implements UserServiceInterface
 
     public function updateUser($id, array $data)
     {
-        $validator = Validator::make($data, [
-            'username' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6',
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'phone' => 'nullable|string',
-            'address' => 'nullable|string',
-            'role_id' => 'integer',
-        ]);
 
-        if ($validator->fails()) {
-            return Result::error('Validation failed', 422, $validator->errors());
+        try {
+            $validator = Validator::make($data, [
+                'username' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|string|min:6',
+                'first_name' => 'required|string',
+                'last_name' => 'required|string',
+                'phone' => 'nullable|string',
+                'address' => 'nullable|string',
+                'role_id' => 'integer',
+            ]);
+
+
+            if ($validator->fails()) {
+                return Result::error('Validation failed', 422, $validator->errors());
+            }
+
+
+            $result = $this->genericRepository->update($id, $data);
+
+            return Result::success($result, 'User is updated Successfully', StatusResponse::HTTP_OK);
+        } catch (Exception $ex) {
+            return Result::error($ex, StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-
-        $result = $this->genericRepository->update($id, $data);
-
-        return Result::success($result, 'User is updated Successfully', StatusResponse::HTTP_OK);
     }
 
     public function deleteUser($id)

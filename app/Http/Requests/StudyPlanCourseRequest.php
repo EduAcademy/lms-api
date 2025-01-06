@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StudyPlanRequest extends FormRequest
+class StudyPlanCourseRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,12 @@ class StudyPlanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'=> 'required|string|unique:study_plans,name',
-            'number' => 'required|integer',
-            'start_date' => 'required|date',
+            //
+            'study_plan_id'=>'required|integer|exists:study_plans,id',
+            'department_id'=>'required|integer|exists:departments,id',
+            'course_id'=>'required|integer|exists:courses,id',
+            'level_id'=>'required|integer|exists:levels,id',
+            'semester'=>'required|integer|in:1,2',
         ];
     }
 }

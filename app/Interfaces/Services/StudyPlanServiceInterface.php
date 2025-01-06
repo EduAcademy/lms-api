@@ -5,8 +5,6 @@ namespace App\Interfaces\Services;
 interface StudyPlanServiceInterface
 {
     public function getAllStudyPlans();
-    public function getStudyPlanByDeptId($departmentId);
-    public function getStudyPlanByCourseId($courseId);
     public function getStudyPlanById($id);
     public function createStudyPlan(array $data);
     public function updateStudyPlan($id, array $data);

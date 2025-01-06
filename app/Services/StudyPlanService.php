@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Contracts\StudyPlanRepositoryInterface;
 use App\Http\Requests\StudyPlanRequest;
 use App\Interfaces\Services\StudyPlanServiceInterface;
-use App\Models\Course;
 use App\Models\StudyPlan;
 use App\Repositories\GenericRepository;
 use App\Shared\Constants\StatusResponse;
@@ -40,20 +39,11 @@ class StudyPlanService implements StudyPlanServiceInterface
     {
         $result = $this->studyplanRepository->getById($id);
 
+        if (!$result) {
+            return Result::error("StudyPlan not found with this Id {$id}", StatusResponse::HTTP_NOT_FOUND);
+        }
+
         return Result::success($result, 'Found StudyPlan Successfully', StatusResponse::HTTP_OK);
-    }
-
-    public function getStudyPlanByDeptId($departmentId)
-    {
-        $result = $this->studyplanRepository->getByDepartmentId($departmentId);
-        return Result::success($result, 'Found Study Plan by Department Successfully', StatusResponse::HTTP_OK);
-    }
-
-    public function getStudyPlanByCourseId($courseId)
-    {
-
-        $result = $this->studyplanRepository->getByCourseId($courseId);
-        return Result::success($result, 'Found Study Plan by Course Successfully', StatusResponse::HTTP_OK);
     }
 
     public function createStudyPlan(array $data)
@@ -64,7 +54,7 @@ class StudyPlanService implements StudyPlanServiceInterface
             return Result::error('Validation failed', 422, $validator->errors());
         }
 
-        $result = $this->studyplanRepository->create($data, $data['courses']);
+        $result = $this->studyplanRepository->create($data);
 
         return Result::success($result, 'StudyPlan is created Successfully', StatusResponse::HTTP_OK);
     }
@@ -74,12 +64,9 @@ class StudyPlanService implements StudyPlanServiceInterface
         Log::info('Incoming Data:', $data);
 
         $validator = Validator::make($data, [
-            'study_plan_no' => "required|integer", // Exclude current record
-            'level' => 'required|integer',
-            'semester' => 'required|integer',
-            'issued_at' => 'required|date',
-            'department_id' => 'required|integer|exists:departments,id',
-            'course_id' => 'required|integer|exists:courses,id',
+            'name' => 'required|string|unique:study_plans,name',
+            'number' => 'required|integer',
+            'start_date' => 'required|date',
         ]);
 
         if ($validator->fails()) {
@@ -87,17 +74,14 @@ class StudyPlanService implements StudyPlanServiceInterface
             return Result::error('Validation failed', 422, $validator->errors());
         }
 
-        $updatedCourse = $this->genericRepository->update($id, $data);
+        $result = $this->genericRepository->update($id, $data);
 
-        if (!$updatedCourse) {
+        if (!$result) {
             return Result::error('Failed to update Study Plan', StatusResponse::HTTP_BAD_REQUEST);
         }
 
-        return Result::success($updatedCourse, 'StudyPlan Updated Successfully', StatusResponse::HTTP_OK);
+        return Result::success($result, 'StudyPlan Updated Successfully', StatusResponse::HTTP_OK);
     }
-
-
-
 
     public function deleteStudyPlan($id)
     {

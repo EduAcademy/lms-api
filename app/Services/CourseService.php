@@ -56,7 +56,7 @@ class CourseService implements CourseServiceInterface
         $result = $this->courseRepository->getbyId($id);
 
         if (!$result) {
-            return Result::error('Course not found', StatusResponse::HTTP_NOT_FOUND);
+            return Result::error("Course not found with this Id {$id}", StatusResponse::HTTP_NOT_FOUND);
         }
 
         return Result::success($result, 'Course found Successfully by Id', StatusResponse::HTTP_OK);
@@ -67,7 +67,7 @@ class CourseService implements CourseServiceInterface
         $result = $this->courseRepository->getbyDepartmentId($departmentId);
 
         if (!$result) {
-            return Result::error('Course not found', StatusResponse::HTTP_NOT_FOUND);
+            return Result::error("Course not found with this Id {$departmentId}", StatusResponse::HTTP_NOT_FOUND);
         }
 
         return Result::success($result, 'Course found Successfully by DepartmentId', StatusResponse::HTTP_OK);

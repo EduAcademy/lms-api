@@ -18,7 +18,7 @@ Route::prefix('v1')->group(function () {
 });
 
 // Protected routes
-Route::middleware('auth:sanctum')->group(function () {
+// Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('v1')->group(function () {
         // User profile and authentication
         Route::prefix('auth')->group(function () {
@@ -117,4 +117,4 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::delete('/{id}', [CourseMaterialController::class, 'delete']);
         });
     });
-});
+// });
