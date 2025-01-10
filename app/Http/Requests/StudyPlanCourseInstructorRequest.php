@@ -23,6 +23,9 @@ class StudyPlanCourseInstructorRequest extends FormRequest
     {
         return [
             //
+            'study_plan_course_id'=> 'required|integer|exists:study_plan_courses,id',
+            'group_id'=> 'required|integer|exists:groups,id',
+            'instructor_id'=> 'required|integer|exists:instructors,id'
         ];
     }
 }

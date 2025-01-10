@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\StudyPlanCourseInstructorSubGroup;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StudyPlanCourseInstructorSubGroupRequest extends FormRequest
@@ -11,7 +12,7 @@ class StudyPlanCourseInstructorSubGroupRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,6 +24,9 @@ class StudyPlanCourseInstructorSubGroupRequest extends FormRequest
     {
         return [
             //
+            'spc_instructor_id'=>'required|integer|exists:spc_instructors,id',
+            'sub_group_id'=>'required|integer|exists:sub_groups,id',
+            'instructor_id'=>'required|integer|exists:instructors,id'
         ];
     }
 }

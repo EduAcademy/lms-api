@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Contracts\Interfaces\Services\StudyPlanCourseServiceInterface;
 use App\Interfaces\Services\CourseMaterialServiceInterface;
 use App\Interfaces\Services\SubGroupserviceInterface;
 use App\Interfaces\Services\StuCouInstrGroupServiceInterface;
@@ -16,6 +17,8 @@ use App\Interfaces\Services\StudentServiceInterface;
 use App\Interfaces\Services\StudyPlanServiceInterface;
 use App\Interfaces\Services\GroupserviceInterface as ServicesGroupserviceInterface;
 use App\Interfaces\Services\RoleServiceInterface;
+use App\Interfaces\Services\StudyPlanCourseInstructorServiceInterface;
+use App\Interfaces\Services\StudyPlanCourseInstructorSubGroupServiceInterface;
 use App\Interfaces\Services\UserServiceInterface;
 use App\Services\CourseMaterialService;
 use App\Services\CourseService;
@@ -26,6 +29,9 @@ use App\Services\StudentService;
 use App\Services\StudyPlanService;
 use App\Services\Groupservice;
 use App\Services\RoleService;
+use App\Services\StudyPlanCourseInstructorService;
+use App\Services\StudyPlanCourseInstructorSubGroupService;
+use App\Services\StudyPlanCourseService;
 use App\Services\UserService;
 use Illuminate\Support\ServiceProvider;
 
@@ -47,6 +53,9 @@ class ServicesServiceProvider extends ServiceProvider
         $this->app->bind(CourseMaterialServiceInterface::class, CourseMaterialService::class);
         $this->app->bind(InstructorServiceInterface::class, InstructorService::class);
         $this->app->bind(RoleServiceInterface::class, RoleService::class);
+        $this->app->bind(StudyPlanCourseServiceInterface::class, StudyPlanCourseService::class);
+        $this->app->bind(StudyPlanCourseInstructorServiceInterface::class, StudyPlanCourseInstructorService::class);
+        $this->app->bind(StudyPlanCourseInstructorSubGroupServiceInterface::class, StudyPlanCourseInstructorSubGroupService::class);
     }
 
     /**

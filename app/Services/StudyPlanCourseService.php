@@ -38,7 +38,7 @@ class StudyPlanCourseService implements StudyPlanCourseServiceInterface
         $result = $this->sPCourseRepository->getById($id);
 
         if (!$result) {
-            return Result::error("StudyPlan Course not found with this Id {$id}", StatusResponse::HTTP_NOT_FOUND);
+            return Result::error("StudyPlanCourse Course not found with this Id {$id}", StatusResponse::HTTP_NOT_FOUND);
         }
 
         return Result::success($result, 'Found StudyPlanCourse Successfully', StatusResponse::HTTP_OK);
