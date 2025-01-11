@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Interfaces\Services\RoleServiceInterface;
+use App\Shared\Constants\StatusResponse;
+use App\Shared\Handler\Result;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
@@ -17,6 +19,7 @@ class RoleController extends Controller
 
     public function index()
     {
-        return $this->roles_service->getAllRoles();
+        $result = $this->roles_service->getAllRoles();
+        return Result::success($result, 'Get all roles', StatusResponse::HTTP_OK);
     }
 }
