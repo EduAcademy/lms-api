@@ -182,7 +182,6 @@ class UserService implements UserServiceInterface
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
                 'phone' => 'nullable|string',
-                'address' => 'nullable|string',
                 'role_id' => 'integer',
             ]);
 

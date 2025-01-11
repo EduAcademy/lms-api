@@ -20,20 +20,22 @@ class UserSeeder extends Seeder
         $roleIds = DB::table('roles')->pluck('id');
 
         if (!User::where('email', 'test@test.com')->exists()) {
-            User::factory()->create([
-                'email' => 'test@test.com',
-                'password' => bcrypt('123456'),
-                'role_id' => 1,
-                'email_verified_at' => now(),
-                'first_name' => 'Admin',
-                'last_name' => 'Admin',
-                'phone' => '1234567890',
-                'address' => 'Admin Address',
-                'status' => 'active',
-                'gender' => 'male',
-                'remember_token' => Str::random(10),
-                'role_id' => $roleIds->random(),
-            ]);
+            if ($roleIds->isNotEmpty()) {
+                User::factory()->create([
+                    'email' => 'test@test.com',
+                    'password' => bcrypt('123456'),
+                    'role_id' => $roleIds->random(),
+                    'email_verified_at' => now(),
+                    'first_name' => 'Admin',
+                    'last_name' => 'Admin',
+                    'phone' => '1234567890',
+                    'status' => 'active',
+                    'gender' => 'male',
+                    'remember_token' => Str::random(10),
+                ]);
+            } else {
+                \Log::warning('No roles available to assign to the user. Please seed roles first.');
+            }
         }
 
         for ($i = 0; $i < $total / $chunks; $i++) {

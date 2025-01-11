@@ -31,7 +31,6 @@ class UserFactory extends Factory
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
             'phone' => $this->faker->phoneNumber,
-            'address' => $this->faker->address,
             'status' => $this->faker->randomElement(['active', 'inactive']),
             'gender' => $this->faker->randomElement(['male', 'female']),
             'remember_token' => Str::random(10),
