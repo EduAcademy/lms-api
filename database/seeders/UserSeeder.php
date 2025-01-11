@@ -17,6 +17,7 @@ class UserSeeder extends Seeder
     {
         $chunks = 99; // Insert rows in chunks
         $total = 99; // Total rows
+        $roleIds = DB::table('roles')->pluck('id');
 
         if (!User::where('email', 'test@test.com')->exists()) {
             User::factory()->create([
@@ -31,6 +32,7 @@ class UserSeeder extends Seeder
                 'status' => 'active',
                 'gender' => 'male',
                 'remember_token' => Str::random(10),
+                'role_id' => $roleIds->random(),
             ]);
         }
 

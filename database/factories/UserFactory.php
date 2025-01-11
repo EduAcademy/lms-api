@@ -36,7 +36,7 @@ class UserFactory extends Factory
             'gender' => $this->faker->randomElement(['male', 'female']),
             'remember_token' => Str::random(10),
             'role_id' => $this->faker->randomElement([1, 2, 3]),
-        ];       
+        ];
     }
 
     /**
@@ -44,7 +44,7 @@ class UserFactory extends Factory
      */
     public function unverified(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn(array $attributes) => [
             'email_verified_at' => null,
         ]);
     }

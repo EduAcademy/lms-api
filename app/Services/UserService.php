@@ -73,8 +73,6 @@ class UserService implements UserServiceInterface
 
     public function registerUser(array $data)
     {
-
-
         try {
             $validator = Validator::make($data, (new SignUpRequest())->rules());
 
