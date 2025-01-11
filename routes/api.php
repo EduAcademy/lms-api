@@ -37,6 +37,10 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::delete('/{id}', [AuthController::class, 'delete']);
         });
 
+        Route::prefix('roles')->group(function () {
+            Route::get('/', [AuthController::class, 'roles']);
+        });
+
         // Admin-only routes
         // Excel Import routes
         Route::post('/upload-students', [StudentController::class, 'uploadStudents']);

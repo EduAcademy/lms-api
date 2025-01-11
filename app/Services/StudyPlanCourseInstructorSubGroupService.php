@@ -93,9 +93,9 @@ class StudyPlanCourseInstructorSubGroupService implements StudyPlanCourseInstruc
     public function updateSpCInstSubGrou($id, array $data)
     {
         $validator = Validator::make($data, [
-            'spc_instructor_id'=>'required|integer|exists:spc_instructors,id',
-            'sub_group_id'=>'required|integer|exists:sub_groups,id',
-            'instructor_id'=>'required|integer|exists:instructors,id'
+            'spc_instructor_id' => 'required|integer|exists:spc_instructors,id',
+            'sub_group_id' => 'required|integer|exists:sub_groups,id',
+            'instructor_id' => 'required|integer|exists:instructors,id'
         ]);
 
         if ($validator->fails()) {
@@ -118,5 +118,4 @@ class StudyPlanCourseInstructorSubGroupService implements StudyPlanCourseInstruc
 
         return Result::success($result, 'StudyPlanCInsSubGroup is Deleted Successfully', StatusResponse::HTTP_OK);
     }
-
 }

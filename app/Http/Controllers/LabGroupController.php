@@ -3,17 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LabGroupRequest;
-use App\Interfaces\Services\SubGroupserviceInterface;
+use App\Interfaces\Services\SubGroupServiceInterface;
 use Illuminate\Http\Request;
 
 class LabGroupController extends Controller
 {
     //
 
-    protected $sub_groupservice;
-    public function __construct(SubGroupserviceInterface $SubGroupservice)
+    protected $sub_groups_service;
+    public function __construct(SubGroupServiceInterface $SubGroupService)
     {
-        $this->sub_groupservice = $SubGroupservice;
+        $this->sub_groups_service = $SubGroupService;
     }
 
     /**
@@ -22,7 +22,7 @@ class LabGroupController extends Controller
     public function index()
     {
         //
-        $result = $this->sub_groupservice->getAllLabGroup();
+        $result = $this->sub_groups_service->getAllLabGroup();
         return $result;
     }
 
@@ -41,7 +41,7 @@ class LabGroupController extends Controller
     {
         //
         $data = $request->validated();
-        $result = $this->sub_groupservice->createLabGroup($data);
+        $result = $this->sub_groups_service->createLabGroup($data);
         return $result;
     }
 
@@ -51,7 +51,7 @@ class LabGroupController extends Controller
     public function show($id)
     {
         //
-        $result = $this->sub_groupservice->getLabById($id);
+        $result = $this->sub_groups_service->getLabById($id);
         return $result;
     }
 
@@ -69,7 +69,7 @@ class LabGroupController extends Controller
     public function update($id, Request $request)
     {
         //
-        $result = $this->sub_groupservice->updateLabGroup($id, $request->all());
+        $result = $this->sub_groups_service->updateLabGroup($id, $request->all());
         return $result;
     }
 
@@ -79,7 +79,7 @@ class LabGroupController extends Controller
     public function delete($id)
     {
         //
-        $result = $this->sub_groupservice->deleteLabGroup($id);
+        $result = $this->sub_groups_service->deleteLabGroup($id);
         return $result;
     }
 }

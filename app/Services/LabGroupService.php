@@ -4,14 +4,14 @@ namespace App\Services;
 
 use App\Contracts\LabGroupRepositoryInterface;
 use App\Http\Requests\LabGroupRequest;
-use App\Interfaces\Services\SubGroupserviceInterface;
+use App\Interfaces\Services\SubGroupServiceInterface;
 use App\Models\SubGroups;
 use App\Repositories\GenericRepository;
 use App\Shared\Constants\StatusResponse;
 use App\Shared\Handler\Result;
 use Illuminate\Support\Facades\Validator;
 
-class SubGroupservice implements SubGroupserviceInterface
+class SubGroupservice implements SubGroupServiceInterface
 {
     /**
      * Create a new class instance.

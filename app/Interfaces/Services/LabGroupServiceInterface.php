@@ -2,7 +2,7 @@
 
 namespace App\Interfaces\Services;
 
-interface SubGroupserviceInterface
+interface SubGroupServiceInterface
 {
     //
     public function getAllLabGroup();
