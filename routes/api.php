@@ -6,6 +6,7 @@ use App\Http\Controllers\CourseMaterialController;
 use App\Http\Controllers\Department\DepartmentController;
 use App\Http\Controllers\Instructor\InstructorController;
 use App\Http\Controllers\LabGroupController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudyPlanController;
 use App\Http\Controllers\TheoreticalGroupController;
@@ -38,7 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
         });
 
         Route::prefix('roles')->group(function () {
-            Route::get('/', [AuthController::class, 'roles']);
+            Route::get('/', [RoleController::class, 'index']);
         });
 
         // Admin-only routes

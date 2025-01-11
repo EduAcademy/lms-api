@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Interfaces\Services\RoleServiceInterface;
-use App\Http\Requests\LabGroupRequest;
 use Illuminate\Http\Request;
 
-class LabGroupController extends Controller
+class RoleController extends Controller
 {
     //
 
