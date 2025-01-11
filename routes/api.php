@@ -21,7 +21,7 @@ Route::prefix('v1')->group(function () {
 });
 
 // Protected routes
-// Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('v1')->group(function () {
         // User profile and authentication
         Route::prefix('auth')->group(function () {
@@ -38,6 +38,10 @@ Route::prefix('v1')->group(function () {
             Route::get('/{id}', [AuthController::class, 'show']);
             Route::put('/{id}', [AuthController::class, 'update']);
             Route::delete('/{id}', [AuthController::class, 'delete']);
+        });
+
+        Route::prefix('roles')->group(function () {
+            Route::get('/', [RoleController::class, 'index']);
         });
 
         // Admin-only routes
@@ -144,4 +148,4 @@ Route::prefix('v1')->group(function () {
             Route::delete('/{id}', [StudyPlanCourseInstructorSubGroupController::class, 'delete']);
         });
     });
-// });
+});

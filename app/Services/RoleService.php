@@ -7,6 +7,12 @@ use App\Models\Role;
 
 class RoleService implements RoleServiceInterface
 {
+    public function getAllRoles()
+    {
+        $result = Role::all();
+
+        return $result;
+    }
 
     public function getRoleByName($name)
     {
