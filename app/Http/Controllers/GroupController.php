@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\LabGroupRequest;
-use App\Interfaces\Services\SubGroupserviceInterface;
+use App\Http\Requests\GroupRequest;
+use App\Interfaces\Services\GroupserviceInterface;
 use Illuminate\Http\Request;
 
-class LabGroupController extends Controller
+class GroupController extends Controller
 {
     //
 
-    protected $sub_groupservice;
-    public function __construct(SubGroupserviceInterface $SubGroupservice)
+    protected $groupService;
+    public function __construct(GroupserviceInterface $groupservice)
     {
-        $this->sub_groupservice = $SubGroupservice;
+        $this->groupService = $groupservice;
     }
 
     /**
@@ -22,7 +22,7 @@ class LabGroupController extends Controller
     public function index()
     {
         //
-        $result = $this->sub_groupservice->getAllLabGroup();
+        $result = $this->groupService->getAllGroups();
         return $result;
     }
 
@@ -37,11 +37,11 @@ class LabGroupController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(LabGroupRequest $request)
+    public function store(GroupRequest $request)
     {
         //
         $data = $request->validated();
-        $result = $this->sub_groupservice->createLabGroup($data);
+        $result = $this->groupService->createGroup($data);
         return $result;
     }
 
@@ -51,7 +51,7 @@ class LabGroupController extends Controller
     public function show($id)
     {
         //
-        $result = $this->sub_groupservice->getLabById($id);
+        $result = $this->groupService->getGroupById($id);
         return $result;
     }
 
@@ -69,7 +69,7 @@ class LabGroupController extends Controller
     public function update($id, Request $request)
     {
         //
-        $result = $this->sub_groupservice->updateLabGroup($id, $request->all());
+        $result = $this->groupService->updateGroup($id, $request->all());
         return $result;
     }
 
@@ -79,7 +79,7 @@ class LabGroupController extends Controller
     public function delete($id)
     {
         //
-        $result = $this->sub_groupservice->deleteLabGroup($id);
+        $result = $this->groupService->deleteGroup($id);
         return $result;
     }
 }

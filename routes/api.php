@@ -5,10 +5,13 @@ use App\Http\Controllers\Course\CourseController;
 use App\Http\Controllers\CourseMaterialController;
 use App\Http\Controllers\Department\DepartmentController;
 use App\Http\Controllers\Instructor\InstructorController;
-use App\Http\Controllers\LabGroupController;
+use App\Http\Controllers\SubGroupController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudyPlanController;
-use App\Http\Controllers\TheoreticalGroupController;
+use App\Http\Controllers\GroupController;
+use App\Http\Controllers\StudyPlanCourseController;
+use App\Http\Controllers\StudyPlanCourseInstructorController;
+use App\Http\Controllers\StudyPlanCourseInstructorSubGroupController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
@@ -91,21 +94,21 @@ Route::prefix('v1')->group(function () {
         });
 
         // Theoretical Group routes
-        Route::prefix('theo_groups')->group(function () {
-            Route::get('/', [TheoreticalGroupController::class, 'index']);
-            Route::get('/{id}', [TheoreticalGroupController::class, 'show']);
-            Route::post('/', [TheoreticalGroupController::class, 'store']);
-            Route::put('/{id}', [TheoreticalGroupController::class, 'update']);
-            Route::delete('/{id}', [TheoreticalGroupController::class, 'delete']);
+        Route::prefix('groups')->group(function () {
+            Route::get('/', [GroupController::class, 'index']);
+            Route::get('/{id}', [GroupController::class, 'show']);
+            Route::post('/', [GroupController::class, 'store']);
+            Route::put('/{id}', [GroupController::class, 'update']);
+            Route::delete('/{id}', [GroupController::class, 'delete']);
         });
 
         // Lab Group routes
         Route::prefix('sub_groups')->group(function () {
-            Route::get('/', [LabGroupController::class, 'index']);
-            Route::get('/{id}', [LabGroupController::class, 'show']);
-            Route::post('/', [LabGroupController::class, 'store']);
-            Route::put('/{id}', [LabGroupController::class, 'update']);
-            Route::delete('/{id}', [LabGroupController::class, 'delete']);
+            Route::get('/', [SubGroupController::class, 'index']);
+            Route::get('/{id}', [SubGroupController::class, 'show']);
+            Route::post('/', [SubGroupController::class, 'store']);
+            Route::put('/{id}', [SubGroupController::class, 'update']);
+            Route::delete('/{id}', [SubGroupController::class, 'delete']);
         });
 
         // Course Materials routes
@@ -115,6 +118,30 @@ Route::prefix('v1')->group(function () {
             Route::post('/', [CourseMaterialController::class, 'store']);
             Route::put('/{id}', [CourseMaterialController::class, 'update']);
             Route::delete('/{id}', [CourseMaterialController::class, 'delete']);
+        });
+
+        Route::prefix('study_plan_courses')->group(function () {
+            Route::get('/', [StudyPlanCourseController::class, 'index']);
+            Route::get('/{id}', [StudyPlanCourseController::class, 'show']);
+            Route::post('/', [StudyPlanCourseController::class, 'store']);
+            Route::put('/{id}', [StudyPlanCourseController::class, 'update']);
+            Route::delete('/{id}', [StudyPlanCourseController::class, 'delete']);
+        });
+
+        Route::prefix('study_plan_course_instructors')->group(function () {
+            Route::get('/', [StudyPlanCourseInstructorController::class, 'index']);
+            Route::get('/{id}', [StudyPlanCourseInstructorController::class, 'show']);
+            Route::post('/', [StudyPlanCourseInstructorController::class, 'store']);
+            Route::put('/{id}', [StudyPlanCourseInstructorController::class, 'update']);
+            Route::delete('/{id}', [StudyPlanCourseInstructorController::class, 'delete']);
+        });
+
+        Route::prefix('study_plan_course_instructor_sub_groups')->group(function () {
+            Route::get('/', [StudyPlanCourseInstructorSubGroupController::class, 'index']);
+            Route::get('/{id}', [StudyPlanCourseInstructorSubGroupController::class, 'show']);
+            Route::post('/', [StudyPlanCourseInstructorSubGroupController::class, 'store']);
+            Route::put('/{id}', [StudyPlanCourseInstructorSubGroupController::class, 'update']);
+            Route::delete('/{id}', [StudyPlanCourseInstructorSubGroupController::class, 'delete']);
         });
     });
 // });

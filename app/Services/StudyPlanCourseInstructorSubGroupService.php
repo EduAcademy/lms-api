@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Contracts\Contracts\StudyPlanCourseInstructorSubGroupRepositoryInterface;
+use App\Contracts\StudyPlanCourseInstructorSubGroupRepositoryInterface;
 use App\Http\Requests\StudyPlanCourseInstructorSubGroupRequest;
 use App\Interfaces\Services\StudyPlanCourseInstructorSubGroupServiceInterface;
 use App\Models\StudyPlanCourseInstructorSubGroup;

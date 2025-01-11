@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Contracts\Contracts\StudyPlanCourseRepositoryInterface;
-use App\Contracts\Interfaces\Services\StudyPlanCourseServiceInterface;
+use App\Contracts\StudyPlanCourseRepositoryInterface;
+use App\Interfaces\Services\StudyPlanCourseServiceInterface;
 use App\Http\Requests\StudyPlanCourseRequest;
 use App\Models\StudyPlanCourse;
 use App\Repositories\GenericRepository;

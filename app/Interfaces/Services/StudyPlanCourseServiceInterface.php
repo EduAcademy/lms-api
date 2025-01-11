@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Contracts\Interfaces\Services;
+namespace App\Interfaces\Services;
 
 interface StudyPlanCourseServiceInterface
 {

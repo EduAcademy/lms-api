@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Contracts\Contracts\StudyPlanCourseInstructorRepositoryInterface;
+use App\Contracts\StudyPlanCourseInstructorRepositoryInterface;
 use App\Models\StudyPlanCourseInstructor;
 
 class StudyPlanCourseInstructorRepository implements StudyPlanCourseInstructorRepositoryInterface

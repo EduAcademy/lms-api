@@ -2,7 +2,7 @@
 
 namespace App\Contracts;
 
-interface TheoreticalGroupRepositoryInterface
+interface GroupRepositoryInterface
 {
     //
 

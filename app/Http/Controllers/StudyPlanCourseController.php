@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Contracts\Interfaces\Services\StudyPlanCourseServiceInterface;
+use App\Interfaces\Services\StudyPlanCourseServiceInterface;
 use App\Http\Requests\StudyPlanCourseRequest;
 use Database\Seeders\StudyPlanSeeder;
 use Illuminate\Http\Request;

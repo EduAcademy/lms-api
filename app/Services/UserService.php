@@ -179,13 +179,15 @@ class UserService implements UserServiceInterface
         try {
             $validator = Validator::make($data, [
                 'username' => 'required|string|max:255',
-                'email' => 'required|email|unique:users,email',
+                'email' => 'required|email|unique:users,email,' . $id,
                 'password' => 'required|string|min:6',
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
                 'phone' => 'nullable|string',
                 'address' => 'nullable|string',
-                'role_id' => 'integer',
+                'status' => 'nullable|in:active,inactive',
+                'gender' => 'required|in:male,female',
+                // 'role_id' => 'integer',
             ]);
 
 

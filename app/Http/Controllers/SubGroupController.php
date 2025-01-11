@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\TheoreticalGroupRequest;
-use App\Interfaces\Services\GroupserviceInterface;
+use App\Http\Requests\SubGroupRequest;
+use App\Interfaces\Services\SubGroupserviceInterface;
 use Illuminate\Http\Request;
 
-class TheoreticalGroupController extends Controller
+class SubGroupController extends Controller
 {
     //
 
-    protected $theo_groupService;
-    public function __construct(GroupserviceInterface $Groupservice)
+    protected $sub_groupservice;
+    public function __construct(SubGroupserviceInterface $subGroupservice)
     {
-        $this->theo_groupService = $Groupservice;
+        $this->sub_groupservice = $subGroupservice;
     }
 
     /**
@@ -22,7 +22,7 @@ class TheoreticalGroupController extends Controller
     public function index()
     {
         //
-        $result = $this->theo_groupService->getAllTheoGroups();
+        $result = $this->sub_groupservice->getAllSubGroups();
         return $result;
     }
 
@@ -37,11 +37,11 @@ class TheoreticalGroupController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(TheoreticalGroupRequest $request)
+    public function store(SubGroupRequest $request)
     {
         //
         $data = $request->validated();
-        $result = $this->theo_groupService->createTheoGroup($data);
+        $result = $this->sub_groupservice->createSubGroup($data);
         return $result;
     }
 
@@ -51,7 +51,7 @@ class TheoreticalGroupController extends Controller
     public function show($id)
     {
         //
-        $result = $this->theo_groupService->getTheoGroupById($id);
+        $result = $this->sub_groupservice->getSubGroupById($id);
         return $result;
     }
 
@@ -69,17 +69,17 @@ class TheoreticalGroupController extends Controller
     public function update($id, Request $request)
     {
         //
-        $result = $this->theo_groupService->updateLabGroup($id, $request->all());
+        $result = $this->sub_groupservice->updateSubGroup($id, $request->all());
         return $result;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function delete($id)
     {
         //
-        $result = $this->theo_groupService->deleteLabGroup($id);
+        $result = $this->sub_groupservice->deleteSubGroup($id);
         return $result;
     }
 }

@@ -2,10 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Contracts\TheoreticalGroupRepositoryInterface;
+use App\Contracts\GroupRepositoryInterface;
 use App\Models\Groups;
 
-class TheoreticalGroupRepository implements TheoreticalGroupRepositoryInterface
+class GroupRepository implements GroupRepositoryInterface
 {
     public function getAll()
     {

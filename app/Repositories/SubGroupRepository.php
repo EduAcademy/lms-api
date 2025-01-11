@@ -2,10 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Contracts\LabGroupRepositoryInterface;
+use App\Contracts\SubGroupRepositoryInterface;
 use App\Models\SubGroups;
 
-class LabGroupRepository implements LabGroupRepositoryInterface
+class SubGroupRepository implements SubGroupRepositoryInterface
 {
     public function getAll()
     {

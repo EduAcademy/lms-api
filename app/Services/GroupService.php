@@ -2,7 +2,8 @@
 
 namespace App\Services;
 
-use App\Contracts\TheoreticalGroupRepositoryInterface;
+use App\Contracts\GroupRepositoryInterface;
+use App\Http\Requests\GroupRequest;
 use App\Interfaces\Services\GroupserviceInterface;
 use App\Models\Groups;
 use App\Repositories\GenericRepository;
@@ -16,43 +17,46 @@ class Groupservice implements GroupserviceInterface
     /**
      * Create a new class instance.
      */
-    private $theoreticalGroupRepository;
+    private $groupRepository;
     private $genericRepository;
-    public function __construct(TheoreticalGroupRepositoryInterface $theoreticalGroupRepository)
+    public function __construct(GroupRepositoryInterface $groupRepository)
     {
         //
-        $this->theoreticalGroupRepository = $theoreticalGroupRepository;
+        $this->groupRepository = $groupRepository;
         $this->genericRepository = new GenericRepository(new Groups);
     }
 
-    public function getAllTheoGroups()
+    public function getAllGroups()
     {
-        $result = $this->theoreticalGroupRepository->getAll();
-        return Result::success($result, 'Get all Theo groups Successfully', StatusResponse::HTTP_OK);
+        $result = $this->groupRepository->getAll();
+        return Result::success($result, 'Get all  groups Successfully', StatusResponse::HTTP_OK);
     }
 
-    public function getTheoGroupById($id)
+    public function getGroupById($id)
     {
-        $result = $this->theoreticalGroupRepository->getById($id);
-        return Result::success($result, 'Found Theo group Successfully', StatusResponse::HTTP_OK);
+        $result = $this->groupRepository->getById($id);
+        if (!$result) {
+            return Result::error("Group not found with this Id {$id}", StatusResponse::HTTP_NOT_FOUND);
+        }
+        return Result::success($result, 'Found  group Successfully', StatusResponse::HTTP_OK);
     }
 
-    public function createTheoGroup(array $data)
+    public function createGroup(array $data)
     {
-        $validator = Validator::make($data, (new Groups())->rules());
+        $validator = Validator::make($data, (new GroupRequest())->rules());
 
         if ($validator->fails()) {
             Log::error('Validation Errors:', $validator->errors()->toArray());
             return Result::error('Validation failed', 422, $validator->errors());
         }
-        $result = $this->theoreticalGroupRepository->create($data);
+        $result = $this->groupRepository->create($data);
         if (!$result) {
-            return Result::error('Failed in creating TheoreticalGroup', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return Result::error('Failed in creating Group', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
-        return Result::success($result, 'Theo Group is Created Successfully', StatusResponse::HTTP_CREATED);
+        return Result::success($result, 'Group is Created Successfully', StatusResponse::HTTP_CREATED);
     }
 
-    public function updateLabGroup($id, array $data)
+    public function updateGroup($id, array $data)
     {
         $validator = Validator::make($data, [
             'name' => "required|string|unique:groups,name,{$id}",
@@ -73,7 +77,7 @@ class Groupservice implements GroupserviceInterface
     }
 
 
-    public function deleteLabGroup($id)
+    public function deleteGroup($id)
     {
         $result = $this->genericRepository->delete($id);
 

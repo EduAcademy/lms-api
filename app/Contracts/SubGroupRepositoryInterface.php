@@ -2,7 +2,7 @@
 
 namespace App\Contracts;
 
-interface LabGroupRepositoryInterface
+interface SubGroupRepositoryInterface
 {
     //
     public function getAll();

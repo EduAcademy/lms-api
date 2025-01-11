@@ -9,7 +9,7 @@ class StudyPlanCourseInstructor extends Model
 {
     use HasFactory;
 
-    protected $table = 'spc_instructor';
+    protected $table = 'spc_instructors';
 
     protected $fillable = [
         'study_plan_course_id',

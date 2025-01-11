@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Contracts\Interfaces\Services\StudyPlanCourseServiceInterface;
+use App\Interfaces\Services\StudyPlanCourseServiceInterface;
 use App\Interfaces\Services\CourseMaterialServiceInterface;
 use App\Interfaces\Services\SubGroupserviceInterface;
 use App\Interfaces\Services\StuCouInstrGroupServiceInterface;
@@ -24,7 +24,6 @@ use App\Services\CourseMaterialService;
 use App\Services\CourseService;
 use App\Services\InstructorService;
 use App\Services\SubGroupservice;
-use App\Services\StuCouInstrGroupService;
 use App\Services\StudentService;
 use App\Services\StudyPlanService;
 use App\Services\Groupservice;

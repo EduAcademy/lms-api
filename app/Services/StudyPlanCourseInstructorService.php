@@ -2,11 +2,11 @@
 
 namespace App\Services;
 
+use App\Contracts\StudyPlanCourseInstructorRepositoryInterface;
 use App\Http\Requests\StudyPlanCourseInstructorRequest;
 use App\Interfaces\Services\StudyPlanCourseInstructorServiceInterface;
 use App\Models\StudyPlanCourseInstructor;
 use App\Repositories\GenericRepository;
-use App\Repositories\StudyPlanCourseInstructorRepository;
 use App\Shared\Constants\StatusResponse;
 use App\Shared\Handler\Result;
 use Illuminate\Support\Facades\Validator;
@@ -19,7 +19,7 @@ class StudyPlanCourseInstructorService implements StudyPlanCourseInstructorServi
      */
     private $spCInstructorRepository;
     private $genericRepository;
-    public function __construct(StudyPlanCourseInstructorRepository $spCInstructorRepository)
+    public function __construct(StudyPlanCourseInstructorRepositoryInterface $spCInstructorRepository)
     {
         //
         $this->spCInstructorRepository = $spCInstructorRepository;
