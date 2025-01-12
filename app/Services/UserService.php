@@ -170,32 +170,33 @@ class UserService implements UserServiceInterface
 
         return Result::success($newTokens, 'Token refreshed successfully', 200);
     }
-
     public function updateUser($id, array $data)
     {
-
         try {
             $validator = Validator::make($data, [
                 'username' => 'required|string|max:255',
-                'email' => 'required|email|unique:users,email',
-                'password' => 'required|string|min:6',
+                'email' => 'required|email|unique:users,email,' . $id,
+                'password' => 'nullable|string|min:6',
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
                 'phone' => 'nullable|string',
-                'role_id' => 'integer',
+                'role_id' => 'nullable|integer|exists:roles,id',
             ]);
-
 
             if ($validator->fails()) {
                 return Result::error('Validation failed', 422, $validator->errors());
             }
 
+            // Hash password if provided
+            if (!empty($data['password'])) {
+                $data['password'] = Hash::make($data['password']);
+            }
 
             $result = $this->genericRepository->update($id, $data);
 
             return Result::success($result, 'User is updated Successfully', StatusResponse::HTTP_OK);
         } catch (Exception $ex) {
-            return Result::error($ex, StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return Result::error($ex->getMessage(), StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
