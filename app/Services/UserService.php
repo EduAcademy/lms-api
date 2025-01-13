@@ -187,7 +187,6 @@ class UserService implements UserServiceInterface
                 return Result::error('Validation failed', 422, $validator->errors());
             }
 
-            // Hash password if provided
             if (!empty($data['password'])) {
                 $data['password'] = Hash::make($data['password']);
             }
@@ -217,12 +216,10 @@ class UserService implements UserServiceInterface
             return Result::error('Validation failed', 422, $validator->errors());
         }
 
-        // Generate the reset token
         $status = Password::sendResetLink($data, function ($user, $token) use ($data) {
             $resetUrl = url('/reset-password?token=' . $token . '&email=' . urlencode($data['email']));
 
             Log::info($resetUrl);
-            // Send custom email
             Mail::to($data['email'])->send(new EmailSender($resetUrl));
         });
 
@@ -288,7 +285,6 @@ class UserService implements UserServiceInterface
             return Result::error('The token is invalid or not found.', StatusResponse::HTTP_NOT_FOUND);
         }
 
-        // Token is valid
         return Result::success('The token is valid', StatusResponse::HTTP_OK);
     }
 }
