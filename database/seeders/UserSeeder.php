@@ -7,6 +7,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class UserSeeder extends Seeder
 {
@@ -34,7 +35,7 @@ class UserSeeder extends Seeder
                     'remember_token' => Str::random(10),
                 ]);
             } else {
-                \Log::warning('No roles available to assign to the user. Please seed roles first.');
+                Log::warning('No roles available to assign to the user. Please seed roles first.');
             }
         }
 
