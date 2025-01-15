@@ -9,6 +9,7 @@ use App\Http\Controllers\SubGroupController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudyPlanController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StudyPlanCourseController;
 use App\Http\Controllers\StudyPlanCourseInstructorController;
 use App\Http\Controllers\StudyPlanCourseInstructorSubGroupController;
@@ -16,12 +17,13 @@ use Illuminate\Support\Facades\Route;
 
 // Public routes
 Route::prefix('v1')->group(function () {
-    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/login', [AuthController::class, 'login'])->middleware('customThrottle:3,1');
     Route::post('/validate-token', [AuthController::class, 'validateToken']);
+    Route::post('/register', [AuthController::class, 'register']);
 });
 
 // Protected routes
-Route::middleware('auth:sanctum')->group(function () {
+// Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('v1')->group(function () {
         // User profile and authentication
         Route::prefix('auth')->group(function () {
@@ -33,7 +35,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // User management
         Route::prefix('users')->group(function () {
-            Route::post('/', [AuthController::class, 'register']);
             Route::get('/', [AuthController::class, 'index']);
             Route::get('/{id}', [AuthController::class, 'show']);
             Route::put('/{id}', [AuthController::class, 'update']);
@@ -148,4 +149,4 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::delete('/{id}', [StudyPlanCourseInstructorSubGroupController::class, 'delete']);
         });
     });
-});
+// });

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Contracts\UserRepositoryInterface;
 use App\Enums\RoleType;
+use App\Http\Requests\SigninRequest;
 use App\Interfaces\Services\InstructorServiceInterface;
 use App\Interfaces\Services\StudentServiceInterface;
 use App\Interfaces\Services\UserServiceInterface;
@@ -11,7 +12,6 @@ use App\Models\User;
 use App\Repositories\GenericRepository;
 use App\Http\Requests\SignUpRequest;
 use App\Mail\EmailSender;
-use App\Models\Role;
 use App\Shared\Constants\StatusResponse;
 use App\Shared\Handler\Result;
 use Exception;
@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Validator;
 use Laravel\Sanctum\PersonalAccessToken;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+
+
 
 class UserService implements UserServiceInterface
 {
@@ -81,6 +83,7 @@ class UserService implements UserServiceInterface
             }
 
             $data['password'] = Hash::make($data['password']);
+
             $role = $this->roleService->getRoleByName(RoleType::Student);
             $data['role_id'] = $data['role_id'] ?? $role;
 
@@ -138,6 +141,12 @@ class UserService implements UserServiceInterface
 
     public function login(array $data)
     {
+
+        $validator = Validator::make($data, (new SigninRequest())->rules());
+
+        if ($validator->fails()) {
+            return Result::error('Validation failed', 422, $validator->errors());
+        }
 
         if (!auth()->attempt($data)) {
             return Result::error('Invalid credentials', 401);

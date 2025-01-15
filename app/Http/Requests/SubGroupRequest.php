@@ -24,7 +24,7 @@ class SubGroupRequest extends FormRequest
         return [
             //
             'name' => 'required|string|unique:sub_groups,name',
-            'groups_id' => 'required|integer|exists:groups,id',
+            'group_id' => 'required|integer|exists:groups,id',
             'instructor_id' => 'required|integer|exists:instructors,id',
         ];
     }

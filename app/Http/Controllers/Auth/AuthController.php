@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SigninRequest;
 use App\Http\Requests\SignUpRequest;
 use App\Services\UserService;
 use App\Shared\Handler\Result;
@@ -20,6 +21,15 @@ class AuthController extends Controller
         $this->user_service = $userService;
     }
 
+    /**
+     * @OA\Get(
+     *      path="/users",
+     *      tags={"Users"},
+     *      summary="Get all users",
+     *      description="Get list of all users",
+     *      @OA\Response(response=200, description="Users retrieved Successfully")
+     * )
+     */
     public function index()
     {
         $result = $this->user_service->getAllUsers();
@@ -27,20 +37,58 @@ class AuthController extends Controller
         return $result;
     }
 
+
     public function register(SignUpRequest $request)
     {
+
         $data = $request->validated();
         $response = $this->user_service->registerUser($data); // Pass validated data
         return $response;
     }
 
-    public function login(Request $request)
-    {
-        $data = $request->validate([
-            "email" => "required|email|exists:users,email",
-            "password" => "required|string"
-        ]);
 
+    /**
+ * @OA\Post(
+ *      path="/login",
+ *      tags={"Users"},
+ *      summary="Signin endpoint",
+ *      description="Signin a user by requiring email and password",
+ *      @OA\RequestBody(
+ *          required=true,
+ *          @OA\JsonContent(
+ *              @OA\Property(property="email", type="string", maxLength=30, description="Email of user"),
+ *              @OA\Property(property="password", type="string", maxLength=30, description="Password of user"),
+ *          )
+ *      ),
+ *      @OA\Response(
+ *          response=200,
+ *          description="User is logged Successfully",
+ *          @OA\JsonContent(
+ *              @OA\Property(property="token", type="string", description="JWT Token for user")
+ *          )
+ *      ),
+ *      @OA\Response(
+ *          response=422,
+ *          description="Validation failed",
+ *          @OA\JsonContent(
+ *              @OA\Property(property="message", type="string", description="Error message"),
+ *              @OA\Property(property="errors", type="object", description="Validation error details")
+ *          )
+ *      ),
+ *      @OA\Response(response=401, description="Unauthorized"),
+ *      @OA\Parameter(
+ *          name="Accept",
+ *          in="header",
+ *          required=true,
+ *          description="The Accept header for the request",
+ *          @OA\Schema(type="string", default="application/json")
+ *      )
+ * )
+ */
+
+    public function login(SigninRequest $request)
+    {
+        $data = $request->validated();
         $response = $this->user_service->login($data);
         return $response;
     }

@@ -12,7 +12,7 @@ class SubGroups extends Model
 
     protected $fillable = [
         'name',
-        'groups_id',
+        'group_id',
         'instructor_id',
     ];
 

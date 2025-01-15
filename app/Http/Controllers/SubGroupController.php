@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SubGroupRequest;
-use App\Interfaces\Services\SubGroupserviceInterface;
+use App\Interfaces\Services\SubGroupServiceInterface;
 use Illuminate\Http\Request;
 
 class SubGroupController extends Controller
 {
     //
 
-    protected $sub_groupservice;
+    private $sub_groupservice;
     public function __construct(SubGroupserviceInterface $subGroupservice)
     {
         $this->sub_groupservice = $subGroupservice;
