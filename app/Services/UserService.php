@@ -179,35 +179,32 @@ class UserService implements UserServiceInterface
 
         return Result::success($newTokens, 'Token refreshed successfully', 200);
     }
-
     public function updateUser($id, array $data)
     {
-
         try {
             $validator = Validator::make($data, [
                 'username' => 'required|string|max:255',
                 'email' => 'required|email|unique:users,email,' . $id,
-                'password' => 'required|string|min:6',
+                'password' => 'nullable|string|min:6',
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
                 'phone' => 'nullable|string',
-                'address' => 'nullable|string',
-                'status' => 'nullable|in:active,inactive',
-                'gender' => 'required|in:male,female',
-                // 'role_id' => 'integer',
+                'role_id' => 'nullable|integer|exists:roles,id',
             ]);
-
 
             if ($validator->fails()) {
                 return Result::error('Validation failed', 422, $validator->errors());
             }
 
+            if (!empty($data['password'])) {
+                $data['password'] = Hash::make($data['password']);
+            }
 
             $result = $this->genericRepository->update($id, $data);
 
             return Result::success($result, 'User is updated Successfully', StatusResponse::HTTP_OK);
         } catch (Exception $ex) {
-            return Result::error($ex, StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return Result::error($ex->getMessage(), StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -228,12 +225,10 @@ class UserService implements UserServiceInterface
             return Result::error('Validation failed', 422, $validator->errors());
         }
 
-        // Generate the reset token
         $status = Password::sendResetLink($data, function ($user, $token) use ($data) {
             $resetUrl = url('/reset-password?token=' . $token . '&email=' . urlencode($data['email']));
 
             Log::info($resetUrl);
-            // Send custom email
             Mail::to($data['email'])->send(new EmailSender($resetUrl));
         });
 
@@ -299,7 +294,6 @@ class UserService implements UserServiceInterface
             return Result::error('The token is invalid or not found.', StatusResponse::HTTP_NOT_FOUND);
         }
 
-        // Token is valid
         return Result::success('The token is valid', StatusResponse::HTTP_OK);
     }
 }

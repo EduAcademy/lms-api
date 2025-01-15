@@ -14,19 +14,19 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
+        $this->call(RoleSeeder::class);
         $this->call(UserSeeder::class);
-        // $this->call(RoleSeeder::class);
-        // $this->call(DepartmentSeeder::class);
-        // $this->call(StudyPlanSeeder::class);
-        // $this->call(GroupsSeeder::class);
-        // $this->call(SubGroupsSeeder::class);
-        // $this->call(StudentsSeeder::class);
-        // $this->call(AdminsSeeder::class);
-        // $this->call(CoursesSeeder::class);
-        // $this->call(CourseMaterialsSeeder::class);
-        // $this->call(LevelsSeeder::class);
-        // $this->call(StudyPlanCoursesSeeder::class);
-        // $this->call(SpcInstructorsSeeder::class);
-        // $this->call(InstructorSeeder::class);
+        $this->call(AdminsSeeder::class);
+        $this->call(InstructorSeeder::class);
+        $this->call(DepartmentSeeder::class);
+        $this->call(CoursesSeeder::class);
+        $this->call(StudyPlanSeeder::class);
+        $this->call(GroupsSeeder::class);
+        $this->call(SubGroupsSeeder::class);
+        $this->call(StudentsSeeder::class);
+        $this->call(CourseMaterialsSeeder::class);
+        $this->call(LevelsSeeder::class);
+        $this->call(StudyPlanCoursesSeeder::class);
+        $this->call(SpcInstructorsSeeder::class);
     }
 }
