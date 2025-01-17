@@ -15,4 +15,7 @@ interface UserServiceInterface {
     public function isRoleAllowed($userId, $allowedRole);
     public function generateTokens($user);
     public function refreshAccessToken($refreshToken);
+    public function activateUser($userId);
+    public function deactivateUser($userId);
+
 }

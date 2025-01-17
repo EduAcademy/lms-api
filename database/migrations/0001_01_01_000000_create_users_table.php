@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('first_name', 100)->nullable(false);
             $table->string('last_name', 100)->nullable(false);
             $table->string('phone', 30)->nullable(false);
-            $table->enum('status', ['active', 'inactive'])->default('inactive');
             $table->enum('gender', ['male', 'female'])->default('male');
+            $table->boolean('is_active')->default(false);
             #TODO: Add soft delete
             $table->rememberToken();
             $table->timestamps();

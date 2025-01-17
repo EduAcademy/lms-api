@@ -145,14 +145,20 @@ class UserService implements UserServiceInterface
         $validator = Validator::make($data, (new SigninRequest())->rules());
 
         if ($validator->fails()) {
-            return Result::error('Validation failed', 422, $validator->errors());
+            return Result::error('Validation failed', StatusResponse::HTTP_UNPROCESSABLE_ENTITY, $validator->errors());
         }
 
+
         if (!auth()->attempt($data)) {
-            return Result::error('Invalid credentials', 401);
+            return Result::error('Invalid credentials', StatusResponse::HTTP_UNAUTHORIZED);
         }
 
         $user = auth()->user();
+
+        if (!$user->is_active) {
+            return Result::error('User is not activated', StatusResponse::HTTP_BAD_REQUEST);
+        }
+
         $tokens = $this->generateTokens($user);
 
         return Result::success_with_token($user, $tokens, 'Logged in successfully', 200);
@@ -198,6 +204,9 @@ class UserService implements UserServiceInterface
 
             $result = $this->genericRepository->update($id, $data);
 
+            if (!$result) {
+                return Result::error('Failed to update User', StatusResponse::HTTP_BAD_REQUEST);
+            }
 
             return Result::success($result, 'User is updated Successfully', StatusResponse::HTTP_OK);
         } catch (Exception $ex) {
@@ -293,5 +302,28 @@ class UserService implements UserServiceInterface
         }
 
         return Result::success('The token is valid', StatusResponse::HTTP_OK);
+    }
+
+    public function activateUser($userId)
+    {
+        $result = $this->userRepository->activate($userId);
+
+        if (!$result) {
+            return Result::error('Failed to active a user', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return Result::success($result, 'User is activated Successfully');
+    }
+
+
+    public function deactivateUser($userId)
+    {
+        $result = $this->userRepository->deactivate($userId);
+
+        if (!$result) {
+            return Result::error('Failed to deactive a user', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return Result::success($result, 'User is deactivated Successfully');
     }
 }

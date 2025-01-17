@@ -27,4 +27,30 @@ class UserRepository implements UserRepositoryInterface
     {
         return User::create($data);
     }
+
+    public function activate($id)
+    {
+        $user = $this->getById($id);
+
+        if (!$user) {
+            return null;
+        }
+
+        $user->is_active = true;
+        $user->save();
+        return $user;
+    }
+
+    public function deactivate($id)
+    {
+        $user = $this->getById($id);
+
+        if (!$user) {
+            return null;
+        }
+
+        $user->is_active = false;
+        $user->save();
+        return $user;
+    }
 }

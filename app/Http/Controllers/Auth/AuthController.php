@@ -48,43 +48,43 @@ class AuthController extends Controller
 
 
     /**
- * @OA\Post(
- *      path="/login",
- *      tags={"Users"},
- *      summary="Signin endpoint",
- *      description="Signin a user by requiring email and password",
- *      @OA\RequestBody(
- *          required=true,
- *          @OA\JsonContent(
- *              @OA\Property(property="email", type="string", maxLength=30, description="Email of user"),
- *              @OA\Property(property="password", type="string", maxLength=30, description="Password of user"),
- *          )
- *      ),
- *      @OA\Response(
- *          response=200,
- *          description="User is logged Successfully",
- *          @OA\JsonContent(
- *              @OA\Property(property="token", type="string", description="JWT Token for user")
- *          )
- *      ),
- *      @OA\Response(
- *          response=422,
- *          description="Validation failed",
- *          @OA\JsonContent(
- *              @OA\Property(property="message", type="string", description="Error message"),
- *              @OA\Property(property="errors", type="object", description="Validation error details")
- *          )
- *      ),
- *      @OA\Response(response=401, description="Unauthorized"),
- *      @OA\Parameter(
- *          name="Accept",
- *          in="header",
- *          required=true,
- *          description="The Accept header for the request",
- *          @OA\Schema(type="string", default="application/json")
- *      )
- * )
- */
+     * @OA\Post(
+     *      path="/login",
+     *      tags={"Users"},
+     *      summary="Signin endpoint",
+     *      description="Signin a user by requiring email and password",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              @OA\Property(property="email", type="string", maxLength=30, description="Email of user"),
+     *              @OA\Property(property="password", type="string", maxLength=30, description="Password of user"),
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="User is logged Successfully",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="token", type="string", description="JWT Token for user")
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Validation failed",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", description="Error message"),
+     *              @OA\Property(property="errors", type="object", description="Validation error details")
+     *          )
+     *      ),
+     *      @OA\Response(response=401, description="Unauthorized"),
+     *      @OA\Parameter(
+     *          name="Accept",
+     *          in="header",
+     *          required=true,
+     *          description="The Accept header for the request",
+     *          @OA\Schema(type="string", default="application/json")
+     *      )
+     * )
+     */
 
     public function login(SigninRequest $request)
     {
@@ -119,7 +119,7 @@ class AuthController extends Controller
         return $response;
     }
 
-    public function update($id, Request $request)
+    public function patch($id, Request $request)
     {
         $result = $this->user_service->updateUser($id, $request->all());
 
@@ -161,9 +161,24 @@ class AuthController extends Controller
         $response = $this->user_service->refreshAccessToken($data['refresh_token']);
         return $response;
     }
+
     public function show($id)
     {
         $result = $this->user_service->getUserById($id);
+
+        return $result;
+    }
+
+    public function activateUser($id)
+    {
+        $result = $this->user_service->activateUser($id);
+
+        return $result;
+    }
+
+    public function deactivateUser($id)
+    {
+        $result = $this->user_service->deactivateUser($id);
 
         return $result;
     }
