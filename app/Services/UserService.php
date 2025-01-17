@@ -182,6 +182,7 @@ class UserService implements UserServiceInterface
     public function updateUser($id, array $data)
     {
         try {
+            
             $validator = Validator::make($data, [
                 'username' => 'required|string|max:255',
                 'email' => 'required|email|unique:users,email,' . $id,
@@ -192,18 +193,25 @@ class UserService implements UserServiceInterface
                 'role_id' => 'nullable|integer|exists:roles,id',
             ]);
 
+
             if ($validator->fails()) {
                 return Result::error('Validation failed', 422, $validator->errors());
             }
 
-            if (!empty($data['password'])) {
+
+            if (isset($data['password']) && $data['password'] !== null) {
                 $data['password'] = Hash::make($data['password']);
+            } else {
+                unset($data['password']);
             }
+
 
             $result = $this->genericRepository->update($id, $data);
 
+
             return Result::success($result, 'User is updated Successfully', StatusResponse::HTTP_OK);
         } catch (Exception $ex) {
+
             return Result::error($ex->getMessage(), StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
