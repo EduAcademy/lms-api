@@ -182,6 +182,7 @@ class UserService implements UserServiceInterface
     public function updateUser($id, array $data)
     {
         try {
+
             $validator = Validator::make($data, [
                 'username' => 'required|string|max:255',
                 'email' => 'required|email|unique:users,email,' . $id,
@@ -190,14 +191,17 @@ class UserService implements UserServiceInterface
                 'phone' => 'nullable|string',
             ]);
 
+
             if ($validator->fails()) {
                 return Result::error('Validation failed', 422, $validator->errors());
             }
 
             $result = $this->genericRepository->update($id, $data);
 
+
             return Result::success($result, 'User is updated Successfully', StatusResponse::HTTP_OK);
         } catch (Exception $ex) {
+
             return Result::error($ex->getMessage(), StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
