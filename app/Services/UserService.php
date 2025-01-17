@@ -185,19 +185,13 @@ class UserService implements UserServiceInterface
             $validator = Validator::make($data, [
                 'username' => 'required|string|max:255',
                 'email' => 'required|email|unique:users,email,' . $id,
-                'password' => 'nullable|string|min:6',
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
                 'phone' => 'nullable|string',
-                'role_id' => 'nullable|integer|exists:roles,id',
             ]);
 
             if ($validator->fails()) {
                 return Result::error('Validation failed', 422, $validator->errors());
-            }
-
-            if (!empty($data['password'])) {
-                $data['password'] = Hash::make($data['password']);
             }
 
             $result = $this->genericRepository->update($id, $data);

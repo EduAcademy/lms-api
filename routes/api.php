@@ -37,7 +37,7 @@ Route::prefix('v1')->group(function () {
         Route::prefix('users')->group(function () {
             Route::get('/', [AuthController::class, 'index']);
             Route::get('/{id}', [AuthController::class, 'show']);
-            Route::put('/{id}', [AuthController::class, 'update']);
+            Route::patch('/{id}', [AuthController::class, 'update']);
             Route::delete('/{id}', [AuthController::class, 'delete']);
         });
 
