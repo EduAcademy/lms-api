@@ -30,7 +30,7 @@ class UserSeeder extends Seeder
                     'first_name' => 'Admin',
                     'last_name' => 'Admin',
                     'phone' => '1234567890',
-                    'status' => 'active',
+                    'is_active' => 'active',
                     'gender' => 'male',
                     'remember_token' => Str::random(10),
                 ]);
