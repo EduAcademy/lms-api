@@ -12,20 +12,24 @@ use App\Models\User;
 use App\Repositories\GenericRepository;
 use App\Http\Requests\SignUpRequest;
 use App\Mail\EmailSender;
+use App\Shared\Constants\MessageResponse;
 use App\Shared\Constants\StatusResponse;
 use App\Shared\Handler\Result;
 use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Sanctum\PersonalAccessToken;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use App\Exceptions\LmsExceptionsTrait;
 
 
 
 class UserService implements UserServiceInterface
 {
+    use LmsExceptionsTrait;
     protected $userRepository;
     protected $studentService;
     // protected $instructorService;
@@ -46,20 +50,26 @@ class UserService implements UserServiceInterface
 
     public function getAllUsers()
     {
-        $result = $this->userRepository->getAll();
+        try {
 
-        return Result::success($result, 'Get All Users Successfully', StatusResponse::HTTP_OK);
+            $result = $this->userRepository->getAll();
+
+            return Result::success($result, MessageResponse::RETRIEVED_SUCCESSFULLY, StatusResponse::HTTP_OK);
+        } catch (QueryException $queryException) {
+            return $this->queryExceptionResponse($queryException);
+        }
     }
+    
     public function getUserById($id)
     {
 
         $result = $this->userRepository->getById($id);
 
         if (!$result) {
-            return Result::error('User not found', StatusResponse::HTTP_NOT_FOUND);
+            return Result::error(MessageResponse::NO_QUERY_RESULTS, StatusResponse::HTTP_NOT_FOUND);
         }
 
-        return Result::success($result, 'User found Successfully by Id', StatusResponse::HTTP_OK);
+        return Result::success($result, MessageResponse::FETCHED_SUCCESSFULLY, StatusResponse::HTTP_OK);
     }
     public function isRoleAllowed($userId, $allowedRole)
     {
@@ -79,7 +89,7 @@ class UserService implements UserServiceInterface
             $validator = Validator::make($data, (new SignUpRequest())->rules());
 
             if ($validator->fails()) {
-                return Result::error('Validation failed', 422, $validator->errors());
+                return Result::error(MessageResponse::VALIDATION_FAILED, 422, $validator->errors());
             }
 
             $data['password'] = Hash::make($data['password']);
@@ -90,7 +100,7 @@ class UserService implements UserServiceInterface
             $result = $this->userRepository->create($data);
 
             if (!$result) {
-                return Result::error('Failed to create user', 500);
+                return Result::error(MessageResponse::INTERNAL_SERVER_ERROR_MESSAGE, 500);
             }
 
             // $user = $this->userRepository->findById($result->id);
@@ -106,7 +116,7 @@ class UserService implements UserServiceInterface
             //     // $result = $this->instructorService->createInstructor();
             // }
 
-            return Result::success($result, 'User registered successfully', 200);
+            return Result::success($result, MessageResponse::CREATED_SUCCESSFULLY, 200);
         } catch (Exception $ex) {
             return Result::error($ex, StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -145,34 +155,34 @@ class UserService implements UserServiceInterface
         $validator = Validator::make($data, (new SigninRequest())->rules());
 
         if ($validator->fails()) {
-            return Result::error('Validation failed', StatusResponse::HTTP_UNPROCESSABLE_ENTITY, $validator->errors());
+            return Result::error(MessageResponse::VALIDATION_FAILED, StatusResponse::HTTP_UNPROCESSABLE_ENTITY, $validator->errors());
         }
 
 
         if (!auth()->attempt($data)) {
-            return Result::error('Invalid credentials', StatusResponse::HTTP_UNAUTHORIZED);
+            return Result::error(MessageResponse::INVALID_USER, StatusResponse::HTTP_UNAUTHORIZED);
         }
 
         $user = auth()->user();
 
         if (!$user->is_active) {
-            return Result::error('User is not activated', StatusResponse::HTTP_BAD_REQUEST);
+            return Result::error(MessageResponse::USER_NOT_ACTIVATED, StatusResponse::HTTP_BAD_REQUEST);
         }
 
         $tokens = $this->generateTokens($user);
 
-        return Result::success_with_token($user, $tokens, 'Logged in successfully', 200);
+        return Result::success_with_token($user, $tokens, MessageResponse::LOGIN_SUCCESSFUL, 200);
     }
 
 
     public function refreshAccessToken($refreshToken)
     {
-        $tokenRecord = PersonalAccessToken::where('refresh_token', $refreshToken)
+        $tokenRecord = PersonalAccessToken::whereHas('refresh_token', $refreshToken)
             ->where('refresh_token_expires_at', '>', now())
             ->first();
 
         if (!$tokenRecord) {
-            return Result::error('Invalid or expired refresh token', 401);
+            return Result::error(MessageResponse::INVALID_TOKEN, 401);
         }
 
         $user = $tokenRecord->tokenable;
@@ -199,16 +209,16 @@ class UserService implements UserServiceInterface
 
 
             if ($validator->fails()) {
-                return Result::error('Validation failed', 422, $validator->errors());
+                return Result::error(MessageResponse::VALIDATION_FAILED, StatusResponse::HTTP_UNPROCESSABLE_ENTITY, $validator->errors());
             }
 
             $result = $this->genericRepository->update($id, $data);
 
             if (!$result) {
-                return Result::error('Failed to update User', StatusResponse::HTTP_BAD_REQUEST);
+                return Result::error(MessageResponse::INTERNAL_SERVER_ERROR_MESSAGE, StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
             }
 
-            return Result::success($result, 'User is updated Successfully', StatusResponse::HTTP_OK);
+            return Result::success($result, MessageResponse::UPDATED_SUCCESSFULLY, StatusResponse::HTTP_OK);
         } catch (Exception $ex) {
 
             return Result::error($ex->getMessage(), StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
@@ -219,7 +229,10 @@ class UserService implements UserServiceInterface
     {
         $result = $this->genericRepository->delete($id);
 
-        return Result::success($result, 'User is deleted Successfully', StatusResponse::HTTP_OK);
+        if (!$result) {
+            return Result::error(MessageResponse::INTERNAL_SERVER_ERROR_MESSAGE, StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        return Result::success($result, MessageResponse::DELETED_SUCCESSFULLY, StatusResponse::HTTP_OK);
     }
 
     public function forgotPassword(array $data)
@@ -229,7 +242,7 @@ class UserService implements UserServiceInterface
         ]);
 
         if ($validator->fails()) {
-            return Result::error('Validation failed', 422, $validator->errors());
+            return Result::error(MessageResponse::VALIDATION_FAILED, StatusResponse::HTTP_UNPROCESSABLE_ENTITY, $validator->errors());
         }
 
         $status = Password::sendResetLink($data, function ($user, $token) use ($data) {
@@ -253,7 +266,7 @@ class UserService implements UserServiceInterface
         ]);
 
         if ($validator->fails()) {
-            return Result::error('Validation failed', 422, $validator->errors());
+            return Result::error(MessageResponse::VALIDATION_FAILED, StatusResponse::HTTP_UNPROCESSABLE_ENTITY, $validator->errors());
         }
 
         $status = Password::reset(
@@ -279,7 +292,7 @@ class UserService implements UserServiceInterface
         // Revoke current token
         try {
             $user->currentAccessToken()->delete();
-            return Result::success(null, 'Logged out successfully', StatusResponse::HTTP_OK);
+            return Result::success(null, MessageResponse::LOGGED_OUT_SUCCESSFULLY, StatusResponse::HTTP_OK);
         } catch (\Exception $e) {
             return Result::error("Logout failed: . {$e}", StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -293,15 +306,15 @@ class UserService implements UserServiceInterface
 
         // If no token found, return invalid response
         if (!$accessToken) {
-            return Result::error('The token is invalid or not found.', StatusResponse::HTTP_BAD_REQUEST);
+            return Result::error(MessageResponse::INVALID_TOKEN, StatusResponse::HTTP_BAD_REQUEST);
         }
 
         // Check if the token is expired
         if ($accessToken->expires_at && $accessToken->expires_at->isPast()) {
-            return Result::error('The token is invalid or not found.', StatusResponse::HTTP_NOT_FOUND);
+            return Result::error(MessageResponse::INVALID_TOKEN, StatusResponse::HTTP_NOT_FOUND);
         }
 
-        return Result::success('The token is valid', StatusResponse::HTTP_OK);
+        return Result::success(MessageResponse::INVALID_TOKEN, StatusResponse::HTTP_OK);
     }
 
     public function activateUser($userId)
@@ -309,7 +322,7 @@ class UserService implements UserServiceInterface
         $result = $this->userRepository->activate($userId);
 
         if (!$result) {
-            return Result::error('Failed to active a user', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return Result::error(MessageResponse::INTERNAL_SERVER_ERROR_MESSAGE, StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         return Result::success($result, 'User is activated Successfully');
@@ -321,7 +334,7 @@ class UserService implements UserServiceInterface
         $result = $this->userRepository->deactivate($userId);
 
         if (!$result) {
-            return Result::error('Failed to deactive a user', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return Result::error(MessageResponse::INTERNAL_SERVER_ERROR_MESSAGE, StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         return Result::success($result, 'User is deactivated Successfully');

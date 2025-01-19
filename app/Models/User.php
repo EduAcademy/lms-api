@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Scout\Searchable;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasApiTokens;
+    use HasFactory, Notifiable, HasApiTokens, Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -29,10 +30,17 @@ class User extends Authenticatable
         'last_name',
         'phone',
         'role_id',
-        'status',
         'gender',
         'is_active',
     ];
+
+    public function toSearchableArray()
+    {
+        return [
+            'username'=> $this->username,
+            'email'=> $this->email,
+        ];
+    }
 
     /**
      * The attributes that should be hidden for serialization.

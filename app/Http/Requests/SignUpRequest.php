@@ -29,7 +29,6 @@ class SignUpRequest extends FormRequest
             'last_name' => 'required|string',
             'phone' => 'nullable|string',
             'address' => 'nullable|string',
-            'status' => 'nullable|in:active,inactive',
             'gender' => 'required|in:male,female',
             'role_id' => 'integer',
         ];

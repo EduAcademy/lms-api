@@ -31,10 +31,10 @@ class UserFactory extends Factory
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
             'phone' => $this->faker->phoneNumber,
-            'status' => $this->faker->randomElement(['active', 'inactive']),
             'gender' => $this->faker->randomElement(['male', 'female']),
             'remember_token' => Str::random(10),
             'role_id' => $this->faker->randomElement([1, 2, 3]),
+            'is_active'=> $this->faker->randomElement([0,1]),
         ];
     }
 

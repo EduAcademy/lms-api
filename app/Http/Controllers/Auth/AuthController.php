@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SigninRequest;
 use App\Http\Requests\SignUpRequest;
+use App\Models\User;
 use App\Services\UserService;
 use App\Shared\Handler\Result;
 use Illuminate\Http\Request;
@@ -34,6 +35,9 @@ class AuthController extends Controller
     {
         $result = $this->user_service->getAllUsers();
 
+        // $result = User::search(request('search'))->get();
+
+        // return response()->json($result);
         return $result;
     }
 
