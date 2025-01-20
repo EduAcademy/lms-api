@@ -9,7 +9,7 @@ class StudentRepository implements StudentRepositoryInterface
 {
     public function findById($id)
     {
-        return Student::find($id);
+        return Student::with('user')->find($id);
     }
 
     public function findByUuid($uuid)
