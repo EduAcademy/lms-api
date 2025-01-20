@@ -36,6 +36,7 @@ Route::prefix('v1')->group(function () {
     });
 
     // User management
+    
     Route::prefix('users')->group(function () {
         Route::get('/', [AuthController::class, 'index']);
         Route::get('/{id}', [AuthController::class, 'show']);
