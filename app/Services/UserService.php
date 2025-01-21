@@ -188,32 +188,40 @@ class UserService implements UserServiceInterface
     public function updateUser($id, array $data)
     {
         try {
-
+            // Validate input data
             $validator = Validator::make($data, [
                 'username' => 'required|string|max:255',
                 'email' => 'required|email|unique:users,email,' . $id,
+                'password' => 'nullable|string|min:6', // Password is optional
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
                 'phone' => 'nullable|string',
+                'role_id' => 'nullable|integer|exists:roles,id',
             ]);
 
-
+            // Check if validation fails
             if ($validator->fails()) {
                 return Result::error('Validation failed', 422, $validator->errors());
             }
 
-            $result = $this->genericRepository->update($id, $data);
-
-            if (!$result) {
-                return Result::error('Failed to update User', StatusResponse::HTTP_BAD_REQUEST);
+            // Handle password: hash if provided, or remove it if not
+            if (isset($data['password']) && $data['password'] !== null) {
+                $data['password'] = Hash::make($data['password']);
+            } else {
+                unset($data['password']); // Exclude password from update if not provided
             }
 
+            // Update the user using the generic repository
+            $result = $this->genericRepository->update($id, $data);
+
+            // Return success response
             return Result::success($result, 'User is updated Successfully', StatusResponse::HTTP_OK);
         } catch (Exception $ex) {
-
+            // Return error response in case of an exception
             return Result::error($ex->getMessage(), StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
 
     public function deleteUser($id)
     {
