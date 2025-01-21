@@ -27,6 +27,8 @@ class StudentRequest extends FormRequest
              'department_id' => 'required|exists:departments,id',
              'study_plan_id' => 'required|exists:study_plans,id',
              'user_id' => 'required|exists:users,id',
+             'group_id' => 'required|exists:groups,id',
+             'sub_group_id' => 'required|exists:sub_groups,id',
         ];
     }
 }
