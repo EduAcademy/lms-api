@@ -50,16 +50,16 @@ class UserService implements UserServiceInterface
 
     public function getAllUsers()
     {
-        try {
+        // try {
 
             $result = $this->userRepository->getAll();
 
             return Result::success($result, MessageResponse::RETRIEVED_SUCCESSFULLY, StatusResponse::HTTP_OK);
-        } catch (QueryException $queryException) {
-            return $this->queryExceptionResponse($queryException);
-        }
+        // } catch (QueryException $queryException) {
+            // return $this->queryExceptionResponse($queryException);
+        // }
     }
-    
+
     public function getUserById($id)
     {
 
