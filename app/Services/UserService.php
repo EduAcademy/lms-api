@@ -23,13 +23,13 @@ use Illuminate\Support\Facades\Validator;
 use Laravel\Sanctum\PersonalAccessToken;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
-use App\Exceptions\LmsExceptionsTrait;
+// use App\Exceptions\LmsExceptionsTrait;
 
 
 
 class UserService implements UserServiceInterface
 {
-    use LmsExceptionsTrait;
+    // use LmsExceptionsTrait;
     protected $userRepository;
     protected $studentService;
     // protected $instructorService;

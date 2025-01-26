@@ -55,6 +55,12 @@ class GroupController extends Controller
         return $result;
     }
 
+    public function showByName($name)
+    {
+        $result = $this->groupService->getGroupByName($name);
+        return $result;
+    }
+
     /**
      * Show the form for editing the specified resource.
      */

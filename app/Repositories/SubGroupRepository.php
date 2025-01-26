@@ -18,9 +18,15 @@ class SubGroupRepository implements SubGroupRepositoryInterface
         return $result;
     }
 
-    public function getByTheoGroupId($theogroupId)
+    public function getByName($name)
     {
-        $result = SubGroups::with('theoretical_group')->get();
+        $result = SubGroups::where('name', $name)->first();
+        return $result;
+    }
+
+    public function getByGroupId($theogroupId)
+    {
+        $result = SubGroups::with('group')->get();
         return $result;
     }
 

@@ -41,6 +41,16 @@ class Groupservice implements GroupserviceInterface
         return Result::success($result, 'Found  group Successfully', StatusResponse::HTTP_OK);
     }
 
+    public function getGroupByName($name)
+    {
+        $result = $this->groupRepository->getByName($name);
+        if (!$result) {
+            return Result::error("Group not found with this name {$name}", StatusResponse::HTTP_NOT_FOUND);
+        }
+
+        return Result::success($result, 'Found  group Successfully', StatusResponse::HTTP_OK);
+    }
+
     public function createGroup(array $data)
     {
         $validator = Validator::make($data, (new GroupRequest())->rules());

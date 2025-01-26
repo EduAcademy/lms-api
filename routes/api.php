@@ -36,7 +36,7 @@ Route::prefix('v1')->group(function () {
     });
 
     // User management
-    
+
     Route::prefix('users')->group(function () {
         Route::get('/', [AuthController::class, 'index']);
         Route::get('/{id}', [AuthController::class, 'show']);
@@ -105,15 +105,18 @@ Route::prefix('v1')->group(function () {
     Route::prefix('groups')->group(function () {
         Route::get('/', [GroupController::class, 'index']);
         Route::get('/{id}', [GroupController::class, 'show']);
+        Route::get('/group/{name}', [GroupController::class, 'showByName']);
         Route::post('/', [GroupController::class, 'store']);
         Route::put('/{id}', [GroupController::class, 'update']);
         Route::delete('/{id}', [GroupController::class, 'delete']);
     });
 
+
     // Lab Group routes
     Route::prefix('sub_groups')->group(function () {
         Route::get('/', [SubGroupController::class, 'index']);
         Route::get('/{id}', [SubGroupController::class, 'show']);
+        Route::get('/sub_group/{name}', [SubGroupController::class, 'showByName']);
         Route::post('/', [SubGroupController::class, 'store']);
         Route::put('/{id}', [SubGroupController::class, 'update']);
         Route::delete('/{id}', [SubGroupController::class, 'delete']);

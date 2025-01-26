@@ -43,6 +43,17 @@ class SubGroupservice implements SubGroupServiceInterface
         return Result::success($result, 'Sub group is found Successfully by Id', StatusResponse::HTTP_OK);
     }
 
+    public function getSubGroupByName($name)
+    {
+        $result = $this->subGroupRepository->getByName($name);
+
+        if (!$result) {
+            return Result::error("SubGroup not found with this Id {$name}", StatusResponse::HTTP_NOT_FOUND);
+        }
+
+        return Result::success($result, 'Sub group is found Successfully by Name', StatusResponse::HTTP_OK);
+    }
+
     public function createSubGroup(array $data)
     {
         $validator = Validator::make($data, (new SubGroupRequest())->rules());
@@ -61,7 +72,7 @@ class SubGroupservice implements SubGroupServiceInterface
 
     public function getSubGroupByGroupId($groupId)
     {
-        $result = $this->subGroupRepository->getByTheoGroupId($groupId);
+        $result = $this->subGroupRepository->getByGroupId($groupId);
 
         if (!$result) {
             return Result::error("SubGroup not found with this Id {$groupId}", StatusResponse::HTTP_NOT_FOUND);

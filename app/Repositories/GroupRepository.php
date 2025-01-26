@@ -12,6 +12,12 @@ class GroupRepository implements GroupRepositoryInterface
         return Groups::all();
     }
 
+    public function getByName($name)
+    {
+        $result = Groups::where('name', $name)->first();
+        return $result;
+    }
+
     public function getById($id)
     {
         $result = Groups::find($id);
