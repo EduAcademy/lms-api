@@ -50,7 +50,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // Admin-only routes
         // Excel Import routes
-        Route::post('/upload-students', [StudentController::class, 'uploadStudents']);
+        Route::post('/upload-students', [StudentController::class, 'uploadStudent']);
         Route::post('/upload-depts', [DepartmentController::class, 'createDepartment']);
 
         // Department routes

@@ -3,6 +3,8 @@
 namespace App\Imports;
 
 use App\Enums\RoleType;
+use App\Helpers\StringHelper;
+use App\Models\Department;
 use App\Models\Role;
 use App\Models\Student;
 use App\Models\User;
@@ -13,63 +15,79 @@ use Illuminate\Support\Facades\DB;
 
 class StudentImport implements ToCollection
 {
+
+    private $departmentShortNameMapping = [
+        'تكنولوجيا المعلومات' => 'IT',  // IT
+        'الأمن السيبراني' => 'CYS',     // CYS
+        'علوم حاسوب' => 'CS',           // CS
+        'نظم معلومات' => 'IS',          // IS
+    ];
+
+
     public function collection(Collection $rows)
     {
         DB::transaction(function () use ($rows) {
             foreach ($rows as $index => $row) {
-
                 if ($index === 0) {
                     continue;
                 }
 
-                if (!isset($row[1], $row[2], $row[3], $row[4])) {
-                    Log::warning("Row skipped due to missing fields: " . json_encode($row));
+                // Map the columns to the correct attributes
+                $uuid = $row[0]; // كود الطالب (Student Code)
+                $firstName = $row[1]; // اسم الطالب (Student Name)
+                $lastName = $row[26]; // إسم الطالب باللغه الانجليزيه (Student Name in English)
+                $email = $row[14]; // الايميل (Email)
+                $phone = $row[13]; // التلفون (Phone)
+                $gender = $row[4] === 'ذكر' ? 'male' : 'female'; // النوع (Gender)
+                $departmentName = $row[2]; // التخصص (Specialization)
+
+                $shortName = $this->departmentShortNameMapping[$departmentName] ?? null;
+
+                if (!$shortName) {
+                    Log::warning("Invalid department name: $departmentName for student: $uuid");
                     continue;
                 }
 
-                //We suppose that excel file has these records in order.
-                $username = $row[1];
-                $firstName = $row[2];
-                $lastName = $row[3];
-                $email = $row[4];
+                $department = Department::where('short_name', $shortName)->first();
+                if (!$department) {
+                    Log::warning("Department not found for short name: $shortName for student: $uuid");
+                    continue;
+                }
 
-                $existingUser = User::where('username', $username)
-                    ->orWhere('email', $email)
-                    ->first();
+                $departmentId = $department->id;
+
+                $existingUser = User::where('email', $email)->first();
 
                 if ($existingUser) {
-                    Log::info("Duplicate user skipped: Username - $username, Email - $email");
+                    Log::info("Duplicate user skipped: Email - $email");
                     continue;
                 }
 
-                $existingStudent = Student::where('user_id', $existingUser?->id)
-                    ->first();
+                $role = Role::where('name', RoleType::Student)->first();
 
-                if ($existingStudent) {
-                    Log::info("Duplicate student skipped: User ID - {$existingUser->id}");
-                    continue;
-                }
-
-                $role = Role::where('name', RoleType::Student);
+                $username = StringHelper::getBeforeWhitespace($lastName);
 
                 $user = User::create([
                     'username' => $username,
                     'first_name' => $firstName,
                     'last_name' => $lastName,
                     'email' => $email,
+                    'phone' => $phone,
+                    'gender' => $gender,
                     'password' => bcrypt('defaultPassword123'),
                     'role_id' => $role->id,
                 ]);
 
                 Student::create([
+                    'uuid' => $uuid,
                     'user_id' => $user->id,
-                    'department_id' => $row[5] ?? null,
-                    'study_plan_id' => $row[6] ?? null,
-                    'group_id' => $row[7] ?? null,
-                    'sub_group_id' => $row[8] ?? null,
+                    'department_id' => $departmentId,
+                    'study_plan_id' => 1,
+                    'group_id' => 1,
+                    'sub_group_id' => 1,
                 ]);
 
-                Log::info("New student created: Username - $username, Email - $email");
+                Log::info("New student created: Username - $uuid, Email - $email");
             }
         });
     }
