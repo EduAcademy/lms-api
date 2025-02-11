@@ -17,5 +17,6 @@ interface UserServiceInterface {
     public function refreshAccessToken($refreshToken);
     public function activateUser($userId);
     public function deactivateUser($userId);
+    public function getUserProfile($user);
 
 }

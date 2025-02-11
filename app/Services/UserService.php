@@ -52,11 +52,11 @@ class UserService implements UserServiceInterface
     {
         // try {
 
-            $result = $this->userRepository->getAll();
+        $result = $this->userRepository->getAll();
 
-            return Result::success($result, MessageResponse::RETRIEVED_SUCCESSFULLY, StatusResponse::HTTP_OK);
+        return Result::success($result, MessageResponse::RETRIEVED_SUCCESSFULLY, StatusResponse::HTTP_OK);
         // } catch (QueryException $queryException) {
-            // return $this->queryExceptionResponse($queryException);
+        // return $this->queryExceptionResponse($queryException);
         // }
     }
 
@@ -120,6 +120,14 @@ class UserService implements UserServiceInterface
         } catch (Exception $ex) {
             return Result::error($ex, StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public function getUserProfile($user)
+    {
+        if ($user == null) {
+            return Result::error('Token is expired or invalid', StatusResponse::HTTP_UNAUTHORIZED);
+        }
+        return Result::success($user, 'Found profile Successfully', StatusResponse::HTTP_OK);
     }
 
     public function generateTokens($user)
@@ -303,6 +311,7 @@ class UserService implements UserServiceInterface
         // Revoke current token
         try {
             $user->currentAccessToken()->delete();
+            Log::info($user);
             return Result::success(null, MessageResponse::LOGGED_OUT_SUCCESSFULLY, StatusResponse::HTTP_OK);
         } catch (\Exception $e) {
             return Result::error("Logout failed: . {$e}", StatusResponse::HTTP_INTERNAL_SERVER_ERROR);

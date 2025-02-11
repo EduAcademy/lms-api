@@ -4,8 +4,10 @@ namespace App\Services;
 
 use App\Contracts\GenericRepositoryInterface;
 use App\Contracts\StudentRepositoryInterface;
+use App\DTOs\StudentDTO;
 use App\Http\Requests\StudentRequest;
 use App\Interfaces\Services\StudentServiceInterface;
+use App\Mappings\StudentMapping;
 use App\Models\Student;
 use App\Repositories\GenericRepository;
 use App\Shared\Constants\StatusResponse;
@@ -32,11 +34,15 @@ class StudentService implements StudentServiceInterface
 
     public function getStudentById($id)
     {
-        $result = $this->studentRepository->findById($id);
+        $student = $this->studentRepository->findById($id);
 
-        if (!$result) {
+        if (!$student) {
             return Result::error('Student not found', StatusResponse::HTTP_NOT_FOUND);
         }
+
+        $studentData = StudentMapping::toStudent($student);
+
+        $result = StudentDTO::fromArray($studentData);
 
         return Result::success($result, 'Student found Successfully by Id', StatusResponse::HTTP_OK);
     }

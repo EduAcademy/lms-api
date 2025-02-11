@@ -101,14 +101,11 @@ class AuthController extends Controller
     public function profile(Request $request)
     {
         $user = $request->user();
+        // Log::info("This is the request", $request);
+        // Log::info("This is the user", $user);
+        $result = $this->user_service->getUserProfile($user);
 
-        return Result::success($user, 'Found profile Successfully', StatusResponse::HTTP_OK);
-        return $user;
-
-        if ($user == null) {
-
-            return Result::error('Token is expired or invalid', StatusResponse::HTTP_UNAUTHORIZED);
-        }
+        return $result;
     }
 
     public function forgotPassword(Request $request)
@@ -151,8 +148,9 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $result = $this->user_service->logout($request->user());
 
+        Log::info($request);
+        $result = $this->user_service->logout($request->user());
         return $result;
     }
 
