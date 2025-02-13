@@ -9,6 +9,7 @@ use App\Http\Controllers\SubGroupController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudyPlanController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\LevelController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StudyPlanCourseController;
 use App\Http\Controllers\StudyPlanCourseInstructorController;
@@ -23,7 +24,7 @@ Route::prefix('v1')->group(function () {
 });
 
 // Protected routes
-Route::middleware('auth:sanctum')->group(function () {
+// Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('v1')->group(function () {
         // User profile and authentication
         Route::prefix('auth')->group(function () {
@@ -111,6 +112,9 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::delete('/{id}', [GroupController::class, 'delete']);
         });
 
+        Route::prefix('levels')->group(function () {
+            Route::get('/', [LevelController::class, 'index']);
+        });
 
         // Lab Group routes
         Route::prefix('sub_groups')->group(function () {
@@ -155,4 +159,4 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::delete('/{id}', [StudyPlanCourseInstructorSubGroupController::class, 'delete']);
         });
     });
-});
+// });

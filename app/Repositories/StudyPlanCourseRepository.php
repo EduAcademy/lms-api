@@ -19,9 +19,21 @@ class StudyPlanCourseRepository implements StudyPlanCourseRepositoryInterface
         return $result;
     }
 
-    public function create(array $data)
+    public function create(array $data, array $courses)
     {
-        return StudyPlanCourse::create($data);
+        $studyPlanCourseEntries = [];
+
+        foreach ($courses as $course) {
+            $studyPlanCourseEntries[] = [
+                'study_plan_id' => $data['study_plan_id'],
+                'department_id' => $data['department_id'],
+                'semester' => $data['semester'],
+                'level_id' => $data['level_id'],
+                'course_id' => $course['course_id'],
+            ];
+        }
+
+            return StudyPlanCourse::insert($studyPlanCourseEntries);
     }
 
     public function getByStudyplanId($studyplanId)

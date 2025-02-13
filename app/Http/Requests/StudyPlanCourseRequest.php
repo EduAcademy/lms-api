@@ -23,11 +23,12 @@ class StudyPlanCourseRequest extends FormRequest
     {
         return [
             //
-            'study_plan_id'=>'required|integer|exists:study_plans,id',
-            'department_id'=>'required|integer|exists:departments,id',
-            'course_id'=>'required|integer|exists:courses,id',
-            'level_id'=>'required|integer|exists:levels,id',
-            'semester'=>'required|integer|in:1,2',
+            'study_plan_id' => 'required|integer|exists:study_plans,id',
+            'department_id' => 'required|integer|exists:departments,id',
+            'course_id' => 'required|array',
+            'course_id.*' => 'integer|exists:courses,id',
+            'level_id' => 'required|integer|exists:levels,id',
+            'semester' => 'required|integer|in:1,2',
         ];
     }
 }

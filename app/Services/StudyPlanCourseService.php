@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Contracts\StudyPlanCourseRepositoryInterface;
+use App\Helpers\ArrayHelper;
 use App\Interfaces\Services\StudyPlanCourseServiceInterface;
 use App\Http\Requests\StudyPlanCourseRequest;
 use App\Models\StudyPlanCourse;
@@ -52,9 +53,20 @@ class StudyPlanCourseService implements StudyPlanCourseServiceInterface
             return Result::error('Validation failed', 422, $validator->errors());
         }
 
-        $result = $this->sPCourseRepository->create($data);
+        $courses = ArrayHelper::maptoArray($data['course_id'], 'course_id');
 
-        return Result::success($result, 'StudyPlanCourse is created Successfully', StatusResponse::HTTP_OK);
+        try {
+            $result = $this->sPCourseRepository->create($data, $courses);
+
+            if (!$result) {
+                return Result::error('Failed to create StudyPlanCourses', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
+            return Result::success($result, 'StudyPlanCourses created successfully', StatusResponse::HTTP_OK);
+        } catch (\Exception $e) {
+            Log::error('Failed to create StudyPlanCourses: ' . $e->getMessage());
+            return Result::error('An error occurred while creating StudyPlanCourses', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     public function getStudyPlanCourseByStudyplanId($studyplanId)
@@ -93,12 +105,17 @@ class StudyPlanCourseService implements StudyPlanCourseServiceInterface
     public function updateStudyPlanCourse($id, array $data)
     {
 
+
+        $courses_ids = $data['course_id'];
+
+        $data['course_id'] = ArrayHelper::convertArraytoInteger($courses_ids);
+
         $validator = Validator::make($data, [
-            'study_plan_id'=>'required|integer|exists:study_plans,id',
-            'department_id'=>'required|integer|exists:departments,id',
-            'course_id'=>'required|integer|exists:courses,id',
-            'level_id'=>'required|integer|exists:levels,id',
-            'semester'=>'required|integer|in:1,2',
+            'study_plan_id' => 'required|integer|exists:study_plans,id',
+            'department_id' => 'required|integer|exists:departments,id',
+            'course_id' => 'required|integer|exists:courses,id',
+            'level_id' => 'required|integer|exists:levels,id',
+            'semester' => 'required|integer|in:1,2',
         ]);
 
         if ($validator->fails()) {
