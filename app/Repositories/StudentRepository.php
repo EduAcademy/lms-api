@@ -9,6 +9,7 @@ class StudentRepository implements StudentRepositoryInterface
 {
     public function findById($id)
     {
+        // Eager load the 'user' relationship when finding a student by ID
         return Student::with('user')->find($id);
     }
 
@@ -29,6 +30,7 @@ class StudentRepository implements StudentRepositoryInterface
 
     public function findByDepartmentId($departmentId)
     {
-        return Student::where('department_id', $departmentId)->get();
+        // Eager load the 'user' relationship when fetching students by department
+        return Student::with('user')->where('department_id', $departmentId)->get();
     }
 }
