@@ -20,7 +20,7 @@ class StudentService implements StudentServiceInterface
     private $genericRepository;
 
     public function __construct(
-        StudentRepositoryInterface $studentRepository,
+        StudentRepositoryInterface $studentRepository
     ) {
         $this->studentRepository = $studentRepository;
         $this->genericRepository = new GenericRepository(new Student);
@@ -28,7 +28,11 @@ class StudentService implements StudentServiceInterface
 
     public function getAllStudents()
     {
+        // Retrieve all students using the generic repository.
         $result = $this->genericRepository->getAll();
+        // Eager load the 'user' relationship for each student.
+        $result->load('user');
+
         return Result::success($result, 'Get all Students Successfully', StatusResponse::HTTP_OK);
     }
 
@@ -40,8 +44,10 @@ class StudentService implements StudentServiceInterface
             return Result::error('Student not found', StatusResponse::HTTP_NOT_FOUND);
         }
 
-        $studentData = StudentMapping::toStudent($student);
+        // Eager load the 'user' relationship for the student.
+        $student->load('user');
 
+        $studentData = StudentMapping::toStudent($student);
         $result = StudentDTO::fromArray($studentData);
 
         return Result::success($result, 'Student found Successfully by Id', StatusResponse::HTTP_OK);
@@ -50,11 +56,6 @@ class StudentService implements StudentServiceInterface
     public function createStudent(array $data)
     {
         // Additional Validation Logic
-        // $existingStudent = $this->studentRepository->findByUuid($data['uuid']);
-        // if ($existingStudent) {
-        //     return Result::error('Student with the same UUID already exists', StatusResponse::HTTP_CONFLICT);
-        // }
-
         $validator = Validator::make($data, (new StudentRequest())->rules());
 
         if ($validator->fails()) {
@@ -63,8 +64,7 @@ class StudentService implements StudentServiceInterface
 
         $result = $this->genericRepository->create($data);
 
-        if(!$result)
-        {
+        if (!$result) {
             return Result::error('Failed in creating Student', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
 
@@ -100,6 +100,9 @@ class StudentService implements StudentServiceInterface
         if ($students->isEmpty()) {
             return Result::error('No students found for the given department', StatusResponse::HTTP_NOT_FOUND);
         }
+
+        // Eager load the 'user' relationship for the collection of students.
+        $students->load('user');
 
         return Result::success($students, 'Students found Successfully by department', StatusResponse::HTTP_OK);
     }
