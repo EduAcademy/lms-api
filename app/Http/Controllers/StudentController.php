@@ -21,8 +21,16 @@ class StudentController extends Controller
 
     public function index()
     {
-        $result = $this->studentService->getAllStudents();
-        return $result;
+        // Get all students from the service
+        $students = $this->studentService->getAllStudents();
+        // Eager load the 'user' relationship so each student includes its linked user data
+        $students->load('user');
+
+        return response()->json([
+            "status"  => 200,
+            "message" => "Get all Students Successfully",
+            "data"    => $students,
+        ]);
     }
 
     public function uploadStudent(Request $request)
@@ -44,8 +52,8 @@ class StudentController extends Controller
         $existingFile = UploadedFiles::where('file_hash', $fileHash)
             ->orWhere(function ($query) use ($fileName, $fileSize, $lastModified) {
                 $query->where('file_name', $fileName)
-                    ->where('file_size', $fileSize)
-                    ->where('last_modified', $lastModified);
+                      ->where('file_size', $fileSize)
+                      ->where('last_modified', $lastModified);
             })
             ->first();
 
@@ -55,9 +63,9 @@ class StudentController extends Controller
 
         // Store file metadata
         UploadedFiles::create([
-            'file_name' => $fileName,
-            'file_hash' => $fileHash,
-            'file_size' => $fileSize,
+            'file_name'     => $fileName,
+            'file_hash'     => $fileHash,
+            'file_size'     => $fileSize,
             'last_modified' => $lastModified,
         ]);
 
@@ -73,8 +81,16 @@ class StudentController extends Controller
 
     public function show($id)
     {
-        $result = $this->studentService->getStudentById($id);
-        return $result;
+        // Get the specific student from the service
+        $student = $this->studentService->getStudentById($id);
+        // Eager load the 'user' relationship
+        $student->load('user');
+
+        return response()->json([
+            "status"  => 200,
+            "message" => "Student retrieved successfully",
+            "data"    => $student,
+        ]);
     }
 
     public function store(StudentRequest $request)
