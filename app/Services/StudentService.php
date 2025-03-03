@@ -10,9 +10,13 @@ use App\Interfaces\Services\StudentServiceInterface;
 use App\Mappings\StudentMapping;
 use App\Models\Student;
 use App\Repositories\GenericRepository;
+use App\Shared\Constants\MessageResponse;
 use App\Shared\Constants\StatusResponse;
 use App\Shared\Handler\Result;
+use Exception;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 
 class StudentService implements StudentServiceInterface
 {
@@ -30,36 +34,30 @@ class StudentService implements StudentServiceInterface
     {
         try {
             $result = $this->genericRepository->getAll();
-            
-            // Verify that $result is an Eloquent Collection
-            if ($result instanceof \Illuminate\Database\Eloquent\Collection) {
+
+            if ($result instanceof Collection) {
                 $result->load('user');
-            } else {
-                \Log::error('GenericRepository::getAll() did not return an Eloquent Collection.');
             }
-            
-            return Result::success($result, 'Get all Students Successfully', StatusResponse::HTTP_OK);
-        } catch (\Exception $e) {
-            \Log::error('Error in StudentService::getAllStudents: ' . $e->getMessage());
-            return Result::error('An error occurred while fetching students', 500, $e->getMessage());
+
+            return Result::success($result, MessageResponse::RETRIEVED_SUCCESSFULLY, StatusResponse::HTTP_OK);
+        } catch (Exception $e) {
+            Log::error('Error in StudentService::getAllStudents: ' . $e->getMessage());
+            return Result::error('An error occurred while fetching students', StatusResponse::HTTP_INTERNAL_SERVER_ERROR, $e->getMessage());
         }
     }
-    
+
     public function getStudentById($id)
     {
         $student = $this->studentRepository->findById($id);
 
         if (!$student) {
-            return Result::error('Student not found', StatusResponse::HTTP_NOT_FOUND);
+            return Result::error(MessageResponse::RESOURCE_NOT_FOUND, StatusResponse::HTTP_NOT_FOUND);
         }
-
-        // Eager load the 'user' relationship for the student.
-        $student->load('user');
 
         $studentData = StudentMapping::toStudent($student);
         $result = StudentDTO::fromArray($studentData);
 
-        return Result::success($result, 'Student found Successfully by Id', StatusResponse::HTTP_OK);
+        return Result::success($result, MessageResponse::RETRIEVED_SUCCESSFULLY, StatusResponse::HTTP_OK);
     }
 
     public function createStudent(array $data)

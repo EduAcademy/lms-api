@@ -9,18 +9,16 @@ class GenericRepository implements GenericRepositoryInterface
 {
     protected $model;
 
-    // Inject the specific model into the repository
     public function __construct(Model $model)
     {
         $this->model = $model;
     }
 
-    // Return an Eloquent Collection
-    public function getAll(): \Illuminate\Database\Eloquent\Collection
+    public function getAll(): Collection
     {
         return $this->model->all();
     }
-    
+
     public function findById($id)
     {
         return $this->model->find($id);
