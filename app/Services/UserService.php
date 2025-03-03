@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Contracts\UserRepositoryInterface;
 use App\Enums\RoleType;
+use App\Handler\ImageUploads;
 use App\Http\Requests\SigninRequest;
 use App\Interfaces\Services\InstructorServiceInterface;
 use App\Interfaces\Services\StudentServiceInterface;
@@ -11,18 +12,22 @@ use App\Interfaces\Services\UserServiceInterface;
 use App\Models\User;
 use App\Repositories\GenericRepository;
 use App\Http\Requests\SignUpRequest;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Mail\EmailSender;
 use App\Shared\Constants\MessageResponse;
 use App\Shared\Constants\StatusResponse;
 use App\Shared\Handler\Result;
 use Exception;
 use Illuminate\Database\QueryException;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Sanctum\PersonalAccessToken;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+
 // use App\Exceptions\LmsExceptionsTrait;
 
 
@@ -358,5 +363,44 @@ class UserService implements UserServiceInterface
         }
 
         return Result::success($result, 'User is deactivated Successfully');
+    }
+
+    public function updateProfile($user, array $data, $image = null)
+    {
+        $validator = Validator::make($data, (new UpdateProfileRequest())->rules());
+
+        if ($validator->fails()) {
+            return Result::error(MessageResponse::VALIDATION_FAILED, 422, $validator->errors());
+        }
+
+        if (!$user->role) {
+            return Result::error('User role not found.', StatusResponse::HTTP_NOT_FOUND);
+        }
+
+        // Handle image upload
+        if ($image instanceof UploadedFile) {
+            // Delete the old image if it exists
+            if ($user->image_url) {
+                $oldImagePath = str_replace('/storage', 'public', $user->image_url);
+                Storage::delete($oldImagePath);
+            }
+
+            // Upload the new image
+            $user->image_url = ImageUploads::uploadImage($image, $user->role->name);
+        } elseif ($image === null) {
+            // Clear the image if null is provided
+            $user->image_url = null;
+        }
+
+        // Update other fields
+        $user->username = $data['username'];
+        $user->first_name = $data['first_name'];
+        $user->last_name = $data['last_name'];
+        $user->phone = $data['phone'];
+        $user->gender = $data['gender'];
+
+        $user->save();
+
+        return Result::success($user, MessageResponse::UPDATED_SUCCESSFULLY, StatusResponse::HTTP_OK);
     }
 }

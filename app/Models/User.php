@@ -32,6 +32,7 @@ class User extends Authenticatable
         'role_id',
         'gender',
         'is_active',
+        'image_url',
     ];
 
     public function toSearchableArray()

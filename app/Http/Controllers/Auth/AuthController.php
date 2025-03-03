@@ -5,12 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SigninRequest;
 use App\Http\Requests\SignUpRequest;
-use App\Models\User;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Services\UserService;
-use App\Shared\Handler\Result;
 use Illuminate\Http\Request;
-
-use App\Shared\Constants\StatusResponse;
 use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
@@ -46,7 +43,7 @@ class AuthController extends Controller
     {
 
         $data = $request->validated();
-        $response = $this->user_service->registerUser($data); 
+        $response = $this->user_service->registerUser($data);
         return $response;
     }
 
@@ -100,8 +97,25 @@ class AuthController extends Controller
 
     public function profile(Request $request)
     {
+
         $user = $request->user();
         $result = $this->user_service->getUserProfile($user);
+        return $result;
+    }
+
+    public function updateProfile(UpdateProfileRequest $request)
+    {
+
+        Log::info('Request data:', $request->all());
+        Log::info('Request files:', $request->files->all());
+        $data = $request->validated();
+        // Convert empty string to null for image_url
+        if (isset($data['image_url']) && $data['image_url'] === '') {
+            $data['image_url'] = null;
+        }
+
+        $user = $request->user();
+        $result = $this->user_service->updateProfile($user, $data, $data['image_url']);
         return $result;
     }
 

@@ -36,6 +36,7 @@ class SubGroupRepository implements SubGroupRepositoryInterface
         return $result;
     }
 
+
     public function create(array $data)
     {
         $result = SubGroups::create($data);

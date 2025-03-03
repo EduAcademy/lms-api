@@ -2,6 +2,8 @@
 
 namespace App\Interfaces\Services;
 
+use Illuminate\Http\UploadedFile;
+
 interface UserServiceInterface {
     public function getUserById($id);
     public function getUserByEmail($email);
@@ -18,5 +20,6 @@ interface UserServiceInterface {
     public function activateUser($userId);
     public function deactivateUser($userId);
     public function getUserProfile($user);
+    public function updateProfile($user, array $data, ?UploadedFile $image = null);
 
 }

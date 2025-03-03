@@ -24,11 +24,12 @@ Route::prefix('v1')->group(function () {
 });
 
 // Protected routes
-// Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('v1')->group(function () {
         // User profile and authentication
         Route::prefix('auth')->group(function () {
             Route::get('/profile', [AuthController::class, 'profile']);
+            Route::patch('/update-profile', [AuthController::class, 'updateProfile']);
             Route::post('/logout', [AuthController::class, 'logout']);
             Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
             Route::post('/reset-password', [AuthController::class, 'resetPassword']);
@@ -49,8 +50,6 @@ Route::prefix('v1')->group(function () {
             Route::get('/', [RoleController::class, 'index']);
         });
 
-        // Admin-only routes
-        // Excel Import routes
         Route::post('/upload-students', [StudentController::class, 'uploadStudent']);
         Route::post('/upload-depts', [DepartmentController::class, 'createDepartment']);
 
@@ -124,6 +123,7 @@ Route::prefix('v1')->group(function () {
             Route::post('/', [SubGroupController::class, 'store']);
             Route::put('/{id}', [SubGroupController::class, 'update']);
             Route::delete('/{id}', [SubGroupController::class, 'delete']);
+            Route::get('/group/{id}', [SubGroupController::class, 'showByGroupId']);
         });
 
         // Course Materials routes
@@ -159,4 +159,4 @@ Route::prefix('v1')->group(function () {
             Route::delete('/{id}', [StudyPlanCourseInstructorSubGroupController::class, 'delete']);
         });
     });
-// });
+});

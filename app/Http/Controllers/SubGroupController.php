@@ -61,6 +61,12 @@ class SubGroupController extends Controller
         return $result;
     }
 
+    public function showByGroupId($id)
+    {
+        $result = $this->sub_groupservice->getSubGroupByGroupId($id);
+        return $result;
+    }
+
     /**
      * Show the form for editing the specified resource.
      */

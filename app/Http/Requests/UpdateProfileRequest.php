@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SignUpRequest extends FormRequest
+class UpdateProfileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -19,24 +19,24 @@ class SignUpRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules()
     {
+        
         return [
             'username' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'phone' => 'nullable|string',
             'gender' => 'required|in:male,female',
-            'role_id' => 'integer',
+            'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 
     protected function prepareForValidation()
     {
-        $this->merge([
-            'role_id' => $this->role ?? 3, // Set default role ID to 3 if not provided
-        ]);
+        // Convert empty string to null for image_url
+        if ($this->has('image_url') && $this->input('image_url') === '') {
+            $this->merge(['image_url' => null]);
+        }
     }
 }
