@@ -3,6 +3,7 @@ namespace App\Repositories;
 
 use App\Contracts\GenericRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
 
 class GenericRepository implements GenericRepositoryInterface
 {
@@ -14,11 +15,12 @@ class GenericRepository implements GenericRepositoryInterface
         $this->model = $model;
     }
 
-    public function getAll(): array
+    // Return an Eloquent Collection
+    public function getAll(): \Illuminate\Database\Eloquent\Collection
     {
-        return $this->model->all()->toArray();
+        return $this->model->all();
     }
-
+    
     public function findById($id)
     {
         return $this->model->find($id);

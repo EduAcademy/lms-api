@@ -28,14 +28,23 @@ class StudentService implements StudentServiceInterface
 
     public function getAllStudents()
     {
-        // Retrieve all students using the generic repository.
-        $result = $this->genericRepository->getAll();
-        // Eager load the 'user' relationship for each student.
-        $result->load('user');
-
-        return Result::success($result, 'Get all Students Successfully', StatusResponse::HTTP_OK);
+        try {
+            $result = $this->genericRepository->getAll();
+            
+            // Verify that $result is an Eloquent Collection
+            if ($result instanceof \Illuminate\Database\Eloquent\Collection) {
+                $result->load('user');
+            } else {
+                \Log::error('GenericRepository::getAll() did not return an Eloquent Collection.');
+            }
+            
+            return Result::success($result, 'Get all Students Successfully', StatusResponse::HTTP_OK);
+        } catch (\Exception $e) {
+            \Log::error('Error in StudentService::getAllStudents: ' . $e->getMessage());
+            return Result::error('An error occurred while fetching students', 500, $e->getMessage());
+        }
     }
-
+    
     public function getStudentById($id)
     {
         $student = $this->studentRepository->findById($id);

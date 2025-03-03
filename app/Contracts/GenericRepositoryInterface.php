@@ -1,9 +1,11 @@
 <?php
 namespace App\Contracts;
 
+use Illuminate\Database\Eloquent\Collection;
+
 interface GenericRepositoryInterface
 {
-    public function getAll(): array;
+    public function getAll(): \Illuminate\Database\Eloquent\Collection;
     public function findById($id);
     public function create(array $data);
     public function update($id, array $data);
