@@ -21,8 +21,7 @@ class StudentController extends Controller
 
     public function index()
     {
-        $result = $this->studentService->getAllStudents();
-        return $result;
+        return $this->studentService->getAllStudents();
     }
 
     public function uploadStudent(Request $request)
@@ -44,8 +43,8 @@ class StudentController extends Controller
         $existingFile = UploadedFiles::where('file_hash', $fileHash)
             ->orWhere(function ($query) use ($fileName, $fileSize, $lastModified) {
                 $query->where('file_name', $fileName)
-                    ->where('file_size', $fileSize)
-                    ->where('last_modified', $lastModified);
+                      ->where('file_size', $fileSize)
+                      ->where('last_modified', $lastModified);
             })
             ->first();
 
@@ -55,9 +54,9 @@ class StudentController extends Controller
 
         // Store file metadata
         UploadedFiles::create([
-            'file_name' => $fileName,
-            'file_hash' => $fileHash,
-            'file_size' => $fileSize,
+            'file_name'     => $fileName,
+            'file_hash'     => $fileHash,
+            'file_size'     => $fileSize,
             'last_modified' => $lastModified,
         ]);
 
@@ -73,20 +72,18 @@ class StudentController extends Controller
 
     public function show($id)
     {
-        $result = $this->studentService->getStudentById($id);
-        return $result;
+        // Get the specific student from the service (eager loading is handled in the service)
+        return $this->studentService->getStudentById($id);
     }
 
     public function store(StudentRequest $request)
     {
         $data = $request->validated();
-        $result = $this->studentService->createStudent($data);
-        return $result;
+        return $this->studentService->createStudent($data);
     }
 
     public function update($id, Request $request)
     {
-        $result = $this->studentService->updateStudent($id, $request->all());
-        return $result;
+        return $this->studentService->updateStudent($id, $request->all());
     }
 }
