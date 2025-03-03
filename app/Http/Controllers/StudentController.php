@@ -21,16 +21,7 @@ class StudentController extends Controller
 
     public function index()
     {
-        // Get all students from the service
-        $students = $this->studentService->getAllStudents();
-        // Eager load the 'user' relationship so each student includes its linked user data
-        $students->load('user');
-
-        return response()->json([
-            "status"  => 200,
-            "message" => "Get all Students Successfully",
-            "data"    => $students,
-        ]);
+        return $this->studentService->getAllStudents();
     }
 
     public function uploadStudent(Request $request)
@@ -81,28 +72,18 @@ class StudentController extends Controller
 
     public function show($id)
     {
-        // Get the specific student from the service
-        $student = $this->studentService->getStudentById($id);
-        // Eager load the 'user' relationship
-        $student->load('user');
-
-        return response()->json([
-            "status"  => 200,
-            "message" => "Student retrieved successfully",
-            "data"    => $student,
-        ]);
+        // Get the specific student from the service (eager loading is handled in the service)
+        return $this->studentService->getStudentById($id);
     }
 
     public function store(StudentRequest $request)
     {
         $data = $request->validated();
-        $result = $this->studentService->createStudent($data);
-        return $result;
+        return $this->studentService->createStudent($data);
     }
 
     public function update($id, Request $request)
     {
-        $result = $this->studentService->updateStudent($id, $request->all());
-        return $result;
+        return $this->studentService->updateStudent($id, $request->all());
     }
 }
