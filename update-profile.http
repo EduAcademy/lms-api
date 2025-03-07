@@ -1,0 +1,12 @@
+### Update Profile with Image Upload (Using _method in Body)
+PATCH  http://127.0.0.1:8000/api/v1/auth/update-profile/
+Accept: application/json
+Authorization: Bearer 12|rA1rQWOnPwthwyuwx7Ym1bttsBUckYwg35vRvwbe8143c59a
+
+
+username=camille88
+first_name=Admin
+last_name=Admin
+phone=1234567890
+gender=male
+image_url=@image.jpg

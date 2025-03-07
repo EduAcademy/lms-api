@@ -21,17 +21,15 @@ class UpdateProfileRequest extends FormRequest
      */
     public function rules()
     {
-        
         return [
             'username' => 'required|string|max:255',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'phone' => 'nullable|string',
             'gender' => 'required|in:male,female',
-            'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image_url' => 'nullable|sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
-
     protected function prepareForValidation()
     {
         // Convert empty string to null for image_url

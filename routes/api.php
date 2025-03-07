@@ -24,12 +24,12 @@ Route::prefix('v1')->group(function () {
 });
 
 // Protected routes
-// Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('v1')->group(function () {
         // User profile and authentication
         Route::prefix('auth')->group(function () {
             Route::get('/profile', [AuthController::class, 'profile']);
-            Route::patch('/update-profile', [AuthController::class, 'updateProfile']);
+            Route::patch('/update-profile', [AuthController::class, 'updateProfile']); 
             Route::post('/logout', [AuthController::class, 'logout']);
             Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
             Route::post('/reset-password', [AuthController::class, 'resetPassword']);
@@ -159,4 +159,4 @@ Route::prefix('v1')->group(function () {
             Route::delete('/{id}', [StudyPlanCourseInstructorSubGroupController::class, 'delete']);
         });
     });
-// });
+ });

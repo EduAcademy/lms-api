@@ -1,0 +1,9 @@
+### Login Request
+POST http://127.0.0.1:8000/api/v1/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "test@test.com",
+  "password": "123456"
+}
