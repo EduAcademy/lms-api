@@ -1,5 +1,5 @@
 <?php
-namespace App\Handler;
+namespace App\Shared\Handler;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -19,7 +19,6 @@ class ImageUploads
             $path = $image->store($directory, 'public'); // Store in the 'public' disk under the specified directory
             return Storage::url($path); // Return the full URL of the stored image
         }
-
         return null;
     }
 }

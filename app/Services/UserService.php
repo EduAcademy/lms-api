@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Contracts\UserRepositoryInterface;
 use App\Enums\RoleType;
-use App\Handler\ImageUploads;
+use App\Shared\Handler\ImageUploads;
 use App\Http\Requests\SigninRequest;
 use App\Interfaces\Services\InstructorServiceInterface;
 use App\Interfaces\Services\StudentServiceInterface;
