@@ -22,8 +22,6 @@ return new class extends Migration
             $table->string('phone', 30)->nullable(false);
             $table->enum('gender', ['male', 'female'])->default('male')->nullable(); // Changed to nullable
             $table->boolean('is_active')->default(false);
-            $table->string('image_url')->nullable(); // Added image_url
-            $table->foreignId('role_id')->nullable()->constrained('roles')->onDelete('set null'); // Added role_id as foreign key
             $table->rememberToken();
             $table->timestamps();
         });
