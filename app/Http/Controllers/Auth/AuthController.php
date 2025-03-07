@@ -8,7 +8,11 @@ use App\Http\Requests\SignUpRequest;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Services\UserService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+
+
+use Intervention\Image\Image;
 
 class AuthController extends Controller
 {
@@ -103,20 +107,43 @@ class AuthController extends Controller
         return $result;
     }
 
-    public function updateProfile(UpdateProfileRequest $request)
+    public function updateProfile(Request $request)
     {
 
         Log::info('Request data:', $request->all());
         Log::info('Request files:', $request->files->all());
-        $data = $request->validated();
-        // Convert empty string to null for image_url
-        if (isset($data['image_url']) && $data['image_url'] === '') {
-            $data['image_url'] = null;
-        }
+        // $data = $request->validated();
+        // // Convert empty string to null for image_url
+        // if (isset($data['image_url']) && $data['image_url'] === '') {
+        //     $data['image_url'] = null;
+        // }
 
-        $user = $request->user();
-        $result = $this->user_service->updateProfile($user, $data, $data['image_url']);
-        return $result;
+        // $user = $request->user();
+        // $result = $this->user_service->updateProfile($user, $data, $data['image_url']);
+        // return $result;
+
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $user = Auth::user();
+
+        $image = $request->file('image');
+        $filename = time() . '.' . $image->getClientOriginalExtension();
+
+        $imagePath = public_path('uploads/users/' . $filename);
+
+        Image::make($image)
+            ->resize(300, 300)
+            ->save($imagePath);
+
+        $user->image_url = asset('uploads/users/' . $filename);
+        $user->save();
+
+        return response()->json([
+            'message' => 'Image uploaded successfully.',
+            'image_url' => $user->image_url,
+        ], 200);
     }
 
     public function forgotPassword(Request $request)

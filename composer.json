@@ -8,6 +8,8 @@
         "php": "^8.2",
         "algolia/algoliasearch-client-php": "^4.12",
         "darkaonline/l5-swagger": "^8.6",
+        "intervention/image": "^3.11",
+        "intervention/image-laravel": "^1.5",
         "laravel/framework": "^11.9",
         "laravel/sanctum": "^4.0",
         "laravel/scout": "^10.12",
