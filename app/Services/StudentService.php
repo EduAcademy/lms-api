@@ -30,14 +30,14 @@ class StudentService implements StudentServiceInterface
         $this->genericRepository = new GenericRepository(new Student);
     }
 
-    public function getAllStudents()
+        public function getAllStudents()
     {
         try {
-            $result = $this->genericRepository->getAll();
+            $result = \App\Models\Student::whereHas('user', function ($query) {
+                $query->where('role_id', 3);
+            })->get();
 
-            if ($result instanceof Collection) {
-                $result->load('user');
-            }
+            $result->load('user');
 
             return Result::success($result, MessageResponse::RETRIEVED_SUCCESSFULLY, StatusResponse::HTTP_OK);
         } catch (Exception $e) {
@@ -45,6 +45,8 @@ class StudentService implements StudentServiceInterface
             return Result::error('An error occurred while fetching students', StatusResponse::HTTP_INTERNAL_SERVER_ERROR, $e->getMessage());
         }
     }
+
+
 
     public function getStudentById($id)
     {
