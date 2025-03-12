@@ -12,7 +12,7 @@ use App\Shared\Handler\Result;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
-class Groupservice implements GroupserviceInterface
+class GroupService implements GroupserviceInterface
 {
     /**
      * Create a new class instance.

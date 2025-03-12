@@ -11,9 +11,9 @@ class GroupController extends Controller
     //
 
     protected $groupService;
-    public function __construct(GroupsServiceInterface $groupservice)
+    public function __construct(GroupsServiceInterface $groupService)
     {
-        $this->groupService = $groupservice;
+        $this->groupService = $groupService;
     }
 
     /**
