@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Contracts\GroupRepositoryInterface;
 use App\Http\Requests\GroupRequest;
-use App\Interfaces\Services\GroupserviceInterface;
+use App\Interfaces\Services\GroupServiceInterface;
 use App\Models\Groups;
 use App\Repositories\GenericRepository;
 use App\Shared\Constants\StatusResponse;
@@ -12,7 +12,7 @@ use App\Shared\Handler\Result;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
-class GroupService implements GroupserviceInterface
+class GroupService implements GroupServiceInterface
 {
     /**
      * Create a new class instance.

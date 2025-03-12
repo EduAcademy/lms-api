@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\GroupRequest;
-use App\Interfaces\Services\GroupsServiceInterface;
+use App\Interfaces\Services\GroupServiceInterface;
 use Illuminate\Http\Request;
 
 class GroupController extends Controller
@@ -11,7 +11,7 @@ class GroupController extends Controller
     //
 
     protected $groupService;
-    public function __construct(GroupsServiceInterface $groupService)
+    public function __construct(GroupServiceInterface $groupService)
     {
         $this->groupService = $groupService;
     }

@@ -44,7 +44,7 @@ class ServicesServiceProvider extends ServiceProvider
         $this->app->bind(CourseServiceInterface::class, CourseService::class);
         $this->app->bind(StudentServiceInterface::class, StudentService::class);
         $this->app->bind(StudyPlanServiceInterface::class, StudyPlanService::class);
-        $this->app->bind(GroupserviceInterface::class, GroupService::class);
+        $this->app->bind(GroupServiceInterface::class, GroupService::class);
         $this->app->bind(CourseMaterialServiceInterface::class, CourseMaterialService::class);
         $this->app->bind(InstructorServiceInterface::class, InstructorService::class);
         $this->app->bind(RoleServiceInterface::class, RoleService::class);
