@@ -2,7 +2,7 @@
 
 namespace App\Interfaces\Services;
 
-interface GroupserviceInterface
+interface GroupServiceInterface
 {
     //
     public function getAllGroups();
