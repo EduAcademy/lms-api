@@ -367,6 +367,7 @@ class UserService implements UserServiceInterface
 
     public function updateProfile($user, array $data, $image = null)
     {
+        try{
         $validator = Validator::make($data, (new UpdateProfileRequest())->rules());
 
         if ($validator->fails()) {
@@ -376,6 +377,7 @@ class UserService implements UserServiceInterface
         if (!$user->role) {
             return Result::error('User role not found.', StatusResponse::HTTP_NOT_FOUND);
         }
+
 
         // Handle image upload
         if ($image instanceof UploadedFile) {
@@ -400,7 +402,10 @@ class UserService implements UserServiceInterface
         $user->gender = $data['gender'];
 
         $user->save();
-
+        Log::info('users data:', json_encode($user));
         return Result::success($user, MessageResponse::UPDATED_SUCCESSFULLY, StatusResponse::HTTP_OK);
+    }catch(Exception $e){
+        return $e->getMessage();
+    }
     }
 }

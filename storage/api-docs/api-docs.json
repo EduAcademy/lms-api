@@ -119,6 +119,117 @@
                     }
                 }
             }
+        },
+        "/auth/update-profile": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update user profile",
+                "description": "Update user profile with optional image upload",
+                "operationId": "updateProfile",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "username",
+                                    "first_name",
+                                    "last_name",
+                                    "gender"
+                                ],
+                                "properties": {
+                                    "username": {
+                                        "type": "string",
+                                        "maxLength": 255
+                                    },
+                                    "first_name": {
+                                        "type": "string",
+                                        "maxLength": 255
+                                    },
+                                    "last_name": {
+                                        "type": "string",
+                                        "maxLength": 255
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "maxLength": 20,
+                                        "nullable": true
+                                    },
+                                    "gender": {
+                                        "type": "string",
+                                        "enum": [
+                                            "male",
+                                            "female"
+                                        ]
+                                    },
+                                    "image_url": {
+                                        "description": "Profile image file (jpeg, png, jpg, gif)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Profile updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Profile updated successfully"
+                                        },
+                                        "image_url": {
+                                            "type": "string",
+                                            "example": "http://example.com/uploads/users/12345.jpg"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": {
+                                                "username": [
+                                                    "The username field is required."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -128,6 +239,14 @@
                 "name": "Authorization",
                 "in": "header",
                 "scheme": "bearer"
+            },
+            "securitySchemes": {
+                "bearerAuth": {
+                    "type": "apiKey",
+                    "description": "Enter your Bearer token in the format: Bearer <token>",
+                    "name": "Authorization",
+                    "in": "header"
+                }
             }
         }
     },

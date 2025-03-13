@@ -170,6 +170,14 @@ return [
         */
         'securityDefinitions' => [
             'securitySchemes' => [
+                'securitySchemes' => [
+                    'bearerAuth' => [ // Unique name for the security scheme
+                        'type' => 'apiKey', // Use 'apiKey' for Bearer tokens
+                        'description' => 'Enter your Bearer token in the format: Bearer <token>',
+                        'name' => 'Authorization', // The name of the header where the token will be sent
+                        'in' => 'header', // The location of the API key (header)
+                    ],
+                ],
                 /*
                  * Examples of Security schemes
                  */

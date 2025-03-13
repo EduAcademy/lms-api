@@ -29,7 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
         // User profile and authentication
         Route::prefix('auth')->group(function () {
             Route::get('/profile', [AuthController::class, 'profile']);
-            Route::match(['PATCH', 'POST'], '/update-profile', [AuthController::class, 'updateProfile']);
+            Route::post('/update-profile', [AuthController::class, 'updateProfile']);
             Route::post('/logout', [AuthController::class, 'logout']);
             Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
             Route::post('/reset-password', [AuthController::class, 'resetPassword']);
