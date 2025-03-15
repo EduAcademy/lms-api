@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Models\Student;
 use App\Contracts\StudentRepositoryInterface;
+use App\Models\Student;
 
 class StudentRepository implements StudentRepositoryInterface
 {
@@ -32,5 +32,10 @@ class StudentRepository implements StudentRepositoryInterface
     {
         // Eager load the 'user' relationship when fetching students by department
         return Student::with('user')->where('department_id', $departmentId)->get();
+    }
+
+    public function count(): int
+    {
+        return Student::count();
     }
 }

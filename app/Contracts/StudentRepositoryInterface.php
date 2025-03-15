@@ -8,4 +8,5 @@ interface StudentRepositoryInterface
     public function findByUuid($uuid);
     public function create(array $data);
     public function findByDepartmentId($departmentId);
+    public function count(): int;
 }

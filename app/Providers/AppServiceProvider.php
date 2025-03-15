@@ -2,30 +2,31 @@
 
 namespace App\Providers;
 
-use App\Contracts\GenericRepositoryInterface;
-use App\Models\Student;
-use App\Repositories\GenericRepository;
 use Illuminate\Support\ServiceProvider;
+use App\Interfaces\Services\StatsServiceInterface;
+use App\Services\StatsService;
+use App\Repositories\StudentRepositoryInterface;
+use App\Repositories\StudentRepository;
+use App\Interfaces\Repositories\InstructorRepositoryInterface;
+use App\Repositories\InstructorRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * Register services.
      */
-    public function register(): void
+    public function register()
     {
-        // Bind the GenericRepositoryInterface to GenericRepository for the Student model
-
-
-
+        $this->app->bind(StatsServiceInterface::class, StatsService::class);
+        $this->app->bind(StudentRepositoryInterface::class, StudentRepository::class);
+        $this->app->bind(InstructorRepositoryInterface::class, InstructorRepository::class);
     }
 
     /**
-     * Bootstrap any application services.
+     * Bootstrap services.
      */
-    public function boot(): void
+    public function boot()
     {
         //
     }
 }
-

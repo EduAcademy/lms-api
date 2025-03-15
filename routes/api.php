@@ -14,6 +14,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StudyPlanCourseController;
 use App\Http\Controllers\StudyPlanCourseInstructorController;
 use App\Http\Controllers\StudyPlanCourseInstructorSubGroupController;
+use App\Http\Controllers\StatsController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
@@ -158,5 +159,12 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::put('/{id}', [StudyPlanCourseInstructorSubGroupController::class, 'update']);
             Route::delete('/{id}', [StudyPlanCourseInstructorSubGroupController::class, 'delete']);
         });
+
+
+
+        // Stats routes
+        Route::prefix('stats')->group(function () {
+            Route::get('/', StatsController::class);
+        });
     });
- });
+});
