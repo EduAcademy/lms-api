@@ -113,6 +113,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::prefix('levels')->group(function () {
             Route::get('/', [LevelController::class, 'index']);
+            Route::post('/', [LevelController::class, 'store']);
         });
 
         // Lab Group routes
