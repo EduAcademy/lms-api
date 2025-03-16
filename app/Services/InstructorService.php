@@ -37,8 +37,7 @@ class InstructorService implements InstructorServiceInterface
     {
         $result = $this->instructorRepository->getById($id);
 
-        if($result)
-        {
+        if ($result) {
             return Result::success($result, 'Instructor is found Successfully', StatusResponse::HTTP_OK);
         }
         return Result::error('Can not found Instructor with this Id', StatusResponse::HTTP_NOT_FOUND);
@@ -104,5 +103,11 @@ class InstructorService implements InstructorServiceInterface
         $result = $this->genericRepository->delete($id);
 
         return Result::success($result, 'Instructor is deleted Successfully', StatusResponse::HTTP_OK);
+    }
+
+
+    public function count(): int
+    {
+        return $this->instructorRepository->count();
     }
 }

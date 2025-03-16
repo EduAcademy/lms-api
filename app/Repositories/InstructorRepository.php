@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Repositories;
 
 use App\Contracts\InstructorRepositoryInterface;
@@ -19,5 +20,10 @@ class InstructorRepository implements InstructorRepositoryInterface
     public function create(array $data)
     {
         return Instructor::create($data);
+    }
+
+    public function count(): int
+    {
+        return Instructor::count();
     }
 }

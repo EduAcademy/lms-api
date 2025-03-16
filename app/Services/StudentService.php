@@ -30,7 +30,7 @@ class StudentService implements StudentServiceInterface
         $this->genericRepository = new GenericRepository(new Student);
     }
 
-        public function getAllStudents()
+    public function getAllStudents()
     {
         try {
             $result = \App\Models\Student::whereHas('user', function ($query) {
@@ -114,5 +114,10 @@ class StudentService implements StudentServiceInterface
         $students->load('user');
 
         return Result::success($students, 'Students found Successfully by department', StatusResponse::HTTP_OK);
+    }
+
+    public function count(): int
+    {
+        return $this->studentRepository->count();
     }
 }
