@@ -1,4 +1,4 @@
 GET http://127.0.0.1:8000/api/v1/stats
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer 8|71pq0HhN9nXO7PjV6t4heYoBB5TRaAf0ff87vdaV06927ebb
+Authorization: Bearer 21|0ux8GQZ3mgH3lTX52u37mnE6xJabC7k7akTvUVzJ2251f345

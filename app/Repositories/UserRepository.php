@@ -53,4 +53,16 @@ class UserRepository implements UserRepositoryInterface
         $user->save();
         return $user;
     }
+
+    public function activeNowCount()
+    {
+        return User::where('is_active', true)->count();
+    }
+
+    public function activeLastHourCount()
+    {
+        return User::where('is_active', true)
+            ->where('last_activity', '>=', now()->subHour())
+            ->count();
+    }
 }
