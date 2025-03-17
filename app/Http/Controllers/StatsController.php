@@ -19,7 +19,7 @@ class StatsController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $stats = $this->statsService->getStats();
-        return response()->json($stats);
+        $result = $this->statsService->getStats();
+        return $result;
     }
 }
