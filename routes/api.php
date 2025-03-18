@@ -109,11 +109,13 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/group/{name}', [GroupController::class, 'showByName']);
             Route::post('/', [GroupController::class, 'store']);
             Route::put('/{id}', [GroupController::class, 'update']);
+            Route::patch('/{id}', [GroupController::class, 'update']);
             Route::delete('/{id}', [GroupController::class, 'delete']);
         });
 
         Route::prefix('levels')->group(function () {
             Route::get('/', [LevelController::class, 'index']);
+            Route::post('/', [LevelController::class, 'store']);
         });
 
         // Lab Group routes
