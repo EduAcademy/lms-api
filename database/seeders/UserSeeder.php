@@ -18,29 +18,35 @@ class UserSeeder extends Seeder
     {
         $chunks = 99; // Insert rows in chunks
         $total = 99; // Total rows
-        $roleIds = DB::table('roles')->pluck('id');
 
-        if (!User::where('email', 'test@test.com')->exists()) {
-            if ($roleIds->isNotEmpty()) {
-                User::factory()->create([
-                    'email' => 'test@test.com',
-                    'password' => bcrypt('123456'),
-                    'role_id' => $roleIds->random(),
-                    'email_verified_at' => now(),
-                    'first_name' => 'Admin',
-                    'last_name' => 'Admin',
-                    'phone' => '1234567890',
-                    'is_active' => 1,
-                    'gender' => 'male',
-                    'remember_token' => Str::random(10),
-                ]);
-            } else {
-                Log::warning('No roles available to assign to the user. Please seed roles first.');
-            }
+        // Fetch admin role by its name
+        $adminRole = DB::table('roles')->where('name', 'admin')->first();
+        if (!$adminRole) {
+            Log::warning('Admin role not found. Please seed roles first.');
+            return;
         }
 
+        // Create a default admin if not exists
+        if (!User::where('email', 'test@test.com')->exists()) {
+            User::factory()->create([
+                'email' => 'test@test.com',
+                'password' => bcrypt('123456'),
+                'role_id' => $adminRole->id,
+                'email_verified_at' => now(),
+                'first_name' => 'Admin',
+                'last_name' => 'Admin',
+                'phone' => '1234567890',
+                'is_active' => 1,
+                'gender' => 'male',
+                'remember_token' => Str::random(10),
+            ]);
+        }
+
+        // Create additional admin users in chunks
         for ($i = 0; $i < $total / $chunks; $i++) {
-            User::factory()->count($chunks)->create();
+            User::factory()->count($chunks)->create([
+                'role_id' => $adminRole->id,
+            ]);
         }
     }
 }
