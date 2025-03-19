@@ -31,12 +31,26 @@ class StudentService implements StudentServiceInterface
     public function getAllStudents()
     {
         try {
-            // Eager load related models using the relationship names from Student.php
-            $result = Student::with(['user', 'department', 'study_plan', 'group', 'sub_group'])
-                ->whereHas('user', function ($query) {
-                    $query->where('role_id', 3);
-                })
-                ->get();
+            // Eager load related models with only necessary attributes
+            $result = Student::with([
+                'user',
+                'department' => function ($query) {
+                    $query->select('id', 'name');
+                },
+                'study_plan' => function ($query) {
+                    $query->select('id', 'name');
+                },
+                'group' => function ($query) {
+                    $query->select('id', 'name');
+                },
+                'sub_group' => function ($query) {
+                    $query->select('id', 'name');
+                }
+            ])
+            ->whereHas('user', function ($query) {
+                $query->where('role_id', 3);
+            })
+            ->get();
 
             return Result::success($result, MessageResponse::RETRIEVED_SUCCESSFULLY, StatusResponse::HTTP_OK);
         } catch (Exception $e) {
@@ -53,8 +67,22 @@ class StudentService implements StudentServiceInterface
             return Result::error(MessageResponse::RESOURCE_NOT_FOUND, StatusResponse::HTTP_NOT_FOUND);
         }
 
-        // Eager load the related models using the defined relationship names.
-        $student->load(['user', 'department', 'study_plan', 'group', 'sub_group']);
+        // Eager load related models with only the necessary fields.
+        $student->load([
+            'user',
+            'department' => function ($query) {
+                $query->select('id', 'name');
+            },
+            'study_plan' => function ($query) {
+                $query->select('id', 'name');
+            },
+            'group' => function ($query) {
+                $query->select('id', 'name');
+            },
+            'sub_group' => function ($query) {
+                $query->select('id', 'name');
+            }
+        ]);
 
         $studentData = StudentMapping::toStudent($student);
         $result = StudentDTO::fromArray($studentData);
@@ -64,7 +92,6 @@ class StudentService implements StudentServiceInterface
 
     public function createStudent(array $data)
     {
-        // Validate input using StudentRequest rules.
         $validator = Validator::make($data, (new StudentRequest())->rules());
 
         if ($validator->fails()) {
@@ -82,7 +109,6 @@ class StudentService implements StudentServiceInterface
 
     public function updateStudent($id, array $data)
     {
-        // Validate input data.
         $validator = Validator::make($data, [
             'uuid'           => 'required|string|unique:students,uuid,' . $id,
             'department_id'  => 'required|exists:departments,id',
@@ -113,8 +139,21 @@ class StudentService implements StudentServiceInterface
             return Result::error('No students found for the given department', StatusResponse::HTTP_NOT_FOUND);
         }
 
-        // Eager load related models.
-        $students->load(['user', 'department', 'study_plan', 'group', 'sub_group']);
+        $students->load([
+            'user',
+            'department' => function ($query) {
+                $query->select('id', 'name');
+            },
+            'study_plan' => function ($query) {
+                $query->select('id', 'name');
+            },
+            'group' => function ($query) {
+                $query->select('id', 'name');
+            },
+            'sub_group' => function ($query) {
+                $query->select('id', 'name');
+            }
+        ]);
 
         return Result::success($students, 'Students found Successfully by department', StatusResponse::HTTP_OK);
     }
