@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -26,6 +25,11 @@ class UserSeeder extends Seeder
             return;
         }
 
+        // Function to get a random image from 1.jpg to 10.jpg
+        $getRandomImage = function () {
+            return 'storage/users/' . rand(1, 10) . '.jpg';
+        };
+
         // Create a default admin if not exists
         if (!User::where('email', 'test@test.com')->exists()) {
             User::factory()->create([
@@ -38,6 +42,7 @@ class UserSeeder extends Seeder
                 'phone' => '1234567890',
                 'is_active' => 1,
                 'gender' => 'male',
+                'image_url' => $getRandomImage(), // Assign random image
                 'remember_token' => Str::random(10),
             ]);
         }
@@ -46,6 +51,7 @@ class UserSeeder extends Seeder
         for ($i = 0; $i < $total / $chunks; $i++) {
             User::factory()->count($chunks)->create([
                 'role_id' => $adminRole->id,
+                'image_url' => $getRandomImage(), 
             ]);
         }
     }
