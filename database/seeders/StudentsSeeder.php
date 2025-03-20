@@ -43,17 +43,23 @@ class StudentsSeeder extends Seeder
 
         // Generate 100 fake students by creating a user and linking it to a student record
         foreach (range(1, 100) as $index) {
-            // Create a new user with the student role
+            // Generate a random 8-digit number
+            $randomNumber = random_int(10000000, 99999999);
+            $uuid = (string) $randomNumber;
+            $email = $uuid . '@su.edu.ye';
+
+            // Create a new user with the student role and assign the email using the random number
             $user = User::factory()->create([
                 'role_id' => $studentRole->id,
+                'email'   => $email,
             ]);
 
-            // Create a student record linked to the newly created user
+            // Create a student record linked to the newly created user using the same random number as uuid
             DB::table('students')->insert([
-                'uuid' => Str::uuid()->toString(), // Generate a unique UUID
+                'uuid' => $uuid,
                 'department_id' => $faker->randomElement($departmentIds),
                 'study_plan_id' => $faker->randomElement($studyPlanIds),
-                'user_id' => $user->id, // Link the student to the created user
+                'user_id' => $user->id,
                 'group_id' => $faker->randomElement($groupIds),
                 'sub_group_id' => $faker->randomElement($subGroupIds),
                 'created_at' => now(),
