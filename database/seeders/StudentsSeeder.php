@@ -43,27 +43,31 @@ class StudentsSeeder extends Seeder
 
         // Generate 100 fake students by creating a user and linking it to a student record
         foreach (range(1, 100) as $index) {
-            // Generate a random 8-digit number
+            // Generate a random 8-digit number for uuid
             $randomNumber = random_int(10000000, 99999999);
-            $uuid = (string) $randomNumber;
+            $uuid = (string)$randomNumber;
             $email = $uuid . '@su.edu.ye';
 
-            // Create a new user with the student role and assign the email using the random number
+            // Select a random image between 1.jpg and 10.jpg
+            $randomImage = 'storage/users/' . rand(1, 10) . '.jpg';
+
+            // Create a new user with the student role, assigned email and random image
             $user = User::factory()->create([
-                'role_id' => $studentRole->id,
-                'email'   => $email,
+                'role_id'   => $studentRole->id,
+                'email'     => $email,
+                'image_url' => $randomImage,
             ]);
 
             // Create a student record linked to the newly created user using the same random number as uuid
             DB::table('students')->insert([
-                'uuid' => $uuid,
-                'department_id' => $faker->randomElement($departmentIds),
-                'study_plan_id' => $faker->randomElement($studyPlanIds),
-                'user_id' => $user->id,
-                'group_id' => $faker->randomElement($groupIds),
-                'sub_group_id' => $faker->randomElement($subGroupIds),
-                'created_at' => now(),
-                'updated_at' => now(),
+                'uuid'           => $uuid,
+                'department_id'  => $faker->randomElement($departmentIds),
+                'study_plan_id'  => $faker->randomElement($studyPlanIds),
+                'user_id'        => $user->id,
+                'group_id'       => $faker->randomElement($groupIds),
+                'sub_group_id'   => $faker->randomElement($subGroupIds),
+                'created_at'     => now(),
+                'updated_at'     => now(),
             ]);
         }
     }
