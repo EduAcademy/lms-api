@@ -49,7 +49,7 @@ class StudentsSeeder extends Seeder
             $email = $uuid . '@su.edu.ye';
 
             // Select a random image between 1.jpg and 10.jpg
-            $randomImage = 'storage/users/' . rand(1, 10) . '.jpg';
+            $randomImage = 'users/' . rand(1, 10) . '.jpg';
 
             // Create a new user with the student role, assigned email and random image
             $user = User::factory()->create([

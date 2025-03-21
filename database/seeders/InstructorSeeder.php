@@ -26,7 +26,7 @@ class InstructorSeeder extends Seeder
         // Generate instructors by creating a new user and linking it to an instructor record
         foreach (range(1, $total) as $index) {
             // Select a random image between 1.jpg and 10.jpg
-            $randomImage = 'storage/users/' . rand(1, 10) . '.jpg';
+            $randomImage = 'users/' . rand(1, 10) . '.jpg';
 
             // Create a new user with the instructor role and assign a random image
             $user = User::factory()->create([

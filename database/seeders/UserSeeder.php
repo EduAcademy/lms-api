@@ -27,7 +27,7 @@ class UserSeeder extends Seeder
 
         // Function to get a random image from 1.jpg to 10.jpg
         $getRandomImage = function () {
-            return 'storage/users/' . rand(1, 10) . '.jpg';
+            return 'users/' . rand(1, 10) . '.jpg';
         };
 
         // Create a default admin if not exists
