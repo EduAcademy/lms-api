@@ -15,6 +15,7 @@ use App\Contracts\SubGroupRepositoryInterface;
 use App\Contracts\StudentRepositoryInterface;
 use App\Contracts\StudyPlanRepositoryInterface;
 use App\Contracts\GroupRepositoryInterface;
+use App\Contracts\NotificationRepositoryInterface;
 use App\Repositories\InstructorRepository;
 use App\Contracts\UserRepositoryInterface;
 use App\Repositories\CourseMaterialRepository;
@@ -27,6 +28,7 @@ use App\Repositories\StudyPlanCourseInstructorSubGroupRepository;
 use App\Repositories\StudyPlanCourseRepository;
 use App\Repositories\StudyPlanRepository;
 use App\Repositories\GroupRepository;
+use App\Repositories\NotificationRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Support\ServiceProvider;
 
@@ -51,6 +53,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(StudyPlanCourseRepositoryInterface::class, StudyPlanCourseRepository::class);
         $this->app->bind(StudyPlanCourseInstructorRepositoryInterface::class, StudyPlanCourseInstructorRepository::class);
         $this->app->bind(StudyPlanCourseInstructorSubGroupRepositoryInterface::class, StudyPlanCourseInstructorSubGroupRepository::class);
+        $this->app->bind(NotificationRepositoryInterface::class, NotificationRepository::class);
     }
 
     /**

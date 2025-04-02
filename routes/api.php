@@ -10,6 +10,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudyPlanController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\LevelController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StudyPlanCourseController;
 use App\Http\Controllers\StudyPlanCourseInstructorController;
@@ -161,7 +162,12 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::delete('/{id}', [StudyPlanCourseInstructorSubGroupController::class, 'delete']);
         });
 
-
+        Route::prefix('notifications')->group(function () {
+            Route::post('/all', [NotificationController::class, 'notifyAllStudents']);
+            Route::post('/department', [NotificationController::class, 'notifyDepartment']);
+            Route::post('/group', [NotificationController::class, 'notifyGroup']);
+            Route::post('/student', [NotificationController::class, 'notifyStudent']);
+        });
 
         // Stats routes
         Route::prefix('stats')->group(function () {

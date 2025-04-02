@@ -9,6 +9,7 @@ class NotificationReceiver extends Model
 {
     use HasFactory;
 
+
     protected $table = 'notification_receivers';
 
     protected $fillable = [
