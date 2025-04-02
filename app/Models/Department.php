@@ -36,4 +36,16 @@ class Department extends Model
     {
         return $this->hasMany(Groups::class);
     }
+
+    public function levels()
+    {
+        return $this->hasManyThrough(
+            Level::class,
+            StudyPlanCourse::class,
+            'department_id', // Foreign key on study_plan_courses
+            'id',           // Foreign key on levels
+            'id',           // Local key on departments
+            'level_id'      // Local key on study_plan_courses
+        )->distinct();
+    }
 }

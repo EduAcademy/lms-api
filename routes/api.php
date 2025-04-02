@@ -59,6 +59,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::prefix('departments')->group(function () {
             Route::get('/', [DepartmentController::class, 'index']);
             Route::get('/{id}', [DepartmentController::class, 'show']);
+            Route::get('/levels/{departmentId}', [DepartmentController::class, 'getLevels']);
             Route::post('/', [DepartmentController::class, 'store']);
             Route::put('/{id}', [DepartmentController::class, 'update']);
             Route::delete('/{id}', [DepartmentController::class, 'delete']);
@@ -116,6 +117,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::prefix('levels')->group(function () {
             Route::get('/', [LevelController::class, 'index']);
+            Route::get('/{levelId}', [LevelController::class, 'getAllGroupsByLevel']);
             Route::post('/', [LevelController::class, 'store']);
         });
 

@@ -12,6 +12,7 @@ use App\Interfaces\Services\InstructorServiceInterface;
 use App\Interfaces\Services\StudentServiceInterface;
 use App\Interfaces\Services\StudyPlanServiceInterface;
 use App\Interfaces\Services\GroupServiceInterface as ServicesGroupServiceInterface;
+use App\Interfaces\Services\LevelServiceInterface;
 use App\Interfaces\Services\NotificationServiceInterface;
 use App\Interfaces\Services\RoleServiceInterface;
 use App\Interfaces\Services\StudyPlanCourseInstructorServiceInterface;
@@ -24,6 +25,7 @@ use App\Services\InstructorService;
 use App\Services\StudentService;
 use App\Services\StudyPlanService;
 use App\Services\GroupService;
+use App\Services\LevelService;
 use App\Services\NotificationService;
 use App\Services\RoleService;
 use App\Services\StudyPlanCourseInstructorService;
@@ -55,7 +57,8 @@ class ServicesServiceProvider extends ServiceProvider
         $this->app->bind(StudyPlanCourseInstructorSubGroupServiceInterface::class, StudyPlanCourseInstructorSubGroupService::class);
         $this->app->bind(SubGroupServiceInterface::class, SubGroupservice::class);
         $this->app->bind(NotificationServiceInterface::class, NotificationService::class);
-        
+        $this->app->bind(LevelServiceInterface::class, LevelService::class);
+
     }
 
     /**

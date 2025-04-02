@@ -29,5 +29,11 @@ class DepartmentRepository implements DepartmentRepositoryInterface{
         return $department->update($data);
     }
 
+    public function getDepartmentByInstructorId($instructorId)
+    {
+        return Department::whereHas('sp_courses.instructors', fn($q) =>
+            $q->where('instructor_id', $instructorId)
+        )->get(['id', 'name']);
+    }
 
 }

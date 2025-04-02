@@ -10,4 +10,5 @@ interface GroupRepositoryInterface
     public function getById($id);
     public function getByName($name);
     public function create(array $data);
+    public function getGroups($instructorId, $departmentId, $levelId, $courseId);
 }

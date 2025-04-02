@@ -20,4 +20,5 @@ class Level extends Model
     {
         return $this->hasMany(StudyPlanCourse::class);
     }
+
 }

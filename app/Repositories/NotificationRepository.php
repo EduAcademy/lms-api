@@ -14,7 +14,7 @@ class NotificationRepository implements NotificationRepositoryInterface
 
     public function getAllStudentUsers()
     {
-        return User::whereHas('student')->get('id');
+        return User::whereHas('student')->pluck('id');
     }
 
     public function createNotificationWithReceivers(array $notificationData, array $userIds)
@@ -24,7 +24,7 @@ class NotificationRepository implements NotificationRepositoryInterface
         $receivers = array_map(function($userId) use ($notification) {
             return [
                 'notification_id' => $notification->id,
-                'user_id' => $userId,
+                'receiver_id' => $userId,
                 'created_at' => now(),
                 'updated_at' => now()
             ];

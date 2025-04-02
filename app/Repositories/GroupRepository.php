@@ -29,4 +29,17 @@ class GroupRepository implements GroupRepositoryInterface
         $result = Groups::create($data);
         return $result;
     }
+    public function getGroups($instructorId, $departmentId, $levelId, $courseId)
+    {
+        return Groups::whereHas('spc_instructors', fn($q) =>
+        $q->where('instructor_id', $instructorId)
+            ->whereHas(
+                'sp_course',
+                fn($q) =>
+                $q->where('department_id', $departmentId)
+                    ->where('level_id', $levelId)
+                    ->where('course_id', $courseId)
+            )
+            ->get(['id', 'name']));
+    }
 }

@@ -12,6 +12,7 @@ use App\Interfaces\Services\DepartmentServiceInterface;
 use App\Services\DepartmentService;
 use App\Models\UploadedFiles;
 use App\Repositories\GenericRepository;
+use App\Shared\Constants\MessageResponse;
 use App\Shared\Constants\StatusResponse;
 use App\Shared\Handler\Result;
 use Illuminate\Support\Facades\Log;
@@ -32,9 +33,8 @@ class DepartmentController extends Controller
     {
 
         $result = $this->departmentService->getAllDepartments();
-        
-        return $result;
 
+        return $result;
     }
 
     public function uploadDepartment(Request $request)
@@ -83,6 +83,12 @@ class DepartmentController extends Controller
         return response()->json(['message' => 'File uploaded and processed successfully.']);
     }
 
+    public function getLevels($departmentId)
+    {
+        $levels = Department::findOrFail($departmentId)->levels;
+        return Result::success($levels, MessageResponse::FETCHED_SUCCESSFULLY, StatusResponse::HTTP_OK);
+    }
+
     public function show($id)
     {
         $result = $this->departmentService->getDepartmentById($id);
@@ -109,5 +115,4 @@ class DepartmentController extends Controller
 
         return $result;
     }
-
 }

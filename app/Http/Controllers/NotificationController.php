@@ -25,4 +25,20 @@ class NotificationController extends Controller
 
         return response()->json(['message' => 'Notifications sent to all students']);
     }
+
+    public function notifyDepartment(Request $request)
+    {
+        $validated = $request->validate([
+            'department_id' => 'required|exists:departments,id',
+            'message' => 'required|string|max:500'
+        ]);
+
+        $this->notificationService->sendToDepartment(
+            auth()->id(),
+            $validated['department_id'],
+            $validated['message']
+        );
+
+        return response()->json(['message' => 'Notifications sent successfully']);
+    }
 }
