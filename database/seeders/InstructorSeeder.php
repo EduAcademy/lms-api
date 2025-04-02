@@ -4,23 +4,40 @@ namespace Database\Seeders;
 
 use App\Models\Instructor;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class InstructorSeeder extends Seeder
 {
-    /*************  ✨ Codeium Command 🌟  *************/
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        $chunks = 50; // Insert rows in chunks
-        $total = 50; // Total rows
+        $total = 50; // Total instructors to generate
 
-        for ($i = 0; $i < $total / $chunks; $i++) {
-            Instructor::factory()->count($chunks)->create(['user_id' => rand(1, User::count())]);
+        // Fetch the instructor role by its name
+        $instructorRole = DB::table('roles')->where('name', 'instructor')->first();
+        if (!$instructorRole) {
+            $this->command->warn("Instructor role not found. Please seed roles first.");
+            return;
+        }
+
+        // Generate instructors by creating a new user and linking it to an instructor record
+        foreach (range(1, $total) as $index) {
+            // Select a random image between 1.jpg and 10.jpg
+            $randomImage = 'users/' . rand(1, 10) . '.jpg';
+
+            // Create a new user with the instructor role and assign a random image
+            $user = User::factory()->create([
+                'role_id'   => $instructorRole->id,
+                'image_url' => $randomImage,
+            ]);
+
+            // Create an instructor record linked to the newly created user
+            Instructor::factory()->create([
+                'user_id' => $user->id,
+            ]);
         }
     }
-    /******  8f83adad-3b0f-4ef1-a85c-8b6ba26bdcfb  *******/
 }

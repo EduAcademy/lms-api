@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Contracts\GenericRepositoryInterface;
 use App\Contracts\StudentRepositoryInterface;
 use App\DTOs\StudentDTO;
 use App\Http\Requests\StudentRequest;
@@ -15,7 +14,6 @@ use App\Shared\Constants\StatusResponse;
 use App\Shared\Handler\Result;
 use Exception;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 
 class StudentService implements StudentServiceInterface
@@ -33,11 +31,26 @@ class StudentService implements StudentServiceInterface
     public function getAllStudents()
     {
         try {
-            $result = \App\Models\Student::whereHas('user', function ($query) {
+            // Eager load related models with only necessary attributes
+            $result = Student::with([
+                'user',
+                'department' => function ($query) {
+                    $query->select('id', 'name');
+                },
+                'study_plan' => function ($query) {
+                    $query->select('id', 'name');
+                },
+                'group' => function ($query) {
+                    $query->select('id', 'name');
+                },
+                'sub_group' => function ($query) {
+                    $query->select('id', 'name');
+                }
+            ])
+            ->whereHas('user', function ($query) {
                 $query->where('role_id', 3);
-            })->get();
-
-            $result->load('user');
+            })
+            ->get();
 
             return Result::success($result, MessageResponse::RETRIEVED_SUCCESSFULLY, StatusResponse::HTTP_OK);
         } catch (Exception $e) {
@@ -45,8 +58,6 @@ class StudentService implements StudentServiceInterface
             return Result::error('An error occurred while fetching students', StatusResponse::HTTP_INTERNAL_SERVER_ERROR, $e->getMessage());
         }
     }
-
-
 
     public function getStudentById($id)
     {
@@ -56,6 +67,23 @@ class StudentService implements StudentServiceInterface
             return Result::error(MessageResponse::RESOURCE_NOT_FOUND, StatusResponse::HTTP_NOT_FOUND);
         }
 
+        // Eager load related models with only the necessary fields.
+        $student->load([
+            'user',
+            'department' => function ($query) {
+                $query->select('id', 'name');
+            },
+            'study_plan' => function ($query) {
+                $query->select('id', 'name');
+            },
+            'group' => function ($query) {
+                $query->select('id', 'name');
+            },
+            'sub_group' => function ($query) {
+                $query->select('id', 'name');
+            }
+        ]);
+
         $studentData = StudentMapping::toStudent($student);
         $result = StudentDTO::fromArray($studentData);
 
@@ -64,7 +92,6 @@ class StudentService implements StudentServiceInterface
 
     public function createStudent(array $data)
     {
-        // Additional Validation Logic
         $validator = Validator::make($data, (new StudentRequest())->rules());
 
         if ($validator->fails()) {
@@ -83,10 +110,12 @@ class StudentService implements StudentServiceInterface
     public function updateStudent($id, array $data)
     {
         $validator = Validator::make($data, [
-            'uuid' => 'required|string|unique:students,uuid,' . $id,
-            'department_id' => 'required|exists:departments,id',
-            'study_plan_id' => 'required|exists:study_plans,id',
-            'user_id' => 'required|exists:users,id',
+            'uuid'           => 'required|string|unique:students,uuid,' . $id,
+            'department_id'  => 'required|exists:departments,id',
+            'study_plan_id'  => 'required|exists:study_plans,id',
+            'user_id'        => 'required|exists:users,id',
+            'group_id'       => 'required|exists:groups,id',
+            'sub_group_id'   => 'required|exists:sub_groups,id',
         ]);
 
         if ($validator->fails()) {
@@ -110,8 +139,21 @@ class StudentService implements StudentServiceInterface
             return Result::error('No students found for the given department', StatusResponse::HTTP_NOT_FOUND);
         }
 
-        // Eager load the 'user' relationship for the collection of students.
-        $students->load('user');
+        $students->load([
+            'user',
+            'department' => function ($query) {
+                $query->select('id', 'name');
+            },
+            'study_plan' => function ($query) {
+                $query->select('id', 'name');
+            },
+            'group' => function ($query) {
+                $query->select('id', 'name');
+            },
+            'sub_group' => function ($query) {
+                $query->select('id', 'name');
+            }
+        ]);
 
         return Result::success($students, 'Students found Successfully by department', StatusResponse::HTTP_OK);
     }

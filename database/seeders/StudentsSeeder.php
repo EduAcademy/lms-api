@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -19,33 +20,54 @@ class StudentsSeeder extends Seeder
         // Fetch all related IDs
         $departmentIds = DB::table('departments')->pluck('id');
         $studyPlanIds = DB::table('study_plans')->pluck('id');
-        $userIds = DB::table('users')->pluck('id');
         $groupIds = DB::table('groups')->pluck('id');
         $subGroupIds = DB::table('sub_groups')->pluck('id');
 
-        // Ensure all required tables have data
-        if (
-            $departmentIds->isEmpty() ||
-            $studyPlanIds->isEmpty() ||
-            $userIds->isEmpty() ||
-            $groupIds->isEmpty() ||
-            $subGroupIds->isEmpty()
-        ) {
-            $this->command->warn("Some related tables are empty. Please seed departments, study plans, users, groups, and sub-groups first.");
+        // Fetch the student role by its name
+        $studentRole = DB::table('roles')->where('name', 'student')->first();
+        if (!$studentRole) {
+            $this->command->warn("Student role not found. Please seed roles first.");
             return;
         }
 
-        // Generate 100 fake students
+        // Ensure required tables have data (excluding users since they will be created here)
+        if (
+            $departmentIds->isEmpty() ||
+            $studyPlanIds->isEmpty() ||
+            $groupIds->isEmpty() ||
+            $subGroupIds->isEmpty()
+        ) {
+            $this->command->warn("Some related tables are empty. Please seed departments, study plans, groups, and sub-groups first.");
+            return;
+        }
+
+        // Generate 100 fake students by creating a user and linking it to a student record
         foreach (range(1, 100) as $index) {
+            // Generate a random 8-digit number for uuid
+            $randomNumber = random_int(10000000, 99999999);
+            $uuid = (string)$randomNumber;
+            $email = $uuid . '@su.edu.ye';
+
+            // Select a random image between 1.jpg and 10.jpg
+            $randomImage = 'users/' . rand(1, 10) . '.jpg';
+
+            // Create a new user with the student role, assigned email and random image
+            $user = User::factory()->create([
+                'role_id'   => $studentRole->id,
+                'email'     => $email,
+                'image_url' => $randomImage,
+            ]);
+
+            // Create a student record linked to the newly created user using the same random number as uuid
             DB::table('students')->insert([
-                'uuid' => Str::uuid()->toString(), // Generate a unique UUID
-                'department_id' => $faker->randomElement($departmentIds), // Random department
-                'study_plan_id' => $faker->randomElement($studyPlanIds), // Random study plan
-                'user_id' => $faker->randomElement($userIds), // Random user
-                'group_id' => $faker->randomElement($groupIds), // Random group
-                'sub_group_id' => $faker->randomElement($subGroupIds), // Random sub-group
-                'created_at' => now(),
-                'updated_at' => now(),
+                'uuid'           => $uuid,
+                'department_id'  => $faker->randomElement($departmentIds),
+                'study_plan_id'  => $faker->randomElement($studyPlanIds),
+                'user_id'        => $user->id,
+                'group_id'       => $faker->randomElement($groupIds),
+                'sub_group_id'   => $faker->randomElement($subGroupIds),
+                'created_at'     => now(),
+                'updated_at'     => now(),
             ]);
         }
     }
