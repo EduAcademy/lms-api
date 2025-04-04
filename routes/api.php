@@ -56,13 +56,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/upload-depts', [DepartmentController::class, 'createDepartment']);
 
         // Department routes
-        Route::prefix('departments')->group(function () {
-            Route::get('/', [DepartmentController::class, 'index']);
-            Route::get('/{id}', [DepartmentController::class, 'show']);
-            Route::get('/levels/{departmentId}', [DepartmentController::class, 'getLevels']);
-            Route::post('/', [DepartmentController::class, 'store']);
-            Route::put('/{id}', [DepartmentController::class, 'update']);
-            Route::delete('/{id}', [DepartmentController::class, 'delete']);
+        Route::middleware(['role:admin'])->group(function () {
+            Route::prefix('departments')->group(function () {
+                Route::get('/', [DepartmentController::class, 'index']);
+                Route::get('/{id}', [DepartmentController::class, 'show']);
+                Route::get('/levels/{departmentId}', [DepartmentController::class, 'getLevels']);
+                Route::post('/', [DepartmentController::class, 'store']);
+                Route::put('/{id}', [DepartmentController::class, 'update']);
+                Route::delete('/{id}', [DepartmentController::class, 'delete']);
+            });
         });
 
         // Instructor routes

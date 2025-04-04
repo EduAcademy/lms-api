@@ -106,10 +106,7 @@ class AuthController extends Controller
     public function updateProfile(UpdateProfileRequest $request)
     {
 
-        Log::info('Request data:', $request->all());
-        Log::info('Request files:', $request->files->all());
         $data = $request->validated();
-        //dd($data['image_url']);
         if (isset($data['image_url']) && $data['image_url'] === '') {
             $data['image_url'] = null;
         }
