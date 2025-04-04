@@ -39,4 +39,37 @@ class Assignment extends Model
     {
         return $this->hasMany(AssignmentSubmission::class);
     }
+    public function group()
+    {
+        return $this->hasOneThrough(
+            Groups::class,
+            StudyPlanCourseInstructor::class,
+            'id',
+            'id',
+            'study_plan_course_instructor_id',
+            'group_id'
+        );
+    }
+    public function subGroup()
+    {
+        return $this->hasOneThrough(
+            SubGroups::class,
+            StudyPlanCourseInstructorSubGroup::class,
+            'id',
+            'id',
+            'study_plan_course_instructor_sub_group_id',
+            'sub_group_id'
+        );
+    }
+    public function studyPlanCourse()
+    {
+        return $this->hasOneThrough(
+            StudyPlanCourse::class,
+            StudyPlanCourseInstructor::class,
+            'id',
+            'id',
+            'study_plan_course_instructor_id',
+            'study_plan_course_id'
+        );
+    }
 }

@@ -2,38 +2,40 @@
 
 namespace App\Providers;
 
-use App\Interfaces\Services\StudyPlanCourseServiceInterface;
-use App\Interfaces\Services\CourseMaterialServiceInterface;
-use App\Interfaces\Services\GroupServiceInterface;
-use App\Interfaces\Services\CourseServiceInterface;
-use App\Services\DepartmentService;
-use App\Interfaces\Services\DepartmentServiceInterface;
-use App\Interfaces\Services\InstructorServiceInterface;
-use App\Interfaces\Services\StudentServiceInterface;
-use App\Interfaces\Services\StudyPlanServiceInterface;
-use App\Interfaces\Services\GroupServiceInterface as ServicesGroupServiceInterface;
-use App\Interfaces\Services\LevelServiceInterface;
-use App\Interfaces\Services\NotificationServiceInterface;
-use App\Interfaces\Services\RoleServiceInterface;
-use App\Interfaces\Services\StudyPlanCourseInstructorServiceInterface;
-use App\Interfaces\Services\StudyPlanCourseInstructorSubGroupServiceInterface;
-use App\Interfaces\Services\SubGroupServiceInterface;
-use App\Interfaces\Services\UserServiceInterface;
-use App\Services\CourseMaterialService;
-use App\Services\CourseService;
-use App\Services\InstructorService;
-use App\Services\StudentService;
-use App\Services\StudyPlanService;
+use App\Services\RoleService;
+use App\Services\UserService;
 use App\Services\GroupService;
 use App\Services\LevelService;
-use App\Services\NotificationService;
-use App\Services\RoleService;
-use App\Services\StudyPlanCourseInstructorService;
-use App\Services\StudyPlanCourseInstructorSubGroupService;
-use App\Services\StudyPlanCourseService;
+use App\Services\CourseService;
+use App\Services\StudentService;
 use App\Services\SubGroupService;
-use App\Services\UserService;
+use App\Services\StudyPlanService;
+use App\Services\AssignmentService;
+use App\Services\DepartmentService;
+use App\Services\InstructorService;
+use App\Services\NotificationService;
+use App\Services\CourseMaterialService;
 use Illuminate\Support\ServiceProvider;
+use App\Services\StudyPlanCourseService;
+use App\Interfaces\Services\RoleServiceInterface;
+use App\Interfaces\Services\UserServiceInterface;
+use App\Interfaces\Services\GroupServiceInterface;
+use App\Interfaces\Services\LevelServiceInterface;
+use App\Services\StudyPlanCourseInstructorService;
+use App\Interfaces\Services\CourseServiceInterface;
+use App\Interfaces\Services\StudentServiceInterface;
+use App\Interfaces\Services\SubGroupServiceInterface;
+use App\Interfaces\Services\StudyPlanServiceInterface;
+use App\Interfaces\Services\AssignmentServiceInterface;
+use App\Interfaces\Services\DepartmentServiceInterface;
+use App\Interfaces\Services\InstructorServiceInterface;
+use App\Interfaces\Services\NotificationServiceInterface;
+use App\Services\StudyPlanCourseInstructorSubGroupService;
+use App\Interfaces\Services\CourseMaterialServiceInterface;
+use App\Interfaces\Services\StudyPlanCourseServiceInterface;
+use App\Interfaces\Services\StudyPlanCourseInstructorServiceInterface;
+use App\Interfaces\Services\StudyPlanCourseInstructorSubGroupServiceInterface;
+use App\Interfaces\Services\GroupServiceInterface as ServicesGroupServiceInterface;
 
 class ServicesServiceProvider extends ServiceProvider
 {
@@ -58,6 +60,7 @@ class ServicesServiceProvider extends ServiceProvider
         $this->app->bind(SubGroupServiceInterface::class, SubGroupservice::class);
         $this->app->bind(NotificationServiceInterface::class, NotificationService::class);
         $this->app->bind(LevelServiceInterface::class, LevelService::class);
+        $this->app->bind(AssignmentServiceInterface::class, AssignmentService::class);
 
     }
 

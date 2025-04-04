@@ -4,62 +4,57 @@ namespace App\Http\Controllers;
 
 use App\Models\Assignment;
 use Illuminate\Http\Request;
+use App\Services\AssignmentService;
+use App\Http\Requests\AssignmentRequest;
+use App\Interfaces\Services\AssignmentServiceInterface;
 
 class AssignmentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected $assignmentServiceInterface;
+
+    public function __construct(AssignmentServiceInterface $assignmentServiceInterface)
+    {
+        $this->assignmentServiceInterface = $assignmentServiceInterface;
+    }
+
     public function index()
     {
-        //
+        $result = $this->assignmentServiceInterface->getAllAssignment();
+        return $result;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $result = $this->assignmentServiceInterface->createAssignment($request->all());
+        return response()->json($result);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Assignment $assignment)
+    public function show($id)
     {
-        //
+        $result = $this->assignmentServiceInterface->getAssignmentById($id);
+        return response()->json($result);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Assignment $assignment)
+    public function update($id, Request $request)
     {
-        //
+        $result = $this->assignmentServiceInterface->updateAssignment($id, $request->all());
+        return response()->json($result);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Assignment $assignment)
+    public function destroy($id)
     {
-        //
+        $result = $this->assignmentServiceInterface->deleteAssignment($id);
+        return response()->json($result);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Assignment $assignment)
+    public function getbyInstructorId($instructorId)
     {
-        //
+        $result = $this->assignmentServiceInterface->getbyInstructorId($instructorId);
+        return response()->json($result);
+    }
+    public function getbyGroupId($groupId)
+    {
+        $result = $this->assignmentServiceInterface->getbyGroupId($groupId);
+        return response()->json($result);
     }
 }

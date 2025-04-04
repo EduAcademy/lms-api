@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Scout\Searchable;
+
 class Groups extends Model
 {
     //
@@ -12,7 +13,8 @@ class Groups extends Model
 
 
     protected $fillable = [
-        'name', 'department_id'
+        'name',
+        'department_id'
     ];
 
     public function sub_groups()
@@ -34,5 +36,4 @@ class Groups extends Model
     {
         return $this->hasMany(StudyPlanCourseInstructor::class);
     }
-
 }

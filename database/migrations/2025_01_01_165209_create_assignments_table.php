@@ -32,11 +32,13 @@ return new class extends Migration
                 ->cascadeOnDelete();
 
             $table->foreignId('study_plan_course_instructor_sub_group_id')
+                ->nullable()
                 ->unsignedBigInteger()
                 ->references('id')
                 ->on('spc_instructor_sub_groups')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->cascadeOnDelete()
+                ;
 
 
             $table->timestamps();

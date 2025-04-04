@@ -138,4 +138,38 @@ class StudyPlanCourseService implements StudyPlanCourseServiceInterface
 
         return Result::success($result, 'StudyPlanCourse is Deleted Successfully', StatusResponse::HTTP_OK);
     }
+    public function getSemesterByLevelId($levelId)
+    {
+        //
+        $result = $this->sPCourseRepository->getSemesterByLevelId($levelId);
+
+        return $result;
+    }
+    public function getCoursBySemesterId($department_id, $level_id, $semester)
+    {
+        //
+        $result = $this->sPCourseRepository->getCoursBySemesterId($department_id, $level_id, $semester);
+
+        return $result;
+    }
+    public function getGroupByCourseid($department_id, $level_id, $semesterId, $courseid)
+    {
+
+        $result = $this->sPCourseRepository->getGroupByCourseid($department_id, $level_id, $semesterId, $courseid);
+
+        return $result;
+
+    }
+    public function getSubGroupByGroupid($department_id, $level_id, $semesterId, $courseid, $groupid)
+    {
+        $result = $this->sPCourseRepository->getSubGroupByGroupid($department_id, $level_id, $semesterId, $courseid, $groupid);
+
+        return $result;
+    }
+    public function getCourseByInstructorId($department_id, $level_id, $semester, $instructorId)
+    {
+        $result = $this->sPCourseRepository->getCourseByInstructorId($department_id, $level_id, $semester, $instructorId);
+
+        return $result;
+    }
 }

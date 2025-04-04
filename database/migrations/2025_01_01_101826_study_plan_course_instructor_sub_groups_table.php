@@ -15,28 +15,27 @@ return new class extends Migration
         Schema::create('spc_instructor_sub_groups', function (Blueprint $table) {
             $table->id();
             $table->foreignId('spc_instructor_id')
-            ->unsignedBigInteger()
-            ->references('id')
-            ->on('spc_instructors')
-            ->cascadeOnUpdate()
-            ->cascadeOnDelete();
+                ->unsignedBigInteger()
+                ->references('id')
+                ->on('spc_instructors')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
 
             $table->foreignId('sub_group_id')
-            ->unsignedBigInteger()
-            ->references('id')
-            ->on('sub_groups')
-            ->cascadeOnUpdate()
-            ->cascadeOnDelete();
+                ->unsignedBigInteger()
+                ->references('id')
+                ->on('sub_groups')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
 
             $table->foreignId('instructor_id')
-            ->unsignedBigInteger()
-            ->references('id')
-            ->on('instructors')
-            ->cascadeOnUpdate()
-            ->cascadeOnDelete();
+                ->unsignedBigInteger()
+                ->references('id')
+                ->on('instructors')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
 
             $table->timestamps();
-
         });
     }
 

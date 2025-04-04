@@ -47,6 +47,6 @@ class StudyPlanCourse extends Model
 
     public function instructors()
     {
-        return $this->hasMany(StudyPlanCourseInstructor::class, 'study_plan_courses_id');
+        return $this->hasMany(StudyPlanCourseInstructor::class, 'study_plan_course_id');
     }
 }
