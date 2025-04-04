@@ -20,7 +20,7 @@ class StudyPlanCourseInstructor extends Model
     // Relationships
     public function sp_course()
     {
-        return $this->belongsTo(StudyPlanCourse::class, 'study_plan_courses_id');
+        return $this->belongsTo(StudyPlanCourse::class, 'study_plan_course_id');
     }
 
     public function group()
@@ -35,7 +35,7 @@ class StudyPlanCourseInstructor extends Model
 
     public function spci_sub_groups()
     {
-        return $this->hasMany(StudyPlanCourseInstructorSubGroup::class, 'study_plan_course_instructors_id');
+        return $this->hasMany(StudyPlanCourseInstructorSubGroup::class, 'spc_instructor_id');
     }
 
     public function assignments()

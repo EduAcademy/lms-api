@@ -80,4 +80,39 @@ class StudyPlanCourseController extends Controller
 
         return $result;
     }
+    public function getSemesterByLevelId($levelId)
+    {
+        //
+        $result = $this->spCourseService->getSemesterByLevelId($levelId);
+
+        return $result;
+    }
+    public function getCoursBySemesterId($department_id, $level_id, $semester = 0)
+    {
+        //
+        $result = $this->spCourseService->getCoursBySemesterId($department_id, $level_id, $semester);
+
+        return $result;
+    }
+    public function getGroupByCourseid($department_id, $level_id, $semesterId, $courseid)
+    {
+        //
+        $result = $this->spCourseService->getGroupByCourseid($department_id, $level_id, $semesterId, $courseid);
+
+        return $result;
+    }
+    public function getSubGroupByGroupid($department_id, $level_id, $semesterId, $courseid, $groupid)
+    {
+        //
+        $result = $this->spCourseService->getSubGroupByGroupid($department_id, $level_id, $semesterId, $courseid, $groupid);
+
+        return $result;
+    }
+    public function getCourseByInstructorId($department_id, $level_id, $semester, $instructorId)
+    {
+        //
+        $result = $this->spCourseService->getCourseByInstructorId($department_id, $level_id, $semester, $instructorId);
+
+        return $result;
+    }
 }

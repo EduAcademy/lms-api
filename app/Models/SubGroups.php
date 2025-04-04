@@ -41,4 +41,5 @@ class SubGroups extends Model
     {
         return $this->hasMany(StudyPlanCourseInstructorSubGroup::class);
     }
+    
 }
