@@ -55,6 +55,18 @@ Route::prefix('v1')->group(function () {
         Route::post('/upload-students', [StudentController::class, 'uploadStudent']);
         Route::post('/upload-depts', [DepartmentController::class, 'createDepartment']);
 
+        // Department routes
+        //Here an example how to use role middleware
+        Route::middleware(['role:admin'])->group(function () {
+            Route::prefix('departments')->group(function () {
+                Route::get('/', [DepartmentController::class, 'index']);
+                Route::get('/{id}', [DepartmentController::class, 'show']);
+                Route::get('/levels/{departmentId}', [DepartmentController::class, 'getLevels']);
+                Route::post('/', [DepartmentController::class, 'store']);
+                Route::put('/{id}', [DepartmentController::class, 'update']);
+                Route::delete('/{id}', [DepartmentController::class, 'delete']);
+            });
+        });
         // API resources
         Route::apiResource('departments', DepartmentController::class);
         Route::apiResource('instructors', InstructorController::class);

@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Shared\Constants\StatusResponse;
+use App\Shared\Handler\Result;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +20,7 @@ class RoleMiddleware
         $user = $request->user();
 
         if (!$user || !in_array($user->role->name, $roles)) {
-            return response()->json(['error' => 'Unauthorized'], 403); // Forbidden
+            return Result::error('Forbidden', StatusResponse::HTTP_FORBIDDEN); // Forbidden
         }
 
         return $next($request);

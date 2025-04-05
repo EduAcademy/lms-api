@@ -367,45 +367,45 @@ class UserService implements UserServiceInterface
 
     public function updateProfile($user, array $data, $image = null)
     {
-        try{
-        $validator = Validator::make($data, (new UpdateProfileRequest())->rules());
-
-        if ($validator->fails()) {
-            return Result::error(MessageResponse::VALIDATION_FAILED, 422, $validator->errors());
-        }
-
-        if (!$user->role) {
-            return Result::error('User role not found.', StatusResponse::HTTP_NOT_FOUND);
-        }
-
-
-        // Handle image upload
-        if ($image instanceof UploadedFile) {
-            // Delete the old image if it exists
-            if ($user->image_url) {
-                $oldImagePath = str_replace('/storage', 'public', $user->image_url);
-                Storage::delete($oldImagePath);
+        try {
+            $validator = Validator::make($data, (new UpdateProfileRequest())->rules());
+            if ($validator->fails()) {
+                return Result::error(MessageResponse::VALIDATION_FAILED, 422, $validator->errors());
             }
 
-            // Upload the new image
-            $user->image_url = ImageUploads::uploadImage($image, $user->role->name);
-        } elseif ($image === null) {
-            // Clear the image if null is provided
-            $user->image_url = null;
+            if (!$user->role) {
+                return Result::error('User role not found.', StatusResponse::HTTP_NOT_FOUND);
+            }
+
+            // Handle image upload
+            if ($image instanceof UploadedFile) {
+                // Delete the old image if it exists
+                if ($user->image_url) {
+                    $oldImagePath = str_replace(asset('uploads') . '/', 'public/', $user->image_url);
+                    Storage::delete($oldImagePath);
+                }
+
+                // Upload the new image with random characters appended to the filename
+                $user->image_url = \App\Shared\Handler\ImageUploads::uploadImage($image, $user->role->name);
+                Log::info('Image uploaded:', ['file' => $user->image_url]);
+            } elseif ($image === null) {
+                // Clear the image if null is provided
+                $user->image_url = null;
+            }
+
+            // Update other fields
+            $user->username   = $data['username'];
+            $user->first_name = $data['first_name'];
+            $user->last_name  = $data['last_name'];
+            $user->phone      = $data['phone'];
+            $user->gender     = $data['gender'];
+
+            $user->save();
+            Log::info('users data:', ['user' => $user->toArray()]);
+
+            return Result::success($user, MessageResponse::UPDATED_SUCCESSFULLY, StatusResponse::HTTP_OK);
+        } catch (Exception $e) {
+            return $e->getMessage();
         }
-
-        // Update other fields
-        $user->username = $data['username'];
-        $user->first_name = $data['first_name'];
-        $user->last_name = $data['last_name'];
-        $user->phone = $data['phone'];
-        $user->gender = $data['gender'];
-
-        $user->save();
-        Log::info('users data:', json_encode($user));
-        return Result::success($user, MessageResponse::UPDATED_SUCCESSFULLY, StatusResponse::HTTP_OK);
-    }catch(Exception $e){
-        return $e->getMessage();
-    }
     }
 }
