@@ -94,9 +94,9 @@ class StudyPlanCourseInstructorService implements StudyPlanCourseInstructorServi
     {
 
         $validator = Validator::make($data, [
-            'study_plan_course_id'=> 'required|integer|exists:study_plan_courses,id',
-            'group_id'=> 'required|integer|exists:groups,id',
-            'instructor_id'=> 'required|integer|exists:instructors,id',
+            'study_plan_course_id' => 'required|integer|exists:study_plan_courses,id',
+            'group_id' => 'required|integer|exists:groups,id',
+            'instructor_id' => 'required|integer|exists:instructors,id',
         ]);
 
         if ($validator->fails()) {
@@ -119,5 +119,4 @@ class StudyPlanCourseInstructorService implements StudyPlanCourseInstructorServi
 
         return Result::success($result, 'StudyPlanCourseInstructor is Deleted Successfully', StatusResponse::HTTP_OK);
     }
-
 }

@@ -54,4 +54,11 @@ class NotificationRepository implements NotificationRepositoryInterface
     {
         return Student::findOrFail($studentId)->user()->value('id');
     }
+
+    public function getNotificationsByReceiverId($receiverId)
+    {
+        return Notification::whereHas('receivers', function ($query) use ($receiverId) {
+            $query->where('receiver_id', $receiverId);
+        })->get();
+    }
 }

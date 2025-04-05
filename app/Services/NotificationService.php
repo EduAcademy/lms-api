@@ -55,4 +55,8 @@ class NotificationService implements NotificationServiceInterface
             [$userId]
         );
     }
+    public function getNotificationsByReceiverId($receiverId)
+    {
+        return $this->notificationRepo->getNotificationsByReceiverId($receiverId);
+    }
 }

@@ -9,4 +9,5 @@ interface NotificationServiceInterface
     public function sendToDepartment($senderId, $departmentId, $content);
     public function sendToGroup($senderId, $groupId, $content);
     public function sendToStudent($senderId, $studentId, $content);
+    public function getNotificationsByReceiverId($receiverId);
 }

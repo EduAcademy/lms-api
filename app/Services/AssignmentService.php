@@ -3,61 +3,73 @@
 namespace App\Services;
 
 use App\Models\Assignment;
-use App\Shared\Handler\Result;
-use App\Repositories\GenericRepository;
 use App\Http\Requests\AssignmentRequest;
+use App\Repositories\GenericRepository;
+use App\Shared\Handler\Result;
 use App\Shared\Constants\StatusResponse;
 use Illuminate\Support\Facades\Validator;
 use App\Contracts\AssignmentRepositoryInterface;
 use App\Interfaces\Services\AssignmentServiceInterface;
+use App\Interfaces\Services\NotificationServiceInterface;
+use App\Interfaces\Services\StudyPlanCourseInstructorServiceInterface;
+use Illuminate\Support\Facades\Log;
 
 class AssignmentService implements AssignmentServiceInterface
 {
-    private $assignmentRepository;
-    private $genericRepository;
+    protected $assignmentRepository;
+    protected $genericRepository;
+    protected $spCInstructorService;
+    protected $notificationService;
 
-    public function __construct(AssignmentRepositoryInterface $assignmentRepository)
-    {
+    public function __construct(
+        AssignmentRepositoryInterface $assignmentRepository,
+        StudyPlanCourseInstructorServiceInterface $spCInstructorService,
+        NotificationServiceInterface $notificationService
+    ) {
         $this->assignmentRepository = $assignmentRepository;
         $this->genericRepository = new GenericRepository(new Assignment());
+        $this->spCInstructorService = $spCInstructorService;
+        $this->notificationService = $notificationService;
     }
-
 
     public function getAllAssignment()
     {
-        $result = $this->assignmentRepository->getAll();
-
-        return Result::success($result, 'Get all Assignment Successfully', StatusResponse::HTTP_OK);
-    }
-
-    public function createAssignment(array $data)
-    {
-        $validator = Validator::make($data, (new AssignmentRequest())->rules());
-
-        if ($validator->fails()) {
-            return Result::error('Validation failed', 422, $validator->errors());
-        }
-        $result = $this->assignmentRepository->create($data);
-
-        if (!$result) {
-            return Result::error('Failed in creating Assignment', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        return Result::success($result, 'Assignment is Created Successfully', StatusResponse::HTTP_CREATED);
+        $assignments = $this->assignmentRepository->getAll();
+        return Result::success($assignments, 'Get all Assignments successfully', StatusResponse::HTTP_OK);
     }
 
     public function getAssignmentById($id)
     {
-        $result = $this->assignmentRepository->getbyId($id);
+        $assignment = $this->assignmentRepository->getbyId($id);
 
-        if (!$result) {
-            return Result::error("Assignment not found with this Id {$id}", StatusResponse::HTTP_NOT_FOUND);
+        if (!$assignment) {
+            return Result::error("Assignment not found with Id {$id}", StatusResponse::HTTP_NOT_FOUND);
         }
 
-        return Result::success($result, 'Assignment found Successfully by Id', StatusResponse::HTTP_OK);
+        return Result::success($assignment, 'Assignment found successfully', StatusResponse::HTTP_OK);
     }
 
+    public function createAssignment(array $data)
+    {
+        // Validate input
+        $validator = Validator::make($data, (new AssignmentRequest())->rules());
 
+        if ($validator->fails()) {
+            return Result::error('Validation failed', StatusResponse::HTTP_UNPROCESSABLE_ENTITY, $validator->errors());
+        }
+
+        // Create assignment
+        $assignment = $this->assignmentRepository->create($data);
+
+        if (!$assignment) {
+            return Result::error('Failed to create Assignment', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        // Send notification if applicable
+        $this->sendAssignmentNotification($data);
+
+        return Result::success($assignment, 'Assignment created successfully', StatusResponse::HTTP_CREATED);
+    }
 
     public function updateAssignment($id, array $data)
     {
@@ -68,12 +80,10 @@ class AssignmentService implements AssignmentServiceInterface
             'instructor_id' => 'required|exists:instructors,id',
             'study_plan_course_instructor_id' => 'required|exists:spc_instructors,id',
             'study_plan_course_instructor_sub_group_id' => 'nullable',
-
         ]);
 
         if ($validator->fails()) {
-            // Include detailed error messages
-            return Result::error('Validation failed', 422, $validator->errors());
+            return Result::error('Validation failed', StatusResponse::HTTP_UNPROCESSABLE_ENTITY, $validator->errors());
         }
 
         $updatedAssignment = $this->genericRepository->update($id, $data);
@@ -82,37 +92,62 @@ class AssignmentService implements AssignmentServiceInterface
             return Result::error('Failed to update Assignment', StatusResponse::HTTP_BAD_REQUEST);
         }
 
-        return Result::success($updatedAssignment, 'Assignment Updated Successfully', StatusResponse::HTTP_OK);
+        return Result::success($updatedAssignment, 'Assignment updated successfully', StatusResponse::HTTP_OK);
     }
 
     public function deleteAssignment($id)
     {
-        $result = $this->genericRepository->delete($id);
+        $deleted = $this->genericRepository->delete($id);
 
-        return Result::success($result, 'Assignment is Deleted Successfully', StatusResponse::HTTP_OK);
+        if (!$deleted) {
+            return Result::error('Failed to delete Assignment', StatusResponse::HTTP_BAD_REQUEST);
+        }
+
+        return Result::success($deleted, 'Assignment deleted successfully', StatusResponse::HTTP_OK);
     }
-
 
     public function getbyInstructorId($instructorId)
     {
-        $result = $this->assignmentRepository->getbyInstructorId($instructorId);
+        $assignments = $this->assignmentRepository->getbyInstructorId($instructorId);
 
-        if (!$result) {
-            return Result::error("Assignment not found with this InstructorId {$instructorId}", StatusResponse::HTTP_NOT_FOUND);
+        if (!$assignments) {
+            return Result::error("No assignments found for instructor ID {$instructorId}", StatusResponse::HTTP_NOT_FOUND);
         }
 
-        return Result::success($result, 'Assignment found Successfully by Id', StatusResponse::HTTP_OK);
+        return Result::success($assignments, 'Assignments found successfully', StatusResponse::HTTP_OK);
     }
+
     public function getbyGroupId($groupId)
     {
-        $result = $this->assignmentRepository->getbyGroupId($groupId);
+        $assignments = $this->assignmentRepository->getbyGroupId($groupId);
 
-        if (!$result) {
-            return Result::error("Assignment not found with this GroupId {$groupId}", StatusResponse::HTTP_NOT_FOUND);
+        if (!$assignments) {
+            return Result::error("No assignments found for group ID {$groupId}", StatusResponse::HTTP_NOT_FOUND);
         }
 
-        return Result::success($result, 'Assignment found Successfully by Id', StatusResponse::HTTP_OK);
+        return Result::success($assignments, 'Assignments found successfully', StatusResponse::HTTP_OK);
     }
- 
 
+    /**
+     * Handle notification logic after assignment creation.
+     */
+    protected function sendAssignmentNotification(array $assignment)
+    {
+        $response = $this->spCInstructorService->getSpCInstructorById($assignment['study_plan_course_instructor_id']);
+
+        $data = $response->getData(true);//
+
+        if ($data['status'] === 200) {
+            $instructorData = $data['data'];
+            
+            // Optional: update assignment instructor_id in DB if needed
+            $assignment['instructor_id'] = $instructorData['instructor_id'];
+
+            $this->notificationService->sendToGroup(
+                auth()->id(),
+                $instructorData['group_id'],
+                $assignment['title']
+            );
+        }
+    }
 }

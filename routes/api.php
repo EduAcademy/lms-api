@@ -109,6 +109,7 @@ Route::prefix('v1')->group(function () {
             Route::post('/department', [NotificationController::class, 'notifyDepartment']);
             Route::post('/group', [NotificationController::class, 'notifyGroup']);
             Route::post('/student', [NotificationController::class, 'notifyStudent']);
+            Route::get('/getNotificationsByReceiver/{receiverId}', [NotificationController::class, 'getNotificationsByReceiverId']);
         });
 
 

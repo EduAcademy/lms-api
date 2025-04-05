@@ -9,6 +9,7 @@ class NotificationController extends Controller
 {
     //
     protected $notificationService;
+
     public function __construct(NotificationServiceInterface $notificationService)
     {
         $this->notificationService = $notificationService;
@@ -41,4 +42,27 @@ class NotificationController extends Controller
 
         return response()->json(['message' => 'Notifications sent successfully']);
     }
+    public function notifyGroup(Request $request)
+    {
+        $validated = $request->validate([
+            'group_id' => 'required|exists:groups,id',
+            'message' => 'required|string|max:500',
+        ]);
+
+        $this->notificationService->sendToGroup(
+            auth()->id(),
+            $validated['group_id'],
+            $validated['message']
+        );
+
+        return response()->json(['message' => 'Notifications sent successfully']);
+    }
+
+    public function getNotificationsByReceiverId($receiverId)
+    {
+        $notifications = $this->notificationService->getNotificationsByReceiverId($receiverId);
+
+        return response()->json($notifications);
+    }
+
 }
