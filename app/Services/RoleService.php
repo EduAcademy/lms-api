@@ -20,4 +20,10 @@ class RoleService implements RoleServiceInterface
 
         return $result;
     }
+
+    public function getRoleById($id)
+    {
+        $result = Role::where('id', $id)->value('name');
+        return $result;
+    }
 }

@@ -53,10 +53,14 @@ class StudyPlanCourseInstructorController extends Controller
     {
         //
         $result = $this->spCInstructorService->getSpCInstructorById($id);
-
         return $result;
     }
 
+    public function getDepartmentsByInstructorId($instructorId)
+    {
+        $result = $this->spCInstructorService->getDepartmentsByInstructorId($instructorId);
+        return $result;
+    }
 
     /**
      * Update the specified resource in storage.

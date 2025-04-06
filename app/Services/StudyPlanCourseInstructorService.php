@@ -119,4 +119,10 @@ class StudyPlanCourseInstructorService implements StudyPlanCourseInstructorServi
 
         return Result::success($result, 'StudyPlanCourseInstructor is Deleted Successfully', StatusResponse::HTTP_OK);
     }
+
+    public function getDepartmentsByInstructorId($instructorId)
+    {
+        $result = $this->spCInstructorRepository->getDepartmentsByInstructorId($instructorId);
+        return Result::success($result, 'Get All departments related to the logged in instructor', StatusResponse::HTTP_OK);
+    }
 }

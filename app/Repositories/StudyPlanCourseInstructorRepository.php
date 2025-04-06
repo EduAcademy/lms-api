@@ -17,7 +17,7 @@ class StudyPlanCourseInstructorRepository implements StudyPlanCourseInstructorRe
 
     public function getinstcourses($instId)
     {
-     
+
         StudyPlanCourseInstructor::with('instructor', $instId)->get();
     }
 
@@ -50,4 +50,18 @@ class StudyPlanCourseInstructorRepository implements StudyPlanCourseInstructorRe
         return $result;
     }
 
+    public function getDepartmentsByInstructorId($instructorId)
+    {
+        $data = StudyPlanCourseInstructor::with('sp_course.department')
+            ->where('instructor_id', $instructorId)
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'department_id' => $item->sp_course->department_id ?? null,
+                    'department_name' => $item->sp_course->department->name ?? null,
+                    'instructor_id' => $item->instructor_id,
+                ];
+            });
+        return $data;
+    }
 }

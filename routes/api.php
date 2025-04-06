@@ -20,6 +20,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Course\CourseController;
 use App\Http\Controllers\Department\DepartmentController;
 use App\Http\Controllers\Instructor\InstructorController;
+use App\Models\StudyPlanCourseInstructor;
 
 Route::prefix('v1')->group(function () {
     // Public routes
@@ -109,6 +110,8 @@ Route::prefix('v1')->group(function () {
         Route::get('/study_plan_courses/subgroup/{department_id}/{level_id}/{semesterId}/{courseid}/{groupid}', [StudyPlanCourseController::class, 'getSubGroupByGroupid']);
 
         Route::get('/study_plan_courses/getCourseInstructor/{department_id}/{level_id}/{semesterId}/{instructorId}', [StudyPlanCourseController::class, 'getCourseByInstructorId']);
+
+        Route::get('/spc_instructors/getDepartmentInstructor/{instructorId}', [StudyPlanCourseInstructorController::class, 'getDepartmentsByInstructorId']);
 
         // assignment
 

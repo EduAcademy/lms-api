@@ -132,6 +132,7 @@ class UserService implements UserServiceInterface
         if ($user == null) {
             return Result::error('Token is expired or invalid', StatusResponse::HTTP_UNAUTHORIZED);
         }
+        $user['role_name'] = $user->role->name;
         return Result::success($user, 'Found profile Successfully', StatusResponse::HTTP_OK);
     }
 

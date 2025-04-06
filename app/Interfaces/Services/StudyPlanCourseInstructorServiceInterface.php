@@ -13,5 +13,5 @@ interface StudyPlanCourseInstructorServiceInterface
     public function getSpCInstructorByInstruId($instructorId);
     public function updateSpCInstructor($id, array $data);
     public function deleteSpCInstructor($id);
-
+    public function getDepartmentsByInstructorId($instructorId);
 }
