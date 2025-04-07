@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\ServiceProvider;
+
 use App\Services\RoleService;
 use App\Services\UserService;
 use App\Services\GroupService;
@@ -15,13 +17,17 @@ use App\Services\DepartmentService;
 use App\Services\InstructorService;
 use App\Services\NotificationService;
 use App\Services\CourseMaterialService;
-use Illuminate\Support\ServiceProvider;
 use App\Services\StudyPlanCourseService;
+use App\Services\StudyPlanCourseInstructorService;
+use App\Services\StudyPlanCourseInstructorSubGroupService;
+use App\Services\AssignmentStudentService;
+
+use App\Repositories\AssignmentStudentRepository;
+
 use App\Interfaces\Services\RoleServiceInterface;
 use App\Interfaces\Services\UserServiceInterface;
 use App\Interfaces\Services\GroupServiceInterface;
 use App\Interfaces\Services\LevelServiceInterface;
-use App\Services\StudyPlanCourseInstructorService;
 use App\Interfaces\Services\CourseServiceInterface;
 use App\Interfaces\Services\StudentServiceInterface;
 use App\Interfaces\Services\SubGroupServiceInterface;
@@ -30,12 +36,13 @@ use App\Interfaces\Services\AssignmentServiceInterface;
 use App\Interfaces\Services\DepartmentServiceInterface;
 use App\Interfaces\Services\InstructorServiceInterface;
 use App\Interfaces\Services\NotificationServiceInterface;
-use App\Services\StudyPlanCourseInstructorSubGroupService;
 use App\Interfaces\Services\CourseMaterialServiceInterface;
 use App\Interfaces\Services\StudyPlanCourseServiceInterface;
 use App\Interfaces\Services\StudyPlanCourseInstructorServiceInterface;
 use App\Interfaces\Services\StudyPlanCourseInstructorSubGroupServiceInterface;
-use App\Interfaces\Services\GroupServiceInterface as ServicesGroupServiceInterface;
+use App\Interfaces\Services\AssignmentStudentServiceInterface;
+
+use App\Interfaces\Repositories\AssignmentStudentRepositoryInterface;
 
 class ServicesServiceProvider extends ServiceProvider
 {
@@ -44,7 +51,6 @@ class ServicesServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
         $this->app->bind(UserServiceInterface::class, UserService::class);
         $this->app->bind(DepartmentServiceInterface::class, DepartmentService::class);
         $this->app->bind(CourseServiceInterface::class, CourseService::class);
@@ -57,11 +63,13 @@ class ServicesServiceProvider extends ServiceProvider
         $this->app->bind(StudyPlanCourseServiceInterface::class, StudyPlanCourseService::class);
         $this->app->bind(StudyPlanCourseInstructorServiceInterface::class, StudyPlanCourseInstructorService::class);
         $this->app->bind(StudyPlanCourseInstructorSubGroupServiceInterface::class, StudyPlanCourseInstructorSubGroupService::class);
-        $this->app->bind(SubGroupServiceInterface::class, SubGroupservice::class);
+        $this->app->bind(SubGroupServiceInterface::class, SubGroupService::class);
         $this->app->bind(NotificationServiceInterface::class, NotificationService::class);
         $this->app->bind(LevelServiceInterface::class, LevelService::class);
         $this->app->bind(AssignmentServiceInterface::class, AssignmentService::class);
 
+        $this->app->bind(AssignmentStudentServiceInterface::class, AssignmentStudentService::class);
+        $this->app->bind(AssignmentStudentRepositoryInterface::class, AssignmentStudentRepository::class);
     }
 
     /**
