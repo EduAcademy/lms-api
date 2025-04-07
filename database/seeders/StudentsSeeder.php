@@ -43,6 +43,41 @@ class StudentsSeeder extends Seeder
             return;
         }
 
+        // Create a default student if not exists (similar to the default admin in UserSeeder)
+        if (!User::where('email', 'messi@su.edu.ye')->exists()) {
+            // Set fixed default values
+            $defaultUuid = '2210000'; // A fixed 8-digit number; change as needed.
+            $defaultEmail = 'messi@su.edu.ye';
+            $defaultImage = 'users/1.jpg';
+
+            // Create default user for student 
+            $defaultUser = User::factory()->create([
+                'role_id'           => $studentRole->id,
+                'email'             => $defaultEmail,
+                'password'          => bcrypt('aaaa1111'), // You can adjust the password
+                'first_name'        => 'Leo',
+                'last_name'         => 'Messi',
+                'phone'             => '0000000000',
+                'is_active'         => 1,
+                'gender'            => 'male',
+                'email_verified_at' => now(),
+                'image_url'         => $defaultImage,
+                'remember_token'    => Str::random(10),
+            ]);
+
+            // Create a student record linked to the default user
+            DB::table('students')->insert([
+                'uuid'           => $defaultUuid,
+                'department_id'  => $faker->randomElement($departmentIds),
+                'study_plan_id'  => $faker->randomElement($studyPlanIds),
+                'user_id'        => $defaultUser->id,
+                'group_id'       => $faker->randomElement($groupIds),
+                'sub_group_id'   => $faker->randomElement($subGroupIds),
+                'created_at'     => now(),
+                'updated_at'     => now(),
+            ]);
+        }
+
         // Generate 100 fake students by creating a user and linking it to a student record
         foreach (range(1, 100) as $index) {
             // Generate a random 8-digit number for uuid

@@ -10,6 +10,8 @@ use App\Repositories\StudentRepositoryInterface;
 use App\Repositories\StudentRepository;
 use App\Interfaces\Repositories\InstructorRepositoryInterface;
 use App\Repositories\InstructorRepository;
+use App\Contracts\AssignmentStudentRepositoryInterface;
+use App\Repositories\AssignmentStudentRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(StudentRepositoryInterface::class, StudentRepository::class);
         $this->app->bind(InstructorRepositoryInterface::class, InstructorRepository::class);
         $this->app->bind(ArrayHelper::class);
+        $this->app->bind(AssignmentStudentRepositoryInterface::class, AssignmentStudentRepository::class); // 👈 Added this line
     }
 
     /**

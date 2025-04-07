@@ -1,36 +1,14 @@
-### Update Profile with Image Upload (Manual Multipart Request)
-POST http://127.0.0.1:8000/api/v1/auth/update-profile/
+POST http://127.0.0.1:8000/api/v1/assignment-students
 Accept: application/json
-Authorization: Bearer 9|REEUdtzBhZ9LlOBsAyJoacCA5dLvgdLeendyZajh53ee16ba
+Authorization: Bearer 9|RPzm8V9ZBK9IiLvdpgPh0Whca4xdROr2SyQvTzV37e00f32f
 Content-Type: multipart/form-data; boundary=----MyBoundary
 
 ----MyBoundary
-Content-Disposition: form-data; name="_method"
+Content-Disposition: form-data; name="assignment_id"
 
-PATCH
+1
 ----MyBoundary
-Content-Disposition: form-data; name="username"
+Content-Disposition: form-data; name="student_id"
 
-camille88
-----MyBoundary
-Content-Disposition: form-data; name="first_name"
-
-Admin
-----MyBoundary
-Content-Disposition: form-data; name="last_name"
-
-Admin
-----MyBoundary
-Content-Disposition: form-data; name="phone"
-
-1234567890
-----MyBoundary
-Content-Disposition: form-data; name="gender"
-
-male
-----MyBoundary
-Content-Disposition: form-data; name="image_url"; filename="image.jpg"
-Content-Type: image/jpeg
-
-< ./image.jpg
+2
 ----MyBoundary--

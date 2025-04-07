@@ -15,8 +15,10 @@ use App\Http\Controllers\{
     CourseMaterialController,
     StudyPlanCourseController,
     StudyPlanCourseInstructorController,
-    StudyPlanCourseInstructorSubGroupController
+    StudyPlanCourseInstructorSubGroupController,
+    AssignmentStudentController
 };
+
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Course\CourseController;
 use App\Http\Controllers\Department\DepartmentController;
@@ -84,6 +86,8 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('spci_subgroups', StudyPlanCourseInstructorSubGroupController::class);
         Route::apiResource('assignment', AssignmentController::class);
         Route::apiResource('absence', AbsenceController::class);
+        Route::apiResource('assignment-students', AssignmentStudentController::class);
+
 
         // Extra Department routes
         Route::get('/departments/levels/{departmentId}', [DepartmentController::class, 'getLevels']);
