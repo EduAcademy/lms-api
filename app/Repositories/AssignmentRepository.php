@@ -151,4 +151,44 @@ class AssignmentRepository implements AssignmentRepositoryInterface
 
         return $assignments->values()->toArray();
     }
+
+    public function getbySubGroupId($subGroupId)
+    {
+        $assignments = Assignment::with([
+            'group',
+            'subGroup',
+            'studyPlanCourse'
+        ])
+            ->whereHas('group', function ($query) use ($subGroupId) {
+                $query->where('subgroup_id', $subGroupId);
+            })
+            ->get()
+            ->map(function ($assignment) {
+                return [
+                    "id" => $assignment->id,
+                    "title" => $assignment->title,
+                    "instructions" => $assignment->instructions,
+                    "due_date" => $assignment->due_date,
+                    "InstructorId" => $assignment->instructor_id,
+                    "study_plan_course_instructor_id" => $assignment->study_plan_course_instructor_id,
+                    "study_plan_course_instructor_sub_group_id" => $assignment->study_plan_course_instructor_sub_group_id,
+                    "GroupId" => optional($assignment->group)->id,
+                    "GroupName" => optional($assignment->group)->name,
+                    "SubGroupId" => optional($assignment->subGroup)->id,
+                    "SubGroupName" => optional($assignment->subGroup)->name,
+                    "CourseId" => optional($assignment->studyPlanCourse->course)->id,
+                    "CourseName" => optional($assignment->studyPlanCourse->course)->name,
+                    "DepartmentId" => optional($assignment->studyPlanCourse->Department)->id,
+                    "DepartmentName" => optional($assignment->studyPlanCourse->Department)->name,
+                    "LevelId" => optional($assignment->studyPlanCourse->Level)->id,
+                    "LeveltName" => optional($assignment->studyPlanCourse->Level)->name,
+                    "SemesterId" => optional($assignment->studyPlanCourse)->semester,
+                    "SemesterName" => 'Semester' . optional($assignment->studyPlanCourse)->semester
+
+                ];
+            });
+
+
+        return $assignments->values()->toArray();
+    }
 }

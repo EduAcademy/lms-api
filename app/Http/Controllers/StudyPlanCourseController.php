@@ -112,7 +112,12 @@ class StudyPlanCourseController extends Controller
     {
         //
         $result = $this->spCourseService->getCourseByInstructorId($department_id, $level_id, $semester, $instructorId);
+        return $result;
+    }
 
+    public function getCourseByGroupId($department_id, $level_id, $semester, $groupId)
+    {
+        $result = $this->spCourseService->getCourseByGroupId($department_id, $level_id, $semester, $groupId);
         return $result;
     }
 }

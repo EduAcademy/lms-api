@@ -22,6 +22,7 @@ class StudentsSeeder extends Seeder
         $studyPlanIds = DB::table('study_plans')->pluck('id');
         $groupIds = DB::table('groups')->pluck('id');
         $subGroupIds = DB::table('sub_groups')->pluck('id');
+        $levelIds = DB::table('levels')->pluck('id');
 
         // Fetch the student role by its name
         $studentRole = DB::table('roles')->where('name', 'student')->first();
@@ -35,7 +36,8 @@ class StudentsSeeder extends Seeder
             $departmentIds->isEmpty() ||
             $studyPlanIds->isEmpty() ||
             $groupIds->isEmpty() ||
-            $subGroupIds->isEmpty()
+            $subGroupIds->isEmpty() ||
+            $levelIds->isEmpty()
         ) {
             $this->command->warn("Some related tables are empty. Please seed departments, study plans, groups, and sub-groups first.");
             return;
@@ -66,6 +68,7 @@ class StudentsSeeder extends Seeder
                 'user_id'        => $user->id,
                 'group_id'       => $faker->randomElement($groupIds),
                 'sub_group_id'   => $faker->randomElement($subGroupIds),
+                'level_id'       => $faker->randomElement($levelIds),
                 'created_at'     => now(),
                 'updated_at'     => now(),
             ]);

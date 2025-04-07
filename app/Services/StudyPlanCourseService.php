@@ -150,14 +150,14 @@ class StudyPlanCourseService implements StudyPlanCourseServiceInterface
         //
         $result = $this->sPCourseRepository->getCoursBySemesterId($department_id, $level_id, $semester);
 
-        return $result;
+        return Result::success($result, 'Get Course by department and level also by semester', StatusResponse::HTTP_OK);
     }
     public function getGroupByCourseid($department_id, $level_id, $semesterId, $courseid)
     {
 
         $result = $this->sPCourseRepository->getGroupByCourseid($department_id, $level_id, $semesterId, $courseid);
 
-        return $result;
+        return Result::success($result, 'Get Group by department and level semesert also by course', StatusResponse::HTTP_OK);
 
     }
     public function getSubGroupByGroupid($department_id, $level_id, $semesterId, $courseid, $groupid)
@@ -171,5 +171,11 @@ class StudyPlanCourseService implements StudyPlanCourseServiceInterface
         $result = $this->sPCourseRepository->getCourseByInstructorId($department_id, $level_id, $semester, $instructorId);
 
         return $result;
+    }
+
+    public function getCourseByGroupId($department_id, $level_id, $semester, $groupId)
+    {
+        $result = $this->sPCourseRepository->getCourseByGroupId($department_id, $level_id, $semester, $groupId);
+        return Result::success($result, 'Get Courses by department and level semesert also by group for logged in student', StatusResponse::HTTP_OK);
     }
 }

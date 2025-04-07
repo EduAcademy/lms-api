@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Interfaces\Services\AbsenceServiceInterface;
 use App\Services\RoleService;
 use App\Services\UserService;
 use App\Services\GroupService;
@@ -36,6 +37,7 @@ use App\Interfaces\Services\StudyPlanCourseServiceInterface;
 use App\Interfaces\Services\StudyPlanCourseInstructorServiceInterface;
 use App\Interfaces\Services\StudyPlanCourseInstructorSubGroupServiceInterface;
 use App\Interfaces\Services\GroupServiceInterface as ServicesGroupServiceInterface;
+use App\Services\AbsenceService;
 
 class ServicesServiceProvider extends ServiceProvider
 {
@@ -61,6 +63,7 @@ class ServicesServiceProvider extends ServiceProvider
         $this->app->bind(NotificationServiceInterface::class, NotificationService::class);
         $this->app->bind(LevelServiceInterface::class, LevelService::class);
         $this->app->bind(AssignmentServiceInterface::class, AssignmentService::class);
+        $this->app->bind(AbsenceServiceInterface::class, AbsenceService::class);
 
     }
 

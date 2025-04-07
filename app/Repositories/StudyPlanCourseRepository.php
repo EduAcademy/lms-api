@@ -73,6 +73,28 @@ class StudyPlanCourseRepository implements StudyPlanCourseRepositoryInterface
 
         return $data;
     }
+
+
+    public function getCourseByGroupId($department_id, $level_id, $semester, $groupId)
+    {
+        $data = StudyPlanCourse::with(['course', 'instructors.group'])
+            ->where('department_id', $department_id)
+            ->where('level_id', $level_id)
+            ->where('semester', $semester)
+            ->whereHas('instructors.group', function ($query) use ($groupId) {
+                $query->where('instructor_id', $groupId);
+            })
+            ->get()
+            ->map(function ($spc) {
+                return [
+                    'id' => $spc->course->id,
+                    'name' => $spc->course->name
+                ];
+            });
+
+        return $data;
+    }
+
     public function getGroupByCourseid($department_id, $level_id, $semesterId, $courseid)
     {
         $data = StudyPlanCourse::with(['instructors.group'])

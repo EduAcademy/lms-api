@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Helpers\ArrayHelper;
 use Illuminate\Support\ServiceProvider;
 use App\Interfaces\Services\StatsServiceInterface;
 use App\Services\StatsService;
@@ -20,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(StatsServiceInterface::class, StatsService::class);
         $this->app->bind(StudentRepositoryInterface::class, StudentRepository::class);
         $this->app->bind(InstructorRepositoryInterface::class, InstructorRepository::class);
+        $this->app->bind(ArrayHelper::class);
     }
 
     /**

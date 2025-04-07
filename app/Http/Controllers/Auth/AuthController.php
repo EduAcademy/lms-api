@@ -41,7 +41,7 @@ class AuthController extends Controller
 
     public function register(SignUpRequest $request)
     {
-
+        Log::info($request);
         $data = $request->validated();
         $response = $this->user_service->registerUser($data);
         return $response;

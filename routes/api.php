@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
+    AbsenceController,
     RoleController,
     GroupController,
     LevelController,
@@ -82,6 +83,7 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('spc_instructors', StudyPlanCourseInstructorController::class);
         Route::apiResource('spci_subgroups', StudyPlanCourseInstructorSubGroupController::class);
         Route::apiResource('assignment', AssignmentController::class);
+        Route::apiResource('absence', AbsenceController::class);
 
         // Extra Department routes
         Route::get('/departments/levels/{departmentId}', [DepartmentController::class, 'getLevels']);
@@ -109,14 +111,21 @@ Route::prefix('v1')->group(function () {
         Route::get('/study_plan_courses/group/{department_id}/{level_id}/{semesterId}/{courseid}', [StudyPlanCourseController::class, 'getGroupByCourseid']);
         Route::get('/study_plan_courses/subgroup/{department_id}/{level_id}/{semesterId}/{courseid}/{groupid}', [StudyPlanCourseController::class, 'getSubGroupByGroupid']);
 
+        //return all courses for the logged in instructor
         Route::get('/study_plan_courses/getCourseInstructor/{department_id}/{level_id}/{semesterId}/{instructorId}', [StudyPlanCourseController::class, 'getCourseByInstructorId']);
+        //return all courses for the logged in student
+        Route::get('/study_plan_courses/getCourseStudent/{department_id}/{level_id}/{semesterId}/{groupId}', [StudyPlanCourseController::class, 'getCourseByGroupId']);
 
         Route::get('/spc_instructors/getDepartmentInstructor/{instructorId}', [StudyPlanCourseInstructorController::class, 'getDepartmentsByInstructorId']);
 
         // assignment
 
+        //get all assignmentes assigned by the loggedin instructor
         Route::get('/assignment/instructor/{instructorId}', [AssignmentController::class, 'getbyInstructorId']);
+
+        // get all assignments assigned to a student by group Id or subgroup Id
         Route::get('/assignment/group/{groupId}', [AssignmentController::class, 'getbyGroupId']);
+        Route::get('/assignment/subgroup/{subGroupId}', [AssignmentController::class, 'getbySubGroupId']);
 
         // Notification routes
         Route::prefix('notifications')->group(function () {

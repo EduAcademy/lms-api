@@ -49,4 +49,9 @@ class Student extends Model
     {
         return $this->belongsTo(SubGroups::class);
     }
+
+    public function absences()
+    {
+        return $this->hasMany(Absence::class);
+    }
 }

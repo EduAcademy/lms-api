@@ -33,10 +33,10 @@ class SignUpRequest extends FormRequest
         ];
     }
 
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'role_id' => $this->role ?? 3, // Set default role ID to 3 if not provided
-        ]);
-    }
+    // protected function prepareForValidation()
+    // {
+    //     $this->merge([
+    //         'role_id' => $this->role ?? 3, // Set default role ID to 3 if not provided
+    //     ]);
+    // }
 }

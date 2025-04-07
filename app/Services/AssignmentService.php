@@ -128,6 +128,17 @@ class AssignmentService implements AssignmentServiceInterface
         return Result::success($assignments, 'Assignments found successfully', StatusResponse::HTTP_OK);
     }
 
+    public function getbySubGroupId($subGroupId)
+    {
+        $assignments = $this->assignmentRepository->getbySubGroupId($subGroupId);
+
+        if (!$assignments) {
+            return Result::error("No assignments found for subgroup ID {$subGroupId}", StatusResponse::HTTP_NOT_FOUND);
+        }
+
+        return Result::success($assignments, 'Assignments found successfully', StatusResponse::HTTP_OK);
+    }
+
     /**
      * Handle notification logic after assignment creation.
      */
@@ -139,7 +150,7 @@ class AssignmentService implements AssignmentServiceInterface
 
         if ($data['status'] === 200) {
             $instructorData = $data['data'];
-            
+
             // Optional: update assignment instructor_id in DB if needed
             $assignment['instructor_id'] = $instructorData['instructor_id'];
 

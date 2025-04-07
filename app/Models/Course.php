@@ -29,4 +29,9 @@ class Course extends Model
     {
         return $this->hasMany(StudyPlanCourse::class);
     }
+
+    public function absences()
+    {
+        return $this->hasMany(Absence::class);
+    }
 }

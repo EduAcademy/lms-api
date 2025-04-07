@@ -36,4 +36,10 @@ class Groups extends Model
     {
         return $this->hasMany(StudyPlanCourseInstructor::class);
     }
+
+
+    public function absences()
+    {
+        return $this->hasMany(Absence::class);
+    }
 }

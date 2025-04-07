@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Services\AssignmentService;
 use App\Http\Requests\AssignmentRequest;
 use App\Interfaces\Services\AssignmentServiceInterface;
+use Illuminate\Support\Facades\Log;
 
 class AssignmentController extends Controller
 {
@@ -25,6 +26,7 @@ class AssignmentController extends Controller
 
     public function store(Request $request)
     {
+        Log::info($request->all());
         $result = $this->assignmentServiceInterface->createAssignment($request->all());
         return response()->json($result);
     }
@@ -55,6 +57,12 @@ class AssignmentController extends Controller
     public function getbyGroupId($groupId)
     {
         $result = $this->assignmentServiceInterface->getbyGroupId($groupId);
+        return response()->json($result);
+    }
+
+    public function getbySubGroupId($subGroupId)
+    {
+        $result = $this->assignmentServiceInterface->getbySubGroupId($subGroupId);
         return response()->json($result);
     }
 }

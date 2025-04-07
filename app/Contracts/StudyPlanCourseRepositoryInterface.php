@@ -16,4 +16,5 @@ interface StudyPlanCourseRepositoryInterface
     public function getGroupByCourseid($department_id, $level_id, $semesterId, $courseid);
     public function getSubGroupByGroupid($department_id, $level_id, $semesterId, $courseid, $groupid);
     public function getCourseByInstructorId($department_id, $level_id, $semester, $instructorId);
+    public function getCourseByGroupId($department_id, $level_id, $semester, $groupId);
 }

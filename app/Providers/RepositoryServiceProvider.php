@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Contracts\AbsenceRepositoryInterface;
 use App\Repositories\UserRepository;
 use App\Repositories\GroupRepository;
 use App\Repositories\LevelRepository;
@@ -35,6 +36,7 @@ use App\Repositories\StudyPlanCourseInstructorRepository;
 use App\Contracts\StudyPlanCourseInstructorRepositoryInterface;
 use App\Repositories\StudyPlanCourseInstructorSubGroupRepository;
 use App\Contracts\StudyPlanCourseInstructorSubGroupRepositoryInterface;
+use App\Repositories\AbsenceRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -60,6 +62,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(NotificationRepositoryInterface::class, NotificationRepository::class);
         $this->app->bind(LevelRepositoryInterface::class, LevelRepository::class);
         $this->app->bind(AssignmentRepositoryInterface::class, AssignmentRepository::class);
+        $this->app->bind(AbsenceRepositoryInterface::class, AbsenceRepository::class);
     }
 
     /**

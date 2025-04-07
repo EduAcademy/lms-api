@@ -58,4 +58,10 @@ class Instructor extends Model
     {
         return $this->hasMany(StudyPlanCourseInstructorSubGroup::class);
     }
+
+
+    public function absences()
+    {
+        return $this->hasMany(Absence::class);
+    }
 }

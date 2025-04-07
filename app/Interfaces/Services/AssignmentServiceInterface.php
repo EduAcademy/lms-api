@@ -12,4 +12,5 @@ interface AssignmentServiceInterface
     public function deleteAssignment($id);
     public function getbyInstructorId($instructorId);
     public function getbyGroupId($groupId);
+    public function getbySubGroupId($subGroupId);
 }
