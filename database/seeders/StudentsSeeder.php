@@ -48,7 +48,7 @@ class StudentsSeeder extends Seeder
             // Set fixed default values
             $defaultUuid = '2210000'; // A fixed 8-digit number; change as needed.
             $defaultEmail = 'messi@su.edu.ye';
-            $defaultImage = 'users/1.jpg';
+            $defaultImage = 'users/7.jpg';
 
             // Create default user for student 
             $defaultUser = User::factory()->create([
