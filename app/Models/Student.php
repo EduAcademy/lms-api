@@ -54,4 +54,9 @@ class Student extends Model
     {
         return $this->hasMany(Absence::class);
     }
+
+    public function assignment_submissions()
+    {
+        return $this->hasMany(AssignmentSubmission::class);
+    }
 }

@@ -16,6 +16,7 @@ class AssignmentSubmission extends Model
         'file_url',
         'assignment_status_id',
         'assignment_id',
+        'student_id',
     ];
 
     public function assignment_status()
@@ -26,5 +27,10 @@ class AssignmentSubmission extends Model
     public function assignment()
     {
         return $this->belongsTo(Assignment::class);
+    }
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
     }
 }

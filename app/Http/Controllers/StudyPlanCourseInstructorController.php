@@ -62,6 +62,18 @@ class StudyPlanCourseInstructorController extends Controller
         return $result;
     }
 
+    public function getGroupByInstructorCourse($instructorId, $courseId, $levelId)
+    {
+        $result = $this->spCInstructorService->getGroupByInstructorCourse($instructorId, $courseId, $levelId);
+        return $result;
+    }
+
+    public function getLevelsByInstructorAndCourse($instructorId, $courseId)
+    {
+        $result = $this->spCInstructorService->getLevelsByInstructorAndCourse($instructorId, $courseId);
+        return $result;
+    }
+
     /**
      * Update the specified resource in storage.
      */

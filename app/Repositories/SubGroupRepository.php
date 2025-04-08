@@ -32,7 +32,8 @@ class SubGroupRepository implements SubGroupRepositoryInterface
 
     public function getByInstructorId($instructorId)
     {
-        $result = SubGroups::with('instructor')->get();
+        $result = SubGroups::where('instructor_id', $instructorId)
+            ->get();
         return $result;
     }
 

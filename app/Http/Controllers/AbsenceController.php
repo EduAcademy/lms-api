@@ -16,6 +16,11 @@ class AbsenceController extends Controller
         $this->absenceServiceInterface = $absenceServiceInterface;
     }
 
+    public function index()
+    {
+        return $this->absenceServiceInterface->getAllAbsence();
+    }
+
     public function store(AbsenceRequest $request)
     {
         $data = $request->validated();

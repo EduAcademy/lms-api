@@ -159,8 +159,8 @@ class AssignmentRepository implements AssignmentRepositoryInterface
             'subGroup',
             'studyPlanCourse'
         ])
-            ->whereHas('group', function ($query) use ($subGroupId) {
-                $query->where('subgroup_id', $subGroupId);
+            ->whereHas('subGroup', function ($query) use ($subGroupId) {
+                $query->where('sub_group_id', $subGroupId);
             })
             ->get()
             ->map(function ($assignment) {
@@ -184,7 +184,6 @@ class AssignmentRepository implements AssignmentRepositoryInterface
                     "LeveltName" => optional($assignment->studyPlanCourse->Level)->name,
                     "SemesterId" => optional($assignment->studyPlanCourse)->semester,
                     "SemesterName" => 'Semester' . optional($assignment->studyPlanCourse)->semester
-
                 ];
             });
 

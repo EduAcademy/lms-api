@@ -18,7 +18,7 @@ class SubGroups extends Model
     ];
 
 
-    public function group() : BelongsTo
+    public function group(): BelongsTo
     {
         return $this
             ->belongsTo(Groups::class)
@@ -27,9 +27,7 @@ class SubGroups extends Model
 
     public function instructor()
     {
-        return $this
-        ->belongsTo(Instructor::class)
-        ->withDefault(Instructor::default());
+        return $this->belongsTo(Instructor::class)->withDefault();
     }
 
     public function students()
@@ -41,5 +39,4 @@ class SubGroups extends Model
     {
         return $this->hasMany(StudyPlanCourseInstructorSubGroup::class);
     }
-    
 }

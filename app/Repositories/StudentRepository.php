@@ -38,10 +38,12 @@ class StudentRepository implements StudentRepositoryInterface
     {
         return Student::with('user:id,first_name,last_name')
             ->where('group_id', $groupId)
-            ->get(['id', 'user_id'])
+            ->get(['id', 'user_id', 'uuid'])
             ->map(fn($student) => [
-                'id' => $student->user_id,
-                'name' => $student->user->first_name . ' ' . $student->user->last_name
+                'id' => $student->id,
+                'user_id' => $student->user_id,
+                'name' => $student->user->first_name . ' ' . $student->user->last_name,
+                'uuid' => $student->uuid,
             ]);
     }
 

@@ -47,10 +47,10 @@ class StudentService implements StudentServiceInterface
                     $query->select('id', 'name');
                 }
             ])
-            ->whereHas('user', function ($query) {
-                $query->where('role_id', 3);
-            })
-            ->get();
+                ->whereHas('user', function ($query) {
+                    $query->where('role_id', 3);
+                })
+                ->get();
 
             return Result::success($result, MessageResponse::RETRIEVED_SUCCESSFULLY, StatusResponse::HTTP_OK);
         } catch (Exception $e) {
@@ -156,6 +156,16 @@ class StudentService implements StudentServiceInterface
         ]);
 
         return Result::success($students, 'Students found Successfully by department', StatusResponse::HTTP_OK);
+    }
+
+    public function getStudentsByGroup($groupId)
+    {
+        $students = $this->studentRepository->findByGroupId($groupId);
+
+        if ($students->isEmpty()) {
+            return Result::error('No students found for the given department', StatusResponse::HTTP_NOT_FOUND);
+        }
+        return Result::success($students, 'Students found Successfully by Group', StatusResponse::HTTP_OK);
     }
 
     public function count(): int

@@ -64,4 +64,38 @@ class StudyPlanCourseInstructorRepository implements StudyPlanCourseInstructorRe
             });
         return $data;
     }
+
+    public function getLevelsByInstructorAndCourse($instructorId, $courseId)
+    {
+        return StudyPlanCourseInstructor::where('instructor_id', $instructorId)
+            ->whereHas('sp_course', function ($query) use ($courseId) {
+                $query->where('course_id', $courseId);
+            })
+            ->with('sp_course:id,level_id')
+            ->get()
+            ->pluck('sp_course.level_id')
+            ->unique()
+            ->values();
+    }
+
+    public function getGroupByInstructorCourse($instructorId, $courseId, $levelId)
+    {
+        $groups = StudyPlanCourseInstructor::where('instructor_id', $instructorId)
+            ->whereHas('sp_course', function ($query) use ($courseId, $levelId) {
+                $query->where('course_id', $courseId)
+                    ->where('level_id', $levelId);
+            })
+            ->with('group')
+            ->get()
+            ->map(function ($instructor) {
+                return [
+                    'group_id' => $instructor->group_id,
+                    'group_name' => $instructor->group->name
+                ];
+            })
+            ->unique('group_id')
+            ->values();
+
+        return $groups;
+    }
 }

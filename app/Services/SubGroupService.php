@@ -92,7 +92,7 @@ class SubGroupservice implements SubGroupServiceInterface
         return Result::success($result, 'Sub group is found Successfully by InstructorId', StatusResponse::HTTP_OK);
     }
 
-    
+
 
     public function updateSubGroup($id, array $data)
     {

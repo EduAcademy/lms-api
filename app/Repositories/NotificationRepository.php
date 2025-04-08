@@ -50,6 +50,13 @@ class NotificationRepository implements NotificationRepositoryInterface
         })->pluck('id');
     }
 
+    public function getSubGroupStudentUsers($subGroupId)
+    {
+        return User::whereHas('student', function($query) use ($subGroupId) {
+            $query->where('sub_group_id', $subGroupId);
+        })->pluck('id');
+    }
+
     public function getStudentUser($studentId)
     {
         return Student::findOrFail($studentId)->user()->value('id');

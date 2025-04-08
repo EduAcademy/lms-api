@@ -23,6 +23,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Course\CourseController;
 use App\Http\Controllers\Department\DepartmentController;
 use App\Http\Controllers\Instructor\InstructorController;
+use App\Models\Student;
 use App\Models\StudyPlanCourseInstructor;
 
 Route::prefix('v1')->group(function () {
@@ -92,6 +93,8 @@ Route::prefix('v1')->group(function () {
         // Extra Department routes
         Route::get('/departments/levels/{departmentId}', [DepartmentController::class, 'getLevels']);
 
+        Route::get('/students/group/{groupId}', [StudentController::class, 'getStudentsByGroupId']);
+
         // Extra Course routes
         Route::get('/courses/department/{departmentId}', [CourseController::class, 'showbyDepartment']);
 
@@ -105,6 +108,7 @@ Route::prefix('v1')->group(function () {
         // Extra Sub Group routes
         Route::get('/sub_groups/sub_group/{name}', [SubGroupController::class, 'showByName']);
         Route::get('/sub_groups/group/{id}', [SubGroupController::class, 'showByGroupId']);
+        Route::get('/sub_groups/instructor/{instructorId}', [SubGroupController::class, 'getSubGroupByInstructorId']);
 
         // Extra Level routes
         Route::get('/levels/{levelId}', [LevelController::class, 'getAllGroupsByLevel']);
@@ -114,6 +118,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/study_plan_courses/course/{department_id}/{level_id}/{semester}', [StudyPlanCourseController::class, 'getCoursBySemesterId']);
         Route::get('/study_plan_courses/group/{department_id}/{level_id}/{semesterId}/{courseid}', [StudyPlanCourseController::class, 'getGroupByCourseid']);
         Route::get('/study_plan_courses/subgroup/{department_id}/{level_id}/{semesterId}/{courseid}/{groupid}', [StudyPlanCourseController::class, 'getSubGroupByGroupid']);
+        Route::get('/study_plan_courses/courses/{instructorId}', [StudyPlanCourseController::class, 'getCoursesByInstructor']);
 
         //return all courses for the logged in instructor
         Route::get('/study_plan_courses/getCourseInstructor/{department_id}/{level_id}/{semesterId}/{instructorId}', [StudyPlanCourseController::class, 'getCourseByInstructorId']);
@@ -121,6 +126,8 @@ Route::prefix('v1')->group(function () {
         Route::get('/study_plan_courses/getCourseStudent/{department_id}/{level_id}/{semesterId}/{groupId}', [StudyPlanCourseController::class, 'getCourseByGroupId']);
 
         Route::get('/spc_instructors/getDepartmentInstructor/{instructorId}', [StudyPlanCourseInstructorController::class, 'getDepartmentsByInstructorId']);
+        Route::get('/spc_instructors/levels/{instructorId}/{courseId}', [StudyPlanCourseInstructorController::class, 'getLevelsByInstructorAndCourse']);
+        Route::get('/spc_instructors/groups/{instructorId}/{courseId}/{levelId}', [StudyPlanCourseInstructorController::class, 'getGroupByInstructorCourse']);
 
         // assignment
 
@@ -139,8 +146,6 @@ Route::prefix('v1')->group(function () {
             Route::post('/student', [NotificationController::class, 'notifyStudent']);
             Route::get('/getNotificationsByReceiver/{receiverId}', [NotificationController::class, 'getNotificationsByReceiverId']);
         });
-
-
 
         // Stats
         Route::prefix('stats')->group(function () {

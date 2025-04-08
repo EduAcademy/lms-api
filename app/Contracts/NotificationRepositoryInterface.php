@@ -10,4 +10,5 @@ interface NotificationRepositoryInterface
     public function getGroupStudentUsers($groupId);
     public function getStudentUser($studentId);
     public function getNotificationsByReceiverId($receiverId);
+    public function getSubGroupStudentUsers($subGroupId);
 }

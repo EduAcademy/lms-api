@@ -13,4 +13,5 @@ interface StudentServiceInterface
     public function updateStudent($id, array $data);
     public function getStudentsByDepartment($departmentId);
     public function count(): int;
+    public function getStudentsByGroup($groupId);
 }

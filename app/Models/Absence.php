@@ -13,6 +13,7 @@ class Absence extends Model
         'group_id',
         'student_id',
         'instructor_id',
+        'lecture_no',
     ];
 
 

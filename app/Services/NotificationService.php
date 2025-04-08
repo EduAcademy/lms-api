@@ -47,6 +47,15 @@ class NotificationService implements NotificationServiceInterface
         );
     }
 
+    public function sendToSubGroup($senderId, $subGroupId, $content)
+    {
+        $userIds = $this->notificationRepo->getSubGroupStudentUsers($subGroupId);
+        return $this->notificationRepo->createNotificationWithReceivers(
+            ['sender_id' => $senderId, 'content' => $content],
+            $userIds->toArray()
+        );
+    }
+
     public function sendToStudent($senderId, $studentId, $content)
     {
         $userId = $this->notificationRepo->getStudentUser($studentId);

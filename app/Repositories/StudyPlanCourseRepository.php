@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Contracts\StudyPlanCourseRepositoryInterface;
 use App\Models\StudyPlanCourse;
+use Illuminate\Support\Facades\Log;
 
 class StudyPlanCourseRepository implements StudyPlanCourseRepositoryInterface
 {
@@ -120,21 +121,23 @@ class StudyPlanCourseRepository implements StudyPlanCourseRepositoryInterface
     }
     public function getSubGroupByGroupid($department_id, $level_id, $semesterId, $courseid, $groupid)
     {
-        $data = StudyPlanCourse::with(['instructors.spci_sub_groups.sub_group'])
+        $data = StudyPlanCourse::with(['instructors' => function ($query) use ($groupid) {
+            $query->where('group_id', $groupid)
+                ->with(['spci_sub_groups.subGroup']);
+        }])
             ->where('department_id', $department_id)
             ->where('level_id', $level_id)
             ->where('semester', $semesterId)
             ->where('course_id', $courseid)
             ->get()
-            ->flatMap(function ($spc) use ($groupid) {
+            ->flatMap(function ($spc) {
                 return $spc->instructors
-                    ->where('group_id', $groupid) // ← الشرط الخاص بالجروب هنا
                     ->flatMap(function ($instructor) {
                         return $instructor->spci_sub_groups->map(function ($subGroupRelation) {
                             return [
                                 'studyPlanCourseInstructorSubGroupId' => $subGroupRelation->id,
-                                'id' => $subGroupRelation->sub_group->id ?? null,
-                                'name' => $subGroupRelation->sub_group->name ?? null,
+                                'id' => $subGroupRelation->subGroup->id ?? null,
+                                'name' => $subGroupRelation->subGroup->name ?? null,
                             ];
                         });
                     });
@@ -142,6 +145,7 @@ class StudyPlanCourseRepository implements StudyPlanCourseRepositoryInterface
             ->filter(fn($item) => $item['id'] !== null)
             ->unique('id')
             ->values();
+
         return $data;
     }
 
@@ -178,5 +182,21 @@ class StudyPlanCourseRepository implements StudyPlanCourseRepositoryInterface
     {
         $result = StudyPlanCourse::with('course', $courseId)->get();
         return $result;
+    }
+
+    public function getCoursesByInstructor($instructorId)
+    {
+        $courses = StudyPlanCourse::whereHas('instructors', function ($query) use ($instructorId) {
+            $query->where('instructor_id', $instructorId);
+        })
+            ->with('course')
+            ->get()
+            ->map(function ($spc) {
+                return [
+                    'course_id' => $spc->course_id,
+                    'name' => $spc->course->name
+                ];
+            });
+        return $courses;
     }
 }

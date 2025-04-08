@@ -70,6 +70,11 @@ class StudentController extends Controller
         return response()->json(['message' => 'File uploaded and processed successfully.']);
     }
 
+    public function getStudentsByGroupId($groupId)
+    {
+        return $this->studentService->getStudentsByGroup($groupId);
+    }
+
     public function show($id)
     {
         // Get the specific student from the service (eager loading is handled in the service)

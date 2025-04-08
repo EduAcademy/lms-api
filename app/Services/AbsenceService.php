@@ -54,4 +54,11 @@ class AbsenceService implements AbsenceServiceInterface
             return Result::error('An error occurred while creating Absence', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    public function getAllAbsence()
+    {
+        $result = $this->absenceRepositoryInterface->getAll();
+        return Result::success($result, 'Get All Absence', StatusResponse::HTTP_OK);
+    }
+
 }

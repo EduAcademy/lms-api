@@ -28,6 +28,7 @@ class AbsenceRequest extends FormRequest
             'student_id.*' => 'integer|exists:students,id',
             'group_id' => 'required|integer|exists:groups,id',
             'instructor_id' => 'required|integer|exists:instructors,id',
+            'lecture_no' => 'required|integer',
         ];
     }
 }

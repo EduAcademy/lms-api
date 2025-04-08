@@ -12,6 +12,7 @@ use App\Contracts\AssignmentRepositoryInterface;
 use App\Interfaces\Services\AssignmentServiceInterface;
 use App\Interfaces\Services\NotificationServiceInterface;
 use App\Interfaces\Services\StudyPlanCourseInstructorServiceInterface;
+use App\Interfaces\Services\StudyPlanCourseInstructorSubGroupServiceInterface;
 use Illuminate\Support\Facades\Log;
 
 class AssignmentService implements AssignmentServiceInterface
@@ -20,16 +21,19 @@ class AssignmentService implements AssignmentServiceInterface
     protected $genericRepository;
     protected $spCInstructorService;
     protected $notificationService;
+    protected $sPCInstructorSubGroupService;
 
     public function __construct(
         AssignmentRepositoryInterface $assignmentRepository,
         StudyPlanCourseInstructorServiceInterface $spCInstructorService,
-        NotificationServiceInterface $notificationService
+        NotificationServiceInterface $notificationService,
+        StudyPlanCourseInstructorSubGroupServiceInterface $sPCInstructorSubGroupService
     ) {
         $this->assignmentRepository = $assignmentRepository;
         $this->genericRepository = new GenericRepository(new Assignment());
         $this->spCInstructorService = $spCInstructorService;
         $this->notificationService = $notificationService;
+        $this->sPCInstructorSubGroupService = $sPCInstructorSubGroupService;
     }
 
     public function getAllAssignment()
@@ -144,8 +148,28 @@ class AssignmentService implements AssignmentServiceInterface
      */
     protected function sendAssignmentNotification(array $assignment)
     {
-        $response = $this->spCInstructorService->getSpCInstructorById($assignment['study_plan_course_instructor_id']);
 
+        if($assignment['study_plan_course_instructor_sub_group_id'])
+        {
+            Log::info('The Dtat coming frm the front : ' .$assignment['study_plan_course_instructor_sub_group_id']);
+            $response = $this->sPCInstructorSubGroupService->getSpCInstSubGrouById($assignment['study_plan_course_instructor_sub_group_id']);
+            $data = $response->getData(true);//
+
+            if ($data['status'] === 200) {
+                $instructorData = $data['data'];
+
+                // Optional: update assignment instructor_id in DB if needed
+                $assignment['instructor_id'] = $instructorData['instructor_id'];
+
+                $this->notificationService->sendToSubGroup(
+                    auth()->id(),
+                    $instructorData['sub_group_id'],
+                    $assignment['title']
+                );
+            }
+        }
+        $response = $this->spCInstructorService->getSpCInstructorById($assignment['study_plan_course_instructor_id']);
+        Log::info('Subgroup is null ' . $response);
         $data = $response->getData(true);//
 
         if ($data['status'] === 200) {

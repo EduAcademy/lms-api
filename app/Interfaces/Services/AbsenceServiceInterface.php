@@ -6,4 +6,5 @@ interface AbsenceServiceInterface
 {
     //
     public function createAbsence(array $data);
+    public function getAllAbsence();
 }
