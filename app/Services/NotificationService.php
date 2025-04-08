@@ -18,7 +18,7 @@ class NotificationService implements NotificationServiceInterface
     }
 
 
-
+    
     public function notifyAllStudents($senderId, $content)
     {
         $userIds = $this->notificationRepo->getAllStudentUsers();

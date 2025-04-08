@@ -58,6 +58,22 @@ class NotificationController extends Controller
         return response()->json(['message' => 'Notifications sent successfully']);
     }
 
+    public function notifyStudent(Request $request)
+    {
+        $validated = $request->validate([
+            'student_id' => 'required|exists:groups,id',
+            'message' => 'required|string|max:500',
+        ]);
+
+        $this->notificationService->sendToStudent(
+            auth()->id(),
+            $validated['student_id'],
+            $validated['message']
+        );
+
+        return response()->json(['message' => 'Notifications sent to this student Id : ' . $validated['student_id']]);
+    }
+
     public function getNotificationsByReceiverId($receiverId)
     {
         $notifications = $this->notificationService->getNotificationsByReceiverId($receiverId);
