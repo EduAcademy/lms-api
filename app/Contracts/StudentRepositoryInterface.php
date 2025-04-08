@@ -9,5 +9,6 @@ interface StudentRepositoryInterface
     public function create(array $data);
     public function findByDepartmentId($departmentId);
     public function findByGroupId($groupId);
+    public function findByUserId($userId);
     public function count(): int;
 }

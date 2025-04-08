@@ -94,6 +94,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/departments/levels/{departmentId}', [DepartmentController::class, 'getLevels']);
 
         Route::get('/students/group/{groupId}', [StudentController::class, 'getStudentsByGroupId']);
+        Route::get('/students/user/{userId}', [StudentController::class, 'findByUserId']);
 
         // Extra Course routes
         Route::get('/courses/department/{departmentId}', [CourseController::class, 'showbyDepartment']);

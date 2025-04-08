@@ -163,7 +163,7 @@ class StudentService implements StudentServiceInterface
         $students = $this->studentRepository->findByGroupId($groupId);
 
         if ($students->isEmpty()) {
-            return Result::error('No students found for the given department', StatusResponse::HTTP_NOT_FOUND);
+            return Result::error('No students found for the given group', StatusResponse::HTTP_NOT_FOUND);
         }
         return Result::success($students, 'Students found Successfully by Group', StatusResponse::HTTP_OK);
     }
@@ -172,4 +172,15 @@ class StudentService implements StudentServiceInterface
     {
         return $this->studentRepository->count();
     }
+
+    public function findByUserId($userId)
+    {
+        $students = $this->studentRepository->findByUserId($userId);
+
+        if ($students->isEmpty()) {
+            return Result::error('No students found for the given user', StatusResponse::HTTP_NOT_FOUND);
+        }
+        return Result::success($students, 'Students found Successfully by user', StatusResponse::HTTP_OK);
+    }
+
 }
