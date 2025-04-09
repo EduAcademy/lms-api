@@ -51,4 +51,19 @@ class StudyPlanCourseInstructorSubGroupRepository implements StudyPlanCourseInst
             ->unique('id') // ensure no duplicates
             ->values();
     }
+
+    public function getSubGroupsByCourseLevel($courseId, $levelId)
+    {
+        return StudyPlanCourseInstructorSubGroup::whereHas('studyPlanCourseInstructor', function ($q) use ($courseId, $levelId) {
+            $q->whereHas('sp_course', function ($q2) use ($courseId, $levelId) {
+                $q2->where('course_id', $courseId)
+                    ->where('level_id', $levelId);
+            });
+        })
+            ->with('subGroup:id,id,name') // eager load the subgroup
+            ->get()
+            ->pluck('subGroup') // extract only the subGroup model
+            ->unique('id') // remove duplicates
+            ->values(); // reset keys
+    }
 }

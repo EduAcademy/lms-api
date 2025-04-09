@@ -15,4 +15,5 @@ interface StudyPlanCourseInstructorSubGroupServiceInterface
     public function updateSpCInstSubGrou($id, array $data);
     public function deleteSpCInstSubGrou($id);
     public function getCoursesBySubGroupId($subGroupId);
+    public function getSubGroupsByCourseLevel($courseId, $levelId);
 }

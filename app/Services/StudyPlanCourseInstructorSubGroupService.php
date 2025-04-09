@@ -129,4 +129,15 @@ class StudyPlanCourseInstructorSubGroupService implements StudyPlanCourseInstruc
 
         return Result::success($result, 'Found Course Successfully by SubgroupId', StatusResponse::HTTP_OK);
     }
+
+    public function getSubGroupsByCourseLevel($courseId, $levelId)
+    {
+        $result = $this->spcInssubGroupRepository->getSubGroupsByCourseLevel($courseId, $levelId);
+
+        if (!$result) {
+            return Result::error("Subgroup not found with this Course, Level and Sroup", StatusResponse::HTTP_NOT_FOUND);
+        }
+
+        return Result::success($result, 'Found Subgroup Successfully by Course, Level and Group', StatusResponse::HTTP_OK);
+    }
 }

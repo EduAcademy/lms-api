@@ -16,7 +16,8 @@ use App\Http\Controllers\{
     StudyPlanCourseController,
     StudyPlanCourseInstructorController,
     StudyPlanCourseInstructorSubGroupController,
-    AssignmentStudentController
+    AssignmentStudentController,
+    GradesController
 };
 
 use App\Http\Controllers\Auth\AuthController;
@@ -88,12 +89,18 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('assignment', AssignmentController::class);
         Route::apiResource('absence', AbsenceController::class);
         Route::apiResource('assignment-students', AssignmentStudentController::class);
+        Route::apiResource('grades', GradesController::class);
 
+
+        Route::get('grades/instructor/{instructorId}', [GradesController::class, 'getByInstructorId']);
+        Route::get('grades/{studentId}/{courseId}', [GradesController::class, 'getByStudentAndCourse']);
 
         // Extra Department routes
         Route::get('/departments/levels/{departmentId}', [DepartmentController::class, 'getLevels']);
 
         Route::get('/students/group/{groupId}', [StudentController::class, 'getStudentsByGroupId']);
+        Route::get('/students/subgroup/{subgroupId}', [StudentController::class, 'getStudentsBySubGroupId']);
+
         Route::get('/students/user/{userId}', [StudentController::class, 'findByUserId']);
 
         // Extra Course routes
@@ -134,6 +141,9 @@ Route::prefix('v1')->group(function () {
         Route::get('/spc_instructors/courses/{groupId}', [StudyPlanCourseInstructorController::class, 'getCoursesByGroupId']);
         // courses for student by subgroup_id
         Route::get('/spci_subgroups/courses/{subGroupId}', [StudyPlanCourseInstructorSubGroupController::class, 'getCoursesBySubGroupId']);
+
+        //Subgroups by course, level and group
+        Route::get('/spci_subgroups/subgroups/{courseId}/{levelId}', [StudyPlanCourseInstructorSubGroupController::class, 'getSubGroupsByCourseLevel']);
 
         // assignment
 

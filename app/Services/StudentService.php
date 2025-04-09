@@ -168,6 +168,16 @@ class StudentService implements StudentServiceInterface
         return Result::success($students, 'Students found Successfully by Group', StatusResponse::HTTP_OK);
     }
 
+    public function getStudentsBySubGroupId($subgroupId)
+    {
+        $students = $this->studentRepository->getStudentsBySubGroupId($subgroupId);
+
+        if ($students->isEmpty()) {
+            return Result::error('No students found for the given group', StatusResponse::HTTP_NOT_FOUND);
+        }
+        return Result::success($students, 'Students found Successfully by Group', StatusResponse::HTTP_OK);
+    }
+
     public function count(): int
     {
         return $this->studentRepository->count();
