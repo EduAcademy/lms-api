@@ -58,6 +58,14 @@ class StudyPlanCourseInstructorSubGroupController extends Controller
         return $result;
     }
 
+    public function getCoursesBySubGroupId($subGroupId)
+    {
+        //
+        $result = $this->spCInstrSubGroupService->getCoursesBySubGroupId($subGroupId);
+
+        return $result;
+    }
+
 
     /**
      * Update the specified resource in storage.

@@ -11,4 +11,5 @@ interface StudyPlanCourseInstructorSubGroupRepositoryInterface
     public function getByStudyplanCourseInstructorId($stupCInsId);
     public function getBySubgroupId($sub_groupId);
     public function getByInstructorId($instructorId);
+    public function getCoursesBySubGroupId($subGroupId);
 }

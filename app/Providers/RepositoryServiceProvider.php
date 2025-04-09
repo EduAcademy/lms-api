@@ -31,12 +31,14 @@ use App\Contracts\DepartmentRepositoryInterface;
 use App\Contracts\InstructorRepositoryInterface;
 use App\Contracts\NotificationRepositoryInterface;
 use App\Contracts\CourseMaterialRepositoryInterface;
+use App\Contracts\GradeRepositoryInterface;
 use App\Contracts\StudyPlanCourseRepositoryInterface;
 use App\Repositories\StudyPlanCourseInstructorRepository;
 use App\Contracts\StudyPlanCourseInstructorRepositoryInterface;
 use App\Repositories\StudyPlanCourseInstructorSubGroupRepository;
 use App\Contracts\StudyPlanCourseInstructorSubGroupRepositoryInterface;
 use App\Repositories\AbsenceRepository;
+use App\Repositories\GradeRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -63,6 +65,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(LevelRepositoryInterface::class, LevelRepository::class);
         $this->app->bind(AssignmentRepositoryInterface::class, AssignmentRepository::class);
         $this->app->bind(AbsenceRepositoryInterface::class, AbsenceRepository::class);
+        $this->app->bind(GradeRepositoryInterface::class, GradeRepository::class);
     }
 
     /**

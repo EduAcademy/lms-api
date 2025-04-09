@@ -64,4 +64,10 @@ class Instructor extends Model
     {
         return $this->hasMany(Absence::class);
     }
+
+
+    public function grades()
+    {
+        return $this->hasMany(Grades::class);
+    }
 }

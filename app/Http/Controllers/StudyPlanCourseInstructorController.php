@@ -95,4 +95,11 @@ class StudyPlanCourseInstructorController extends Controller
 
         return $result;
     }
+
+    public function getCoursesByGroupId($groupId)
+    {
+        $result = $this->spCInstructorService->getCoursesByGroupId($groupId);
+
+        return $result;
+    }
 }

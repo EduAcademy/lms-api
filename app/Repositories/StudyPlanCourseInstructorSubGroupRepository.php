@@ -42,4 +42,13 @@ class StudyPlanCourseInstructorSubGroupRepository implements StudyPlanCourseInst
         return $result;
     }
 
+    public function getCoursesBySubGroupId($subGroupId)
+    {
+        return StudyPlanCourseInstructorSubGroup::where('sub_group_id', $subGroupId)
+            ->with('studyPlanCourseInstructor.sp_course.course') // nested relationship
+            ->get()
+            ->pluck('studyPlanCourseInstructor.sp_course.course') // get course directly
+            ->unique('id') // ensure no duplicates
+            ->values();
+    }
 }

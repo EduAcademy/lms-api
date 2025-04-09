@@ -45,6 +45,8 @@ use App\Interfaces\Services\GroupServiceInterface as ServicesGroupServiceInterfa
 use App\Services\AbsenceService;
 use App\Interfaces\Services\AssignmentStudentServiceInterface;
 use App\Contracts\AssignmentStudentRepositoryInterface;
+use App\Interfaces\Services\GradeServiceInterface;
+use App\Services\GradeService;
 
 class ServicesServiceProvider extends ServiceProvider
 {
@@ -72,6 +74,7 @@ class ServicesServiceProvider extends ServiceProvider
         $this->app->bind(AbsenceServiceInterface::class, AbsenceService::class);
         $this->app->bind(AssignmentStudentServiceInterface::class, AssignmentStudentService::class);
         $this->app->bind(AssignmentStudentRepositoryInterface::class, AssignmentStudentRepository::class);
+        $this->app->bind(GradeServiceInterface::class, GradeService::class);
     }
 
     /**

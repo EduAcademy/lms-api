@@ -14,4 +14,5 @@ interface StudyPlanCourseInstructorRepositoryInterface
     public function getDepartmentsByInstructorId($instructorId);
     public function getLevelsByInstructorAndCourse($instructorId, $courseId);
     public function getGroupByInstructorCourse($instructorId, $courseId, $levelId);
+    public function getCoursesByGroupId($groupId);
 }

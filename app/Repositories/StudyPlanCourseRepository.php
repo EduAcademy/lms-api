@@ -194,7 +194,10 @@ class StudyPlanCourseRepository implements StudyPlanCourseRepositoryInterface
             ->map(function ($spc) {
                 return [
                     'course_id' => $spc->course_id,
-                    'name' => $spc->course->name
+                    'name' => $spc->course->name,
+                    'department_id' => $spc->department_id,
+                    'level_id' => $spc->level_id,
+                    'semester' => $spc->semester,
                 ];
             });
         return $courses;

@@ -39,4 +39,10 @@ class SubGroups extends Model
     {
         return $this->hasMany(StudyPlanCourseInstructorSubGroup::class);
     }
+
+
+    public function grades()
+    {
+        return $this->hasMany(Grades::class);
+    }
 }

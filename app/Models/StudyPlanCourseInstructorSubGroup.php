@@ -20,7 +20,7 @@ class StudyPlanCourseInstructorSubGroup extends Model
     // Relationships
     public function studyPlanCourseInstructor()
     {
-        return $this->belongsTo(StudyPlanCourseInstructor::class, 'study_plan_course_instructors_id');
+        return $this->belongsTo(StudyPlanCourseInstructor::class, 'spc_instructor_id');
     }
 
     public function subGroup()

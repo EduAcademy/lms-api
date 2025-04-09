@@ -118,4 +118,15 @@ class StudyPlanCourseInstructorSubGroupService implements StudyPlanCourseInstruc
 
         return Result::success($result, 'StudyPlanCInsSubGroup is Deleted Successfully', StatusResponse::HTTP_OK);
     }
+
+    public function getCoursesBySubGroupId($subGroupId)
+    {
+        $result = $this->spcInssubGroupRepository->getCoursesBySubGroupId($subGroupId);
+
+        if (!$result) {
+            return Result::error("Course not found with this SubgroupId {$subGroupId}", StatusResponse::HTTP_NOT_FOUND);
+        }
+
+        return Result::success($result, 'Found Course Successfully by SubgroupId', StatusResponse::HTTP_OK);
+    }
 }

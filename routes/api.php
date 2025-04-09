@@ -130,6 +130,11 @@ Route::prefix('v1')->group(function () {
         Route::get('/spc_instructors/levels/{instructorId}/{courseId}', [StudyPlanCourseInstructorController::class, 'getLevelsByInstructorAndCourse']);
         Route::get('/spc_instructors/groups/{instructorId}/{courseId}/{levelId}', [StudyPlanCourseInstructorController::class, 'getGroupByInstructorCourse']);
 
+        // courses for student by group_id
+        Route::get('/spc_instructors/courses/{groupId}', [StudyPlanCourseInstructorController::class, 'getCoursesByGroupId']);
+        // courses for student by subgroup_id
+        Route::get('/spci_subgroups/courses/{subGroupId}', [StudyPlanCourseInstructorSubGroupController::class, 'getCoursesBySubGroupId']);
+
         // assignment
 
         //get all assignmentes assigned by the loggedin instructor

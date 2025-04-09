@@ -98,4 +98,20 @@ class StudyPlanCourseInstructorRepository implements StudyPlanCourseInstructorRe
 
         return $groups;
     }
+
+    public function getCoursesByGroupId($groupId)
+    {
+        return StudyPlanCourseInstructor::where('group_id', $groupId)
+            ->with('sp_course.course') // Load the course through sp_course
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'group_id'   => $item->group_id,
+                    'course_id'  => $item->sp_course->course->id ?? null,
+                    'course_name' => $item->sp_course->course->name ?? null,
+                ];
+            })
+            ->unique('course_id') // Optional: remove duplicates if needed
+            ->values();
+    }
 }
