@@ -78,6 +78,12 @@ class StudyPlanCourseInstructorSubGroupController extends Controller
         return $result;
     }
 
+    public function getSubGroupsByCourseLevel($courseId, $levelId)
+    {
+        $result = $this->spCInstrSubGroupService->getSubGroupsByCourseLevel($courseId, $levelId);
+        return $result;
+    }
+
     /**
      * Remove the specified resource from storage.
      */

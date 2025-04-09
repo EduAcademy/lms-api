@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AssignmentSubmissionRequest;
 use App\Models\AssignmentSubmission;
+use App\Shared\Constants\StatusResponse;
+use App\Shared\Handler\Result;
 use Illuminate\Http\Request;
 
 class AssignmentSubmissionController extends Controller
@@ -26,9 +29,12 @@ class AssignmentSubmissionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(AssignmentSubmissionRequest $request)
     {
         //
+        $data = $request->validated();
+        $result = AssignmentSubmission::create($data);
+        return Result::success($result, 'A new assignmentsubmission is created successfully', StatusResponse::HTTP_OK);
     }
 
     /**

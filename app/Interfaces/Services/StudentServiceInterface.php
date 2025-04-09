@@ -15,4 +15,5 @@ interface StudentServiceInterface
     public function count(): int;
     public function getStudentsByGroup($groupId);
     public function findByUserId($userId);
+    public function getStudentsBySubGroupId($subgroupId);
 }

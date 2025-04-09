@@ -11,4 +11,5 @@ interface StudentRepositoryInterface
     public function findByGroupId($groupId);
     public function findByUserId($userId);
     public function count(): int;
+    public function getStudentsBySubGroupId($subgroupId);
 }

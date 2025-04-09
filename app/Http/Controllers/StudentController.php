@@ -75,6 +75,11 @@ class StudentController extends Controller
         return $this->studentService->getStudentsByGroup($groupId);
     }
 
+    public function getStudentsBySubGroupId($subgroupId)
+    {
+        return $this->studentService->getStudentsBySubGroupId($subgroupId);
+    }
+
     public function findByUserId($userId)
     {
         return $this->studentService->findByUserId($userId);

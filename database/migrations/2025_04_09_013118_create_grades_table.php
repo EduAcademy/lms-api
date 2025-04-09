@@ -13,41 +13,34 @@ return new class extends Migration
     {
         Schema::create('grades', function (Blueprint $table) {
             $table->id();
+
             $table->foreignId('course_id')
-                ->unsignedBigInteger()
-                ->references('id')
-                ->on('courses')
-                ->nullable(false)
+                ->constrained('courses')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+
             $table->foreignId('group_id')
-                ->unsignedBigInteger()
-                ->references('id')
-                ->on('groups')
-                ->nullable(true)
+                ->nullable()
+                ->constrained('groups')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+
             $table->foreignId('sub_group_id')
-                ->unsignedBigInteger()
-                ->references('id')
-                ->on('sub_groups')
-                ->nullable(true)
+                ->nullable()
+                ->constrained('sub_groups')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+
             $table->foreignId('student_id')
-                ->unsignedBigInteger()
-                ->references('id')
-                ->on('students')
-                ->nullable(false)
+                ->constrained('students')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+
             $table->foreignId('instructor_id')
-                ->unsignedBigInteger()
-                ->references('id')
-                ->on('instructors')
-                ->nullable(false)
+                ->constrained('instructors')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+
             $table->integer('grade');
             $table->timestamps();
         });
