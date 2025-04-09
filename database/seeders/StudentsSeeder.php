@@ -73,6 +73,7 @@ class StudentsSeeder extends Seeder
                 'user_id'        => $defaultUser->id,
                 'group_id'       => $faker->randomElement($groupIds),
                 'sub_group_id'   => $faker->randomElement($subGroupIds),
+                'level_id'       => $faker->randomElement($levelIds),
                 'created_at'     => now(),
                 'updated_at'     => now(),
             ]);
