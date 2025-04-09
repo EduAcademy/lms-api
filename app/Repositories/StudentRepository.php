@@ -50,7 +50,7 @@ class StudentRepository implements StudentRepositoryInterface
     public function findByUserId($userId)
     {
         // Eager load the 'user' relationship when fetching students by department
-        return Student::where('user', $userId)->get();
+        return Student::where('user_id', $userId)->get();
     }
 
     public function count(): int
