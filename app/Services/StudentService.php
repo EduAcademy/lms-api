@@ -8,6 +8,7 @@ use App\Http\Requests\StudentRequest;
 use App\Interfaces\Services\StudentServiceInterface;
 use App\Mappings\StudentMapping;
 use App\Models\Student;
+use App\Models\User;
 use App\Repositories\GenericRepository;
 use App\Shared\Constants\MessageResponse;
 use App\Shared\Constants\StatusResponse;
@@ -98,13 +99,37 @@ class StudentService implements StudentServiceInterface
             return Result::error('Validation failed', 422, $validator->errors());
         }
 
-        $result = $this->genericRepository->create($data);
+        try {
+            // Create a user first
+            $userData = [
+                'username'   => $data['username'],
+                'email'      => $data['email'],
+                'password'   => bcrypt($data['password']),
+                'first_name' => $data['first_name'],
+                'last_name'  => $data['last_name'],
+                'phone'      => $data['phone'],
+                'role_id'    => 3, // Assuming 3 is the role ID for students
+                'gender'     => $data['gender'],
+                'is_active'  => true,
+            ];
 
-        if (!$result) {
-            return Result::error('Failed in creating Student', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
+            $user = User::create($userData);
+
+            // Add the created user's ID to the student data
+            $data['user_id'] = $user->id;
+
+            // Create the student record
+            $result = $this->genericRepository->create($data);
+
+            if (!$result) {
+                return Result::error('Failed in creating Student', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
+            return Result::success($result, 'Student is Created Successfully', StatusResponse::HTTP_CREATED);
+        } catch (Exception $e) {
+            Log::error('Error in StudentService::createStudent: ' . $e->getMessage());
+            return Result::error('An error occurred while creating the student', StatusResponse::HTTP_INTERNAL_SERVER_ERROR, $e->getMessage());
         }
-
-        return Result::success($result, 'Student is Created Successfully', StatusResponse::HTTP_CREATED);
     }
 
     public function updateStudent($id, array $data)
