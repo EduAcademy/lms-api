@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use App\Models\UploadedFiles;
+use App\imports\StudentImport;
 
 class StudentService implements StudentServiceInterface
 {
@@ -120,6 +121,7 @@ class StudentService implements StudentServiceInterface
 
             // Add the created user's ID to the student data
             $data['user_id'] = $user->id;
+
 
             // Create the student record
             $result = $this->genericRepository->create($data);
@@ -251,32 +253,7 @@ class StudentService implements StudentServiceInterface
         ]);
 
         try {
-            $data = Excel::toArray(new \App\Imports\StudentImport, $file)[0];
-            // remove header row
-            unset($data[0]);
-
-            foreach ($data as $row) {
-                // Map Excel row columns to studentData structure expected by createStudent.
-                $studentData = [
-                    'department_id' => $row[0],
-                    'study_plan_id' => $row[1],
-                    // Note: Omit 'user_id' here so that createStudent creates a new user.
-                    'group_id'      => $row[2],
-                    'sub_group_id'  => $row[3],
-                    'username'      => $row[4],
-                    'email'         => $row[5],
-                    'password'      => $row[6],
-                    'first_name'    => $row[7],
-                    'last_name'     => $row[8],
-                    'phone'         => $row[9],
-                    'gender'        => $row[10]
-                ];
-
-                $result = $this->createStudent($studentData);
-                if ($result instanceof \App\Shared\Handler\Result && $result->isError()) {
-                    throw new \Exception('Failed to create student for row: ' . json_encode($row) . ' Errors: ' . $result->getMessage());
-                }
-            }
+            Excel::import(new StudentImport, $file);
         } catch (\Exception $e) {
             return Result::error('Error processing file: ' . $e->getMessage(), 500);
         }

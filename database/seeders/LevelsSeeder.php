@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Faker\Factory as Faker;
 
 class LevelsSeeder extends Seeder
 {
@@ -13,12 +12,16 @@ class LevelsSeeder extends Seeder
      */
     public function run(): void
     {
-        $faker = Faker::create();
+        $levels = [
+            'level 1',
+            'level 2',
+            'level 3',
+            'level 4',
+        ];
 
-        // Create a few fake levels
-        foreach (range(1, 5) as $index) {
+        foreach ($levels as $levelName) {
             DB::table('levels')->insert([
-                'name' => $faker->word, // Random name for the level
+                'name'       => $levelName,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
