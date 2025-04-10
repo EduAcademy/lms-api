@@ -22,13 +22,17 @@ class StudentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
-             // 'uuid' => 'required|string|unique:students,uuid',
-             'department_id' => 'required|exists:departments,id',
-             'study_plan_id' => 'required|exists:study_plans,id',
-             'user_id' => 'required|exists:users,id',
-             'group_id' => 'required|exists:groups,id',
-             'sub_group_id' => 'required|exists:sub_groups,id',
+            'username'      => 'required|string|unique:users,username',
+            'email'         => 'required|email|unique:users,email',
+            'password'      => 'required|string|min:8',
+            'first_name'    => 'required|string',
+            'last_name'     => 'required|string',
+            'phone'         => 'required|string',
+            'gender'        => 'required|string|in:male,female',
+            'department_id' => 'required|exists:departments,id',
+            'study_plan_id' => 'required|exists:study_plans,id',
+            'group_id'      => 'required|exists:groups,id',
+            'sub_group_id'  => 'required|exists:sub_groups,id',
         ];
     }
 }
