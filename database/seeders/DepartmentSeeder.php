@@ -59,6 +59,11 @@ class DepartmentSeeder extends Seeder
                 'name' => 'Graphics & Multimedia',
                 'short_name' => 'GM',
                 'description' => 'Focuses on visual design, animation, video production, and interactive media to create engaging digital content.',
+            ],
+            [
+                'name' => 'Information Systems',
+                'short_name' => 'IS',
+                'description' => 'Combines business processes and technology to manage, analyze, and support organizational data and decision-making.',
             ]
             // Add more departments as needed
         ];
