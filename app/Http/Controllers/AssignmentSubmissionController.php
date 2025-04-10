@@ -16,6 +16,8 @@ class AssignmentSubmissionController extends Controller
     public function index()
     {
         //
+        $result = AssignmentSubmission::all();
+        return Result::success($result, 'Get All assignmentsubmissions successfully', StatusResponse::HTTP_OK);
     }
 
     /**
@@ -59,6 +61,14 @@ class AssignmentSubmissionController extends Controller
     public function update(Request $request, AssignmentSubmission $assignmentSubmission)
     {
         //
+    }
+
+    public function getByStudentAssignment($studentId, $assignmentId)
+    {
+        $submission = AssignmentSubmission::where('student_id', $studentId)
+            ->where('assignment_id', $assignmentId)
+            ->first();
+        return Result::success($submission, 'Get All assignmentsubmissions by student and assignemt successfully', StatusResponse::HTTP_OK);
     }
 
     /**
