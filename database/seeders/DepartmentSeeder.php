@@ -5,14 +5,15 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+
 class DepartmentSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
-   public function run()
+    public function run()
     {
-         $departments = [
+        $departments = [
 
             [
                 'name' => 'Information Technology',
@@ -54,6 +55,11 @@ class DepartmentSeeder extends Seeder
                 'short_name' => 'HCC',
                 'description' => 'Studies the design, development, and deployment of computer technology focused on the human user.',
             ],
+            [
+                'name' => 'Graphics & Multimedia',
+                'short_name' => 'GM',
+                'description' => 'Focuses on visual design, animation, video production, and interactive media to create engaging digital content.',
+            ]
             // Add more departments as needed
         ];
 

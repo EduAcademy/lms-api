@@ -16,10 +16,11 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 class StudentImport implements ToCollection
 {
     private $departmentShortNameMapping = [
-        'تكنولوجيا المعلومات' => 'IT',  // IT
-        'الأمن السيبراني'    => 'CYBER', // Adjusted key if needed
+        'تكنولوجيا المعلومات' => 'IT',
+        'الأمن السيبراني'    => 'CYBER',
         'علوم حاسوب'          => 'CS',
         'نظم معلومات'         => 'IS',
+        'جرافكس'         => 'GM',
     ];
 
     public function collection(Collection $rows)
@@ -38,17 +39,23 @@ class StudentImport implements ToCollection
                 // 3: النوع (Gender)
                 // 4: الايميل (Email)
                 // 5: مستوى الطالب (Student Level)
-                $uuid = $row[0];
+                $uuid = trim($row[0]);
                 $fullName = trim($row[1]);
                 $departmentName = trim($row[2]);
                 $genderArabic = trim($row[3]);
                 $email = trim($row[4]);
                 $studentLevel = trim($row[5]);
 
+                // Stop processing if the row is empty
+                if (empty($uuid) && empty($fullName) && empty($departmentName) && empty($genderArabic) && empty($email) && empty($studentLevel)) {
+                    Log::info('End of data reached. Stopping import.');
+                    break;
+                }
+
                 // Convert gender from Arabic to English
                 $gender = $genderArabic === 'ذكر' ? 'male' : 'female';
 
-                // Split full name into first and last names (assuming first word is first name)
+                // Split full name into first and last names
                 $nameParts = preg_split('/\s+/', $fullName);
                 $firstName = array_shift($nameParts);
                 $lastName = implode(' ', $nameParts);
@@ -90,7 +97,7 @@ class StudentImport implements ToCollection
                     continue;
                 }
 
-                // Use the first word of the last name as username or adjust accordingly
+                // Use the first word of the last name as username
                 $username = strtok($lastName, ' ');
 
                 // Create the user (mimicking createStudent)
