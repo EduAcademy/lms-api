@@ -20,6 +20,7 @@ class StudentImport implements ToCollection
         'الأمن السيبراني'    => 'CYBER',
         'علوم حاسوب'          => 'CS',
         'نظم معلومات'         => 'IS',
+        'جرافكس'         => 'GM',
     ];
 
     public function collection(Collection $rows)
