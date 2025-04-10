@@ -110,4 +110,13 @@ class InstructorService implements InstructorServiceInterface
     {
         return $this->instructorRepository->count();
     }
+    public function findByUserId($userId)
+    {
+        $instructors = $this->instructorRepository->findByUserId($userId);
+
+        if ($instructors->isEmpty()) {
+            return Result::error('No instructors found for the given user', StatusResponse::HTTP_NOT_FOUND);
+        }
+        return Result::success($instructors, 'instructors found Successfully by user', StatusResponse::HTTP_OK);
+    }
 }

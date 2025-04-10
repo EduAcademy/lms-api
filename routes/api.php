@@ -101,7 +101,11 @@ Route::prefix('v1')->group(function () {
         Route::get('/students/group/{groupId}', [StudentController::class, 'getStudentsByGroupId']);
         Route::get('/students/subgroup/{subgroupId}', [StudentController::class, 'getStudentsBySubGroupId']);
 
+        // get students by userid 
         Route::get('/students/user/{userId}', [StudentController::class, 'findByUserId']);
+
+        // get instructor by userid 
+        Route::get('/instructor/user/{userId}', [InstructorController::class, 'findByUserId']);
 
         // Extra Course routes
         Route::get('/courses/department/{departmentId}', [CourseController::class, 'showbyDepartment']);

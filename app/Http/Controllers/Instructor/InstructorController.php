@@ -24,6 +24,10 @@ class InstructorController extends Controller
         return $result;
     }
 
+    public function findByUserId($userId)
+    {
+        return $this->instructorService->findByUserId($userId);
+    }
 
     public function show($id)
     {

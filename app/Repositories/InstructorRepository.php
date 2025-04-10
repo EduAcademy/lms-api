@@ -26,4 +26,9 @@ class InstructorRepository implements InstructorRepositoryInterface
     {
         return Instructor::count();
     }
+    public function findByUserId($userId)
+    {
+        // Eager load the 'user' relationship when fetching students by department
+        return Instructor::where('user_id', $userId)->get();
+    }
 }
