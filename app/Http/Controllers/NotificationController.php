@@ -81,4 +81,15 @@ class NotificationController extends Controller
         return response()->json($notifications);
     }
 
+    public function deleteNotificationReceiver($id)
+    {
+        $deleted = $this->notificationService->deleteNotificationReceiverById($id);
+
+        if ($deleted) {
+            return response()->json(['message' => 'NotificationReceiver deleted successfully']);
+        }
+
+        return response()->json(['message' => 'NotificationReceiver not found'], 404);
+    }
+
 }
