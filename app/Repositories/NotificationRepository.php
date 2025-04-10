@@ -7,6 +7,7 @@ use App\Models\Notification;
 use App\Models\NotificationReceiver;
 use App\Models\Student;
 use App\Models\User;
+use App\Models\Instructor;
 use Illuminate\Support\Facades\Log;
 
 class NotificationRepository implements NotificationRepositoryInterface
@@ -67,5 +68,10 @@ class NotificationRepository implements NotificationRepositoryInterface
         return Notification::with('sender:id,first_name,last_name')->whereHas('receivers', function ($query) use ($receiverId) {
             $query->where('receiver_id', $receiverId);
         })->get();
+    }
+
+    public function getAllTeacherUsers()
+    {
+        return Instructor::pluck('user_id');
     }
 }
