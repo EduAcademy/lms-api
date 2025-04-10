@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AssignmentSubmissionRequest;
+use App\Http\Requests\UpdateAssignmentSubmissionRequest;
 use App\Models\AssignmentSubmission;
 use App\Shared\Constants\StatusResponse;
 use App\Shared\Handler\Result;
@@ -58,9 +59,14 @@ class AssignmentSubmissionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, AssignmentSubmission $assignmentSubmission)
+    public function update($id, UpdateAssignmentSubmissionRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        $submission = AssignmentSubmission::findOrFail($id);
+        $submission->update($data);
+
+        return Result::success($submission, 'AssignmentSubmission is updated successfully', StatusResponse::HTTP_OK);
     }
 
     public function getByStudentAssignment($studentId, $assignmentId)

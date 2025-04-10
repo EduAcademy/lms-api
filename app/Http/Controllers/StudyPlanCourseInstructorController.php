@@ -85,6 +85,12 @@ class StudyPlanCourseInstructorController extends Controller
         return $result;
     }
 
+    public function getInstructorsByGroupId($groupId)
+    {
+        $result = $this->spCInstructorService->getInstructorsByGroupId($groupId);
+        return $result;
+    }
+
     /**
      * Remove the specified resource from storage.
      */

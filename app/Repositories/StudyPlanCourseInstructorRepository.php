@@ -114,4 +114,15 @@ class StudyPlanCourseInstructorRepository implements StudyPlanCourseInstructorRe
             ->unique('course_id') // Optional: remove duplicates if needed
             ->values();
     }
+
+    public function getInstructorsByGroupId($groupId)
+    {
+        $instructors = StudyPlanCourseInstructor::with('instructor')
+            ->where('group_id', $groupId)
+            ->get()
+            ->pluck('instructor') // only get the instructor model
+            ->unique('id')         // remove duplicates
+            ->values();
+        return $instructors;
+    }
 }

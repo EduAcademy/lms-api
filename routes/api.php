@@ -144,6 +144,8 @@ Route::prefix('v1')->group(function () {
         Route::get('/spc_instructors/levels/{instructorId}/{courseId}', [StudyPlanCourseInstructorController::class, 'getLevelsByInstructorAndCourse']);
         Route::get('/spc_instructors/groups/{instructorId}/{courseId}/{levelId}', [StudyPlanCourseInstructorController::class, 'getGroupByInstructorCourse']);
 
+        Route::get('/spc_instructors/instructors/{groupId}', [StudyPlanCourseInstructorController::class, 'getInstructorsByGroupId']);
+
         // courses for student by group_id
         Route::get('/spc_instructors/courses/{groupId}', [StudyPlanCourseInstructorController::class, 'getCoursesByGroupId']);
         // courses for student by subgroup_id
@@ -167,6 +169,7 @@ Route::prefix('v1')->group(function () {
             Route::post('/department', [NotificationController::class, 'notifyDepartment']);
             Route::post('/group', [NotificationController::class, 'notifyGroup']);
             Route::post('/student', [NotificationController::class, 'notifyStudent']);
+            Route::post('/instructor', [NotificationController::class, 'notifyInstructor']);
             Route::get('/getNotificationsByReceiver/{receiverId}', [NotificationController::class, 'getNotificationsByReceiverId']);
         });
 

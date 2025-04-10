@@ -143,4 +143,10 @@ class StudyPlanCourseInstructorService implements StudyPlanCourseInstructorServi
         $result = $this->spCInstructorRepository->getCoursesByGroupId($groupId);
         return Result::success($result, 'Get All courses related to the group', StatusResponse::HTTP_OK);
     }
+
+    public function getInstructorsByGroupId($groupId)
+    {
+        $result = $this->spCInstructorRepository->getInstructorsByGroupId($groupId);
+        return Result::success($result, 'Get All instructors related to the group', StatusResponse::HTTP_OK);
+    }
 }

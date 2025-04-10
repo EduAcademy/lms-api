@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Contracts\NotificationRepositoryInterface;
+use App\Models\Instructor;
 use App\Models\Notification;
 use App\Models\NotificationReceiver;
 use App\Models\Student;
@@ -62,9 +63,15 @@ class NotificationRepository implements NotificationRepositoryInterface
         return Student::findOrFail($studentId)->user()->value('id');
     }
 
+    public function getInstructorUser($instructorId)
+    {
+        return Instructor::findOrFail($instructorId)->user()->value('id');
+    }
+
+
     public function getNotificationsByReceiverId($receiverId)
     {
-        return Notification::with('sender:id,first_name,last_name')->whereHas('receivers', function ($query) use ($receiverId) {
+        return Notification::with('sender:id,first_name,last_name, ')->whereHas('receivers', function ($query) use ($receiverId) {
             $query->where('receiver_id', $receiverId);
         })->get();
     }

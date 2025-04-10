@@ -18,7 +18,7 @@ class NotificationService implements NotificationServiceInterface
     }
 
 
-    
+
     public function notifyAllStudents($senderId, $content)
     {
         $userIds = $this->notificationRepo->getAllStudentUsers();
@@ -64,6 +64,17 @@ class NotificationService implements NotificationServiceInterface
             [$userId]
         );
     }
+
+    public function sendToInstructor($senderId, $instructorId, $content)
+    {
+        $userId = $this->notificationRepo->getInstructorUser($instructorId);
+        return $this->notificationRepo->createNotificationWithReceivers(
+            ['sender_id' => $senderId, 'content' => $content],
+            [$userId]
+        );
+    }
+
+
     public function getNotificationsByReceiverId($receiverId)
     {
         return $this->notificationRepo->getNotificationsByReceiverId($receiverId);
