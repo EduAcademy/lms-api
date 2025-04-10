@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Imports\StudentImport;
 use App\Interfaces\Services\StudentServiceInterface;
 use App\Models\UploadedFiles;
+use App\Models\Student;
+use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 
@@ -30,44 +32,12 @@ class StudentController extends Controller
             'file' => 'required|file|mimes:xlsx,xls',
         ]);
 
-        $file = $request->file('file');
-        $filePath = $file->getRealPath();
-
-        // Generate a hash for the file
-        $fileHash = hash_file('sha256', $filePath);
-        $fileSize = $file->getSize();
-        $lastModified = Carbon::createFromTimestamp($file->getMTime())->toDateTimeString();
-        $fileName = $file->getClientOriginalName();
-
-        // Check if the file has been uploaded before
-        $existingFile = UploadedFiles::where('file_hash', $fileHash)
-            ->orWhere(function ($query) use ($fileName, $fileSize, $lastModified) {
-                $query->where('file_name', $fileName)
-                      ->where('file_size', $fileSize)
-                      ->where('last_modified', $lastModified);
-            })
-            ->first();
-
-        if ($existingFile) {
-            return response()->json(['error' => 'This file has already been uploaded and processed.'], 400);
-        }
-
-        // Store file metadata
-        UploadedFiles::create([
-            'file_name'     => $fileName,
-            'file_hash'     => $fileHash,
-            'file_size'     => $fileSize,
-            'last_modified' => $lastModified,
-        ]);
-
-        // Import students
         try {
-            Excel::import(new StudentImport, $file);
+            $result = $this->studentService->uploadAndImportStudents($request->file('file'));
+            return response()->json($result->getData(), $result->getStatusCode());
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error processing file: ' . $e->getMessage()], 500);
         }
-
-        return response()->json(['message' => 'File uploaded and processed successfully.']);
     }
 
     public function getStudentsByGroupId($groupId)

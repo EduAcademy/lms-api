@@ -16,6 +16,9 @@ use App\Shared\Handler\Result;
 use Exception;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
+use Carbon\Carbon;
+use App\Models\UploadedFiles;
 
 class StudentService implements StudentServiceInterface
 {
@@ -218,4 +221,70 @@ class StudentService implements StudentServiceInterface
         return Result::success($students, 'Students found Successfully by user', StatusResponse::HTTP_OK);
     }
 
+    public function uploadAndImportStudents($file)
+    {
+        $filePath = $file->getRealPath();
+        $fileHash = hash_file('sha256', $filePath);
+        $fileSize = $file->getSize();
+        $lastModified = Carbon::createFromTimestamp($file->getMTime())->toDateTimeString();
+        $fileName = $file->getClientOriginalName();
+
+        // Check if the file was already uploaded
+        $existingFile = UploadedFiles::where('file_hash', $fileHash)
+            ->orWhere(function ($query) use ($fileName, $fileSize, $lastModified) {
+                $query->where('file_name', $fileName)
+                    ->where('file_size', $fileSize)
+                    ->where('last_modified', $lastModified);
+            })
+            ->first();
+
+        if ($existingFile) {
+            return Result::error('This file has already been uploaded and processed.', 400);
+        }
+
+        // Store file metadata
+        UploadedFiles::create([
+            'file_name'     => $fileName,
+            'file_hash'     => $fileHash,
+            'file_size'     => $fileSize,
+            'last_modified' => $lastModified,
+        ]);
+
+        try {
+            $data = Excel::toArray(new \App\Imports\StudentImport, $file)[0];
+            // remove header row
+            unset($data[0]);
+
+            foreach ($data as $row) {
+                // Map Excel row columns to studentData structure expected by createStudent.
+                $studentData = [
+                    'department_id' => $row[0],
+                    'study_plan_id' => $row[1],
+                    // Note: Omit 'user_id' here so that createStudent creates a new user.
+                    'group_id'      => $row[2],
+                    'sub_group_id'  => $row[3],
+                    'username'      => $row[4],
+                    'email'         => $row[5],
+                    'password'      => $row[6],
+                    'first_name'    => $row[7],
+                    'last_name'     => $row[8],
+                    'phone'         => $row[9],
+                    'gender'        => $row[10]
+                ];
+
+                $result = $this->createStudent($studentData);
+                if ($result instanceof \App\Shared\Handler\Result && $result->isError()) {
+                    throw new \Exception('Failed to create student for row: ' . json_encode($row) . ' Errors: ' . $result->getMessage());
+                }
+            }
+        } catch (\Exception $e) {
+            return Result::error('Error processing file: ' . $e->getMessage(), 500);
+        }
+
+        return Result::success(
+            ['message' => 'File uploaded and processed successfully.'],
+            'File uploaded and processed successfully.',
+            200
+        );
+    }
 }
