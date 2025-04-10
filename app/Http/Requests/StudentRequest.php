@@ -33,6 +33,8 @@ class StudentRequest extends FormRequest
             'study_plan_id' => 'required|exists:study_plans,id',
             'group_id'      => 'required|exists:groups,id',
             'sub_group_id'  => 'required|exists:sub_groups,id',
+            'level_id'   => 'required|exists:levels,id',
+
         ];
     }
 }

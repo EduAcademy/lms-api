@@ -21,4 +21,9 @@ class Level extends Model
         return $this->hasMany(StudyPlanCourse::class);
     }
 
+    // Correct relationship name
+    public function Student()
+    {
+        return $this->hasMany(Student::class);
+    }
 }

@@ -41,7 +41,11 @@ class Student extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
+    // Correct relationship name
+    public function level()
+    {
+        return $this->belongsTo(Level::class, 'level_id');
+    }
     public function group()
     {
         return $this->belongsTo(Groups::class);
