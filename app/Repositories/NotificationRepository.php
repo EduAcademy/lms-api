@@ -64,7 +64,7 @@ class NotificationRepository implements NotificationRepositoryInterface
 
     public function getNotificationsByReceiverId($receiverId)
     {
-        return Notification::whereHas('receivers', function ($query) use ($receiverId) {
+        return Notification::with('sender:id,first_name,last_name')->whereHas('receivers', function ($query) use ($receiverId) {
             $query->where('receiver_id', $receiverId);
         })->get();
     }

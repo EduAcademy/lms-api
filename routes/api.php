@@ -11,12 +11,14 @@ use App\Http\Controllers\{
     SubGroupController,
     StudyPlanController,
     AssignmentController,
+    AssignmentStatusController,
     NotificationController,
     CourseMaterialController,
     StudyPlanCourseController,
     StudyPlanCourseInstructorController,
     StudyPlanCourseInstructorSubGroupController,
     AssignmentStudentController,
+    AssignmentSubmissionController,
     GradesController
 };
 
@@ -90,6 +92,11 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('absence', AbsenceController::class);
         Route::apiResource('assignment-students', AssignmentStudentController::class);
         Route::apiResource('grades', GradesController::class);
+        Route::apiResource('assignment_status', AssignmentStatusController::class);
+        Route::apiResource('assignment_submissions', AssignmentSubmissionController::class);
+
+
+        Route::get('assignment_submissions/{studentId}/{assignmentId}', [AssignmentSubmissionController::class, 'getByStudentAssignment']);
 
 
         Route::get('grades/instructor/{instructorId}', [GradesController::class, 'getByInstructorId']);

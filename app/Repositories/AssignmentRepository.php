@@ -45,10 +45,20 @@ class AssignmentRepository implements AssignmentRepositoryInterface
     }
 
 
+
+
     public function getbyId($id)
     {
-        return Assignment::find($id);
+        $assignment = Assignment::with([
+            'group:groups.id,groups.name',
+            'studyPlanCourse.course:courses.id,courses.name',
+            'studyPlanCourse.department:departments.id,departments.name',
+            'studyPlanCourse.level:levels.id,levels.name'
+        ])->find($id);
+
+        return $assignment;
     }
+
 
 
     public function create(array $data)
@@ -117,7 +127,8 @@ class AssignmentRepository implements AssignmentRepositoryInterface
         $assignments = Assignment::with([
             'group',
             'subGroup',
-            'studyPlanCourse'
+            'studyPlanCourse',
+            'instructor'
         ])
             ->whereHas('group', function ($query) use ($groupId) {
                 $query->where('group_id', $groupId);
@@ -130,6 +141,7 @@ class AssignmentRepository implements AssignmentRepositoryInterface
                     "instructions" => $assignment->instructions,
                     "due_date" => $assignment->due_date,
                     "InstructorId" => $assignment->instructor_id,
+                    "InstructorName" => $assignment->instructor->user->first_name . ' ' . $assignment->instructor->user->last_name,
                     "study_plan_course_instructor_id" => $assignment->study_plan_course_instructor_id,
                     "study_plan_course_instructor_sub_group_id" => $assignment->study_plan_course_instructor_sub_group_id,
                     "GroupId" => optional($assignment->group)->id,
@@ -170,6 +182,7 @@ class AssignmentRepository implements AssignmentRepositoryInterface
                     "instructions" => $assignment->instructions,
                     "due_date" => $assignment->due_date,
                     "InstructorId" => $assignment->instructor_id,
+                    "InstructorName" => $assignment->instructor->user->first_name . ' ' . $assignment->instructor->user->last_name,
                     "study_plan_course_instructor_id" => $assignment->study_plan_course_instructor_id,
                     "study_plan_course_instructor_sub_group_id" => $assignment->study_plan_course_instructor_sub_group_id,
                     "GroupId" => optional($assignment->group)->id,

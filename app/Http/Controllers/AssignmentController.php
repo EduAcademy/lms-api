@@ -34,7 +34,7 @@ class AssignmentController extends Controller
     public function show($id)
     {
         $result = $this->assignmentServiceInterface->getAssignmentById($id);
-        return response()->json($result);
+        return $result;
     }
 
     public function update($id, Request $request)
@@ -52,17 +52,17 @@ class AssignmentController extends Controller
     public function getbyInstructorId($instructorId)
     {
         $result = $this->assignmentServiceInterface->getbyInstructorId($instructorId);
-        return response()->json($result);
+        return $result;
     }
     public function getbyGroupId($groupId)
     {
         $result = $this->assignmentServiceInterface->getbyGroupId($groupId);
-        return response()->json($result);
+        return $result;
     }
 
     public function getbySubGroupId($subGroupId)
     {
         $result = $this->assignmentServiceInterface->getbySubGroupId($subGroupId);
-        return response()->json($result);
+        return $result;
     }
 }

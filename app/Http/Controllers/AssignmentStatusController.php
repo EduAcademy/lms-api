@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\AssignmentStatus;
+use App\Shared\Constants\StatusResponse;
+use App\Shared\Handler\Result;
 use Illuminate\Http\Request;
 
 class AssignmentStatusController extends Controller
@@ -13,6 +15,8 @@ class AssignmentStatusController extends Controller
     public function index()
     {
         //
+        $result = AssignmentStatus::all();
+        return Result::success($result, 'Get All AssignmentStatus', StatusResponse::HTTP_OK);
     }
 
     /**
