@@ -16,7 +16,9 @@ class Student extends Model
         'study_plan_id',
         'user_id',
         'group_id',
-        'sub_group_id'
+        'sub_group_id',
+        'level_id',  // Add this line
+
     ];
     /**
      * The department that the student belongs to

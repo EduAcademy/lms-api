@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Contracts\NotificationRepositoryInterface;
 use App\Interfaces\Services\NotificationServiceInterface;
 use Illuminate\Support\Facades\Log;
+use App\Models\NotificationReceiver;
 
 class NotificationService implements NotificationServiceInterface
 {
@@ -17,11 +18,12 @@ class NotificationService implements NotificationServiceInterface
         $this->roleService = $roleService;
     }
 
-
-
     public function notifyAllStudents($senderId, $content)
     {
-        $userIds = $this->notificationRepo->getAllStudentUsers();
+        $studentUserIds = $this->notificationRepo->getAllStudentUsers();
+        $teacherUserIds = $this->notificationRepo->getAllTeacherUsers();
+        $userIds = $studentUserIds->merge($teacherUserIds); // Combine both collections
+
         Log::info($userIds);
         return $this->notificationRepo->createNotificationWithReceivers(
             ['sender_id' => $senderId, 'content' => $content],
@@ -78,5 +80,17 @@ class NotificationService implements NotificationServiceInterface
     public function getNotificationsByReceiverId($receiverId)
     {
         return $this->notificationRepo->getNotificationsByReceiverId($receiverId);
+    }
+
+    public function deleteNotificationReceiverById($id)
+    {
+        $notificationReceiver = NotificationReceiver::find($id);
+
+        if ($notificationReceiver) {
+            $notificationReceiver->delete();
+            return true;
+        }
+
+        return false;
     }
 }

@@ -12,4 +12,5 @@ interface NotificationServiceInterface
     public function getNotificationsByReceiverId($receiverId);
     public function sendToSubGroup($senderId, $subGroupId, $content);
     public function sendToInstructor($senderId, $instructorId, $content);
+    public function deleteNotificationReceiverById($id);
 }
