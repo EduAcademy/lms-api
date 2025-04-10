@@ -8,7 +8,6 @@ use App\Models\Notification;
 use App\Models\NotificationReceiver;
 use App\Models\Student;
 use App\Models\User;
-use App\Models\Instructor;
 use Illuminate\Support\Facades\Log;
 
 class NotificationRepository implements NotificationRepositoryInterface
