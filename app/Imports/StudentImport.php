@@ -20,7 +20,7 @@ class StudentImport implements ToCollection
         'الأمن السيبراني'    => 'CYBER',
         'علوم حاسوب'          => 'CS',
         'نظم معلومات'         => 'IS',
-        'جرافكس'         => 'GM',
+        'جرافكس'             => 'GM',
     ];
 
     public function collection(Collection $rows)
@@ -32,22 +32,11 @@ class StudentImport implements ToCollection
                     continue;
                 }
 
-                // Map columns from Excel:
-                // 0: كود الطالب (Student Code)
-                // 1: اسم الطالب (Student Name)
-                // 2: التخصص (Specialization)
-                // 3: النوع (Gender)
-                // 4: الايميل (Email)
-                // 5: مستوى الطالب (Student Level)
-                $uuid = trim($row[0]);
-                $fullName = trim($row[1]);
-                $departmentName = trim($row[2]);
-                $genderArabic = trim($row[3]);
-                $email = trim($row[4]);
-                $studentLevel = trim($row[5]);
+                // Convert row to array then map columns from Excel, trimming each field
+                [$uuid, $fullName, $departmentName, $genderArabic, $email, $studentLevel] = array_map('trim', $row->toArray());
 
-                // Stop processing if the row is empty
-                if (empty($uuid) && empty($fullName) && empty($departmentName) && empty($genderArabic) && empty($email) && empty($studentLevel)) {
+                // Break loop if row is empty (all key fields are empty)
+                if ($this->isEmptyRow($uuid, $fullName, $departmentName, $genderArabic, $email, $studentLevel)) {
                     Log::info('End of data reached. Stopping import.');
                     break;
                 }
@@ -56,11 +45,9 @@ class StudentImport implements ToCollection
                 $gender = $genderArabic === 'ذكر' ? 'male' : 'female';
 
                 // Split full name into first and last names
-                $nameParts = preg_split('/\s+/', $fullName);
-                $firstName = array_shift($nameParts);
-                $lastName = implode(' ', $nameParts);
+                [$firstName, $lastName] = $this->splitName($fullName);
 
-                // Get department short name
+                // Map department name to its short name and validate
                 $shortName = $this->departmentShortNameMapping[$departmentName] ?? null;
                 if (!$shortName) {
                     Log::warning("Invalid department name: $departmentName for student: $uuid");
@@ -74,7 +61,7 @@ class StudentImport implements ToCollection
                 }
                 $departmentId = $department->id;
 
-                // Look up the student level in the levels table
+                // Find level using the student level from Excel
                 $levelName = 'level ' . $studentLevel;
                 $level = Level::where('name', $levelName)->first();
                 if (!$level) {
@@ -83,24 +70,23 @@ class StudentImport implements ToCollection
                 }
                 $levelId = $level->id;
 
-                // Check for duplicate user
-                $existingUser = User::where('email', $email)->first();
-                if ($existingUser) {
+                // Check for duplicate user by email
+                if (User::where('email', $email)->exists()) {
                     Log::info("Duplicate user skipped: Email - $email");
                     continue;
                 }
 
-                // Get the student role
+                // Get the student role from RoleType enum
                 $role = Role::where('name', RoleType::Student)->first();
                 if (!$role) {
                     Log::error("Student role not found for student: $uuid");
                     continue;
                 }
 
-                // Use the first word of the last name as username
+                // Use first word of the last name as username or adjust as needed
                 $username = strtok($lastName, ' ');
 
-                // Create the user (mimicking createStudent)
+                // Create the user record
                 $user = User::create([
                     'username'   => $username,
                     'email'      => $email,
@@ -113,8 +99,8 @@ class StudentImport implements ToCollection
                     'is_active'  => true,
                 ]);
 
-                // Prepare student data
-                $studentData = [
+                // Prepare student data array and create the student record
+                Student::create([
                     'uuid'           => $uuid,
                     'user_id'        => $user->id,
                     'department_id'  => $departmentId,
@@ -122,13 +108,34 @@ class StudentImport implements ToCollection
                     'group_id'       => 1,
                     'sub_group_id'   => 1,
                     'level_id'       => $levelId,
-                ];
-
-                // Create the student record
-                Student::create($studentData);
+                ]);
 
                 Log::info("New student created: UUID - $uuid, Email - $email, Level: $levelName");
             }
         });
+    }
+
+    /**
+     * Check if all provided fields are empty.
+     */
+    private function isEmptyRow(...$fields): bool
+    {
+        foreach ($fields as $field) {
+            if (!empty($field)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Split full name into first and last names.
+     */
+    private function splitName(string $fullName): array
+    {
+        $parts = preg_split('/\s+/', $fullName);
+        $firstName = array_shift($parts);
+        $lastName = implode(' ', $parts);
+        return [$firstName, $lastName];
     }
 }
