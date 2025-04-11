@@ -148,7 +148,7 @@ class StudentService implements StudentServiceInterface
             'sub_group_id'   => 'required|exists:sub_groups,id',
         ]);
 
-        // Log::info('data coming from the request : ' ,$data);
+        Log::info('data coming from the request : ', $data);
 
         if ($validator->fails()) {
             return Result::error('Validation failed', 422, $validator->errors());

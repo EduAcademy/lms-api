@@ -50,14 +50,14 @@ class StudentRepository implements StudentRepositoryInterface
     public function getStudentsBySubGroupId($subgroupId)
     {
         return Student::with('user:id,first_name,last_name')
-        ->where('sub_group_id', $subgroupId)
-        ->get(['id', 'user_id', 'uuid'])
-        ->map(fn($student) => [
-            'id' => $student->id,
-            'user_id' => $student->user_id,
-            'name' => $student->user->first_name . ' ' . $student->user->last_name,
-            'uuid' => $student->uuid,
-        ]);
+            ->where('sub_group_id', $subgroupId)
+            ->get(['id', 'user_id', 'uuid'])
+            ->map(fn($student) => [
+                'id' => $student->id,
+                'user_id' => $student->user_id,
+                'name' => $student->user->first_name . ' ' . $student->user->last_name,
+                'uuid' => $student->uuid,
+            ]);
     }
 
     public function findByUserId($userId)
