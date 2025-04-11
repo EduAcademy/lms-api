@@ -23,12 +23,12 @@ class NotificationService implements NotificationServiceInterface
     public function notifyAllStudents($senderId, $content)
     {
         $studentUserIds = $this->notificationRepo->getAllStudentUsers();
-        $userIds = $studentUserIds->merge($teacherUserIds); // Combine both collections
+        // $userIds = $studentUserIds->merge($teacherUserIds); // Combine both collections
 
-        Log::info($userIds);
+        // Log::info($userIds);
         return $this->notificationRepo->createNotificationWithReceivers(
             ['sender_id' => $senderId, 'content' => $content],
-            $userIds->toArray()
+            $studentUserIds->toArray()
         );
     }
 
