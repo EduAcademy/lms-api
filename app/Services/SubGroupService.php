@@ -97,7 +97,7 @@ class SubGroupservice implements SubGroupServiceInterface
     public function updateSubGroup($id, array $data)
     {
         $validator = Validator::make($data, [
-            'name' => 'required|string|unique:sub_groups,name,' . $id,
+            // 'name' => 'required|string|unique:sub_groups,name,' . $id,
             'group_id' => 'required|integer|exists:groups,id',
             'instructor_id' => 'required|integer|exists:instructors,id',
         ]);
