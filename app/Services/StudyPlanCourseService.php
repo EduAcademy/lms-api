@@ -45,6 +45,13 @@ class StudyPlanCourseService implements StudyPlanCourseServiceInterface
         return Result::success($result, 'Found StudyPlanCourse Successfully', StatusResponse::HTTP_OK);
     }
 
+    protected function maptoArray($items, $key)
+    {
+        return array_map(function ($item) use ($key) {
+            return [$key => $item];
+        }, $items);
+    }
+
     public function createStudyPlanCourse(array $data)
     {
         $validator = Validator::make($data, (new StudyPlanCourseRequest())->rules());
@@ -53,7 +60,7 @@ class StudyPlanCourseService implements StudyPlanCourseServiceInterface
             return Result::error('Validation failed', 422, $validator->errors());
         }
 
-        $courses = ArrayHelper::maptoArray($data['course_id'], 'course_id');
+        $courses = $this->maptoArray($data['course_id'], 'course_id');
 
         try {
             $result = $this->sPCourseRepository->create($data, $courses);
@@ -102,13 +109,22 @@ class StudyPlanCourseService implements StudyPlanCourseServiceInterface
         return Result::success($result, 'Found StudyPlanCourse Successfully', StatusResponse::HTTP_OK);
     }
 
+    protected function convertArraytoInteger($arrofNumbers){
+        $number = (int) array_reduce($arrofNumbers, function($acc, $el){
+            $acc .= $el;
+            return $acc;
+        });
+
+        return $number;
+    }
+
     public function updateStudyPlanCourse($id, array $data)
     {
 
 
         $courses_ids = $data['course_id'];
 
-        $data['course_id'] = ArrayHelper::convertArraytoInteger($courses_ids);
+        $data['course_id'] = $this->convertArraytoInteger($courses_ids);
 
         $validator = Validator::make($data, [
             'study_plan_id' => 'required|integer|exists:study_plans,id',
