@@ -105,9 +105,10 @@ class AuthController extends Controller
 
     public function updateProfile(UpdateProfileRequest $request)
     {
-
         $data = $request->validated();
-        if (isset($data['image_url']) && $data['image_url'] === '' ||$data['image_url'] === null ) {
+
+        // Ensure 'image_url' key exists before accessing it
+        if (!array_key_exists('image_url', $data) || $data['image_url'] === '' || $data['image_url'] === null) {
             $data['image_url'] = null;
         }
 
