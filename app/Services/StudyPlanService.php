@@ -64,7 +64,7 @@ class StudyPlanService implements StudyPlanServiceInterface
         Log::info('Incoming Data:', $data);
 
         $validator = Validator::make($data, [
-            'name' => 'required|string|unique:study_plans,name',
+            'name' => 'required|string',
             'number' => 'required|integer',
             'start_date' => 'required|date',
         ]);

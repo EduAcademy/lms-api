@@ -115,7 +115,7 @@ class AssignmentService implements AssignmentServiceInterface
         $assignments = $this->assignmentRepository->getbyInstructorId($instructorId);
 
         if (!$assignments) {
-            return Result::error("No assignments found for instructor ID {$instructorId}", StatusResponse::HTTP_NOT_FOUND);
+            return Result::error("No assignments found for instructor ID {$instructorId}", 200);
         }
 
         return Result::success($assignments, 'Assignments found successfully', StatusResponse::HTTP_OK);

@@ -28,7 +28,7 @@ class UpdateProfileRequest extends FormRequest
             'last_name' => 'required|string',
             'phone' => 'nullable|string',
             'gender' => 'required|in:male,female',
-            'image_url' => 'required|file|mimes:jpeg,png,jpg,gif|max:2048',
+            'image_url' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 }

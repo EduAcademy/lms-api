@@ -107,7 +107,7 @@ class AuthController extends Controller
     {
 
         $data = $request->validated();
-        if (isset($data['image_url']) && $data['image_url'] === '') {
+        if (isset($data['image_url']) && $data['image_url'] === '' ||$data['image_url'] === null ) {
             $data['image_url'] = null;
         }
 
