@@ -95,6 +95,14 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('assignment_status', AssignmentStatusController::class);
         Route::apiResource('assignment_submissions', AssignmentSubmissionController::class);
 
+        Route::put('assignment_submissions/{id}', [AssignmentSubmissionController::class, 'update']);
+        // Route::prefix('/assignment_submissions')->group(function () {
+        //     Route::get('/', [AssignmentSubmissionController::class, 'index']);
+        //     Route::get('/{id}', [AssignmentSubmissionController::class, 'show']);
+        //     Route::post('/', [AssignmentSubmissionController::class, 'store']);
+        //     Route::put('/{id}', [AssignmentSubmissionController::class, 'update']);
+        //     Route::delete('/{id}', [AssignmentSubmissionController::class, 'delete']);
+        // });
 
         Route::get('assignment_submissions/{studentId}/{assignmentId}', [AssignmentSubmissionController::class, 'getByStudentAssignment']);
 

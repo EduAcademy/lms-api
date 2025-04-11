@@ -5,15 +5,25 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AssignmentSubmissionRequest;
 use App\Http\Requests\UpdateAssignmentSubmissionRequest;
 use App\Models\AssignmentSubmission;
+use App\Repositories\GenericRepository;
 use App\Shared\Constants\StatusResponse;
 use App\Shared\Handler\Result;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AssignmentSubmissionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
+
+    protected $genericRepository;
+    public function __construct()
+    {
+        $this->genericRepository = new GenericRepository(new AssignmentSubmission());
+    }
+
     public function index()
     {
         //
@@ -59,14 +69,13 @@ class AssignmentSubmissionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update($id, UpdateAssignmentSubmissionRequest $request)
+    public function update($id, Request $request)
     {
-        $data = $request->validated();
-
-        $submission = AssignmentSubmission::findOrFail($id);
-        $submission->update($data);
-
-        return Result::success($submission, 'AssignmentSubmission is updated successfully', StatusResponse::HTTP_OK);
+        // $data  = AssignmentSubmission::find($id);
+        Log::info($request->all());
+        // $data = $request->validated();
+        $result = $this->genericRepository->update($id, $request->all());
+        return Result::success($result, 'AssignmentSubmission is updated successfully', StatusResponse::HTTP_OK);
     }
 
     public function getByStudentAssignment($studentId, $assignmentId)

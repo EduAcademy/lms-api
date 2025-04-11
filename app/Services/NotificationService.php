@@ -18,10 +18,11 @@ class NotificationService implements NotificationServiceInterface
         $this->roleService = $roleService;
     }
 
+
+
     public function notifyAllStudents($senderId, $content)
     {
         $studentUserIds = $this->notificationRepo->getAllStudentUsers();
-        $teacherUserIds = $this->notificationRepo->getAllTeacherUsers();
         $userIds = $studentUserIds->merge($teacherUserIds); // Combine both collections
 
         Log::info($userIds);
