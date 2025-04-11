@@ -27,7 +27,7 @@ class UserSeeder extends Seeder
 
         // Function to get a random image from 1.jpg to 10.jpg
         $getRandomImage = function () {
-            return 'users/' . rand(1, 10) . '.jpg';
+            return 'users/' . rand(1, 5) . '.jpg';
         };
 
         // Create a default admin if not exists
@@ -51,7 +51,7 @@ class UserSeeder extends Seeder
         for ($i = 0; $i < $total / $chunks; $i++) {
             User::factory()->count($chunks)->create([
                 'role_id' => $adminRole->id,
-                'image_url' => $getRandomImage(), 
+                'image_url' => $getRandomImage(),
             ]);
         }
     }

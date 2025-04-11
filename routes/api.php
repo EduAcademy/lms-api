@@ -28,8 +28,34 @@ use App\Http\Controllers\Department\DepartmentController;
 use App\Http\Controllers\Instructor\InstructorController;
 use App\Models\Student;
 use App\Models\StudyPlanCourseInstructor;
+use App\Shared\Constants\StatusResponse;
+use App\Shared\Handler\Result;
+use Illuminate\Support\Facades\Log;
 
 Route::prefix('v1')->group(function () {
+    Route::get('/settings', function () {
+        $settings = \App\Models\Settings::all();
+        return  Result::success($settings, 'Get All Settings', StatusResponse::HTTP_OK);
+    });
+    Route::post('/settings/update', function (Illuminate\Http\Request $request) {
+        $settings = collect(); // Initialize an empty collection to store updated settings
+
+        foreach ($request->settings as $setting) {
+            $existingSetting = \App\Models\Settings::where('id', $setting['id'])->first();
+            if ($existingSetting) {
+                $existingSetting->value = $setting['value'];
+                $existingSetting->save();
+                $settings->push($existingSetting); // Add the updated setting to the collection
+            }
+        }
+
+        if ($settings->isNotEmpty()) {
+            return Result::success($settings, 'Update Settings', StatusResponse::HTTP_OK);
+        } else {
+            return Result::error('Settings not found', StatusResponse::HTTP_NOT_FOUND);
+        }
+    });
+
     // Public routes
     Route::post('/login', [AuthController::class, 'login'])->middleware('customThrottle:3,1');
     Route::post('/validate-token', [AuthController::class, 'validateToken']);
