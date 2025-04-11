@@ -17,4 +17,5 @@ interface StudentServiceInterface
     public function findByUserId($userId);
     public function getStudentsBySubGroupId($subgroupId);
     public function uploadAndImportStudents($file);
+    public function deleteStudent($id);
 }
