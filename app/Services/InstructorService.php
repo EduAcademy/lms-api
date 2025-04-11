@@ -12,6 +12,7 @@ use App\Repositories\GenericRepository;
 use App\Shared\Constants\StatusResponse;
 use App\Shared\Handler\Result;
 use Illuminate\Support\Facades\Validator;
+use App\Models\User;
 
 class InstructorService implements InstructorServiceInterface
 {
@@ -51,21 +52,44 @@ class InstructorService implements InstructorServiceInterface
             return Result::error('Validation failed', 422, $validator->errors());
         }
 
-        $user_id = $data['user_id'];
+        try {
+            // Create a user first
+            $userData = [
+                'username'   => $data['username'],
+                'email'      => $data['email'],
+                'password'   => bcrypt($data['password']),
+                'first_name' => $data['first_name'],
+                'last_name'  => $data['last_name'],
+                'phone'      => $data['phone'],
+                'role_id'    => 2, // Assuming this is the role ID for instructors
+                'gender'     => $data['gender'],
+                'is_active'  => true,
+            ];
 
-        $check_role = $this->userService->isRoleAllowed($user_id, RoleType::Instructor->toString());
+            $user = User::create($userData);
 
-        if ($check_role == false) {
-            return Result::error('Failed in creating Instructor because of Role', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
+            // Add the created user's ID to the instructor data
+            $data['user_id'] = $user->id;
+
+            // Check if the role is allowed
+            $check_role = $this->userService->isRoleAllowed($user->id, RoleType::Instructor->toString());
+
+            if ($check_role == false) {
+                return Result::error('Failed in creating Instructor because of Role', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
+            // Create the instructor record
+            $result = $this->instructorRepository->create($data);
+
+            if (!$result) {
+                return Result::error('Failed in creating Instructor', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
+            return Result::success($result, 'Instructor is Created Successfully', StatusResponse::HTTP_CREATED);
+        } catch (Exception $e) {
+            Log::error('Error in InstructorService::createInstructor: ' . $e->getMessage());
+            return Result::error('An error occurred while creating the instructor', StatusResponse::HTTP_INTERNAL_SERVER_ERROR, $e->getMessage());
         }
-
-        $result = $this->instructorRepository->create($data);
-
-        if (!$result) {
-            return Result::error('Failed in creating Instructor', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        return Result::success($result, 'Instructor is Created Successfully', StatusResponse::HTTP_CREATED);
     }
 
     public function updateInstructor($id, array $data)

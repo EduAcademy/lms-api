@@ -23,10 +23,17 @@ class InstructorRequest extends FormRequest
     {
         return [
             //
+            'username'      => 'required|string|unique:users,username',
+            'email'         => 'required|email|unique:users,email',
+            'password'      => 'required|string|min:8',
+            'first_name'    => 'required|string',
+            'last_name'     => 'required|string',
+            'phone'         => 'required|string',
+            'gender'        => 'required|string|in:male,female',
             'professional_title' => 'required|string|max:255',
             'about_me' => 'nullable|string',
             'social_links' => 'nullable|url',
-            'user_id' => 'required|integer|exists:users,id',
+            // 'user_id' => 'required|integer|exists:users,id',
         ];
     }
 }

@@ -80,7 +80,7 @@ class StudyPlanController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function delete($id)
+    public function destroy($id)
     {
         //
         $result = $this->study_PlanService->deleteStudyPlan($id);

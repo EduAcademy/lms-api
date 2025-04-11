@@ -54,7 +54,7 @@ class InstructorController extends Controller
         return $result;
     }
 
-    public function delete($id)
+    public function destroy($id)
     {
         $result = $this->instructorService->deleteInstructor($id);
 
