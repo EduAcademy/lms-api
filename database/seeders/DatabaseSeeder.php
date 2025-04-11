@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         $this->call(RoleSeeder::class);
+        $this->call(LevelsSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(AdminsSeeder::class);
         $this->call(InstructorSeeder::class);
@@ -25,8 +26,8 @@ class DatabaseSeeder extends Seeder
         $this->call(SubGroupsSeeder::class);
         $this->call(StudentsSeeder::class);
         $this->call(CourseMaterialsSeeder::class);
-        $this->call(LevelsSeeder::class);
         $this->call(StudyPlanCoursesSeeder::class);
         $this->call(SpcInstructorsSeeder::class);
+        $this->call(SettingsSeeder::class);
     }
 }
