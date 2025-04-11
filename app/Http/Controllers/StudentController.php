@@ -71,4 +71,14 @@ class StudentController extends Controller
     {
         return $this->studentService->updateStudent($id, $request->all());
     }
+
+    public function destroy($id)
+    {
+        try {
+            $result = $this->studentService->deleteStudent($id);
+            return response()->json(['message' => 'Student deleted successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error deleting student: ' . $e->getMessage()], 500);
+        }
+    }
 }

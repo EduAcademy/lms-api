@@ -140,13 +140,15 @@ class StudentService implements StudentServiceInterface
     public function updateStudent($id, array $data)
     {
         $validator = Validator::make($data, [
-            'uuid'           => 'required|string|unique:students,uuid,' . $id,
+            // 'uuid'           => 'required|string|unique:students,uuid,' . $id,
             'department_id'  => 'required|exists:departments,id',
             'study_plan_id'  => 'required|exists:study_plans,id',
-            'user_id'        => 'required|exists:users,id',
+            // 'user_id'        => 'required|exists:users,id',
             'group_id'       => 'required|exists:groups,id',
             'sub_group_id'   => 'required|exists:sub_groups,id',
         ]);
+
+        // Log::info('data coming from the request : ' ,$data);
 
         if ($validator->fails()) {
             return Result::error('Validation failed', 422, $validator->errors());
@@ -263,5 +265,23 @@ class StudentService implements StudentServiceInterface
             'File uploaded and processed successfully.',
             200
         );
+    }
+
+    public function deleteStudent($id)
+    {
+        try {
+            $student = $this->studentRepository->findById($id);
+
+            if (!$student) {
+                return Result::error('Student not found', StatusResponse::HTTP_NOT_FOUND);
+            }
+
+            $this->genericRepository->delete($id);
+
+            return Result::success(null, 'Student deleted successfully', StatusResponse::HTTP_OK);
+        } catch (Exception $e) {
+            Log::error('Error in StudentService::deleteStudent: ' . $e->getMessage());
+            return Result::error('An error occurred while deleting the student', StatusResponse::HTTP_INTERNAL_SERVER_ERROR, $e->getMessage());
+        }
     }
 }
