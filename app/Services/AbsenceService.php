@@ -61,4 +61,10 @@ class AbsenceService implements AbsenceServiceInterface
         return Result::success($result, 'Get All Absence', StatusResponse::HTTP_OK);
     }
 
+    public function getAbsenceCountByStudentAndCourse($studentId, $courseId)
+    {
+        $result = $this->absenceRepositoryInterface->getAbsenceCountByStudentAndCourse($studentId, $courseId);
+        return Result::success($result, 'Get counts of student absence and in which course', StatusResponse::HTTP_OK);
+    }
+
 }

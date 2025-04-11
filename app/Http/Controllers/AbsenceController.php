@@ -27,4 +27,10 @@ class AbsenceController extends Controller
         $result = $this->absenceServiceInterface->createAbsence($data);
         return $result;
     }
+
+    public function getAbsenceCountByStudentAndCourse($studentId, $courseId)
+    {
+        $result = $this->absenceServiceInterface->getAbsenceCountByStudentAndCourse($studentId, $courseId);
+        return $result;
+    }
 }

@@ -133,6 +133,7 @@ Route::prefix('v1')->group(function () {
         Route::get('assignment_submissions/{studentId}/{assignmentId}', [AssignmentSubmissionController::class, 'getByStudentAssignment']);
 
 
+        Route::get('absence/student/{studentId}/course/{courseId}', [AbsenceController::class, 'getAbsenceCountByStudentAndCourse']);
         Route::get('grades/instructor/{instructorId}', [GradesController::class, 'getByInstructorId']);
         Route::get('grades/{studentId}/{courseId}', [GradesController::class, 'getByStudentAndCourse']);
 

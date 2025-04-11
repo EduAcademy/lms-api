@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Contracts\AbsenceRepositoryInterface;
 use App\Models\Absence;
+use Illuminate\Support\Facades\DB;
 
 class AbsenceRepository implements AbsenceRepositoryInterface
 {
@@ -29,5 +30,12 @@ class AbsenceRepository implements AbsenceRepositoryInterface
     public function getAll()
     {
         return Absence::all();
+    }
+
+    public function getAbsenceCountByStudentAndCourse($studentId, $courseId)
+    {
+        return Absence::where('student_id', $studentId)
+        ->where('course_id', $courseId)
+        ->count();
     }
 }
