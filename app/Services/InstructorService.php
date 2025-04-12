@@ -72,9 +72,8 @@ class InstructorService implements InstructorServiceInterface
             $data['user_id'] = $user->id;
 
             // Check if the role is allowed
-            $check_role = $this->userService->isRoleAllowed($user->id, RoleType::Instructor->toString());
-
-            if ($check_role == false) {
+            if (!$this->userService->isRoleAllowed($user->id, RoleType::Instructor->toString())) {
+                Log::warning('Role not allowed for user ID: ' . $user->id);
                 return Result::error('Failed in creating Instructor because of Role', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
             }
 
@@ -82,12 +81,13 @@ class InstructorService implements InstructorServiceInterface
             $result = $this->instructorRepository->create($data);
 
             if (!$result) {
+                Log::error('Failed to create instructor for user ID: ' . $user->id);
                 return Result::error('Failed in creating Instructor', StatusResponse::HTTP_INTERNAL_SERVER_ERROR);
             }
 
             return Result::success($result, 'Instructor is Created Successfully', StatusResponse::HTTP_CREATED);
         } catch (Exception $e) {
-            Log::error('Error in InstructorService::createInstructor: ' . $e->getMessage());
+            Log::error('Error in InstructorService::createInstructor: ' . $e->getMessage(), ['exception' => $e]);
             return Result::error('An error occurred while creating the instructor', StatusResponse::HTTP_INTERNAL_SERVER_ERROR, $e->getMessage());
         }
     }
@@ -95,9 +95,9 @@ class InstructorService implements InstructorServiceInterface
     public function updateInstructor($id, array $data)
     {
         $validator = Validator::make($data, [
-            'professional_title' => 'required|string|max:255',
+            // 'professional_title' => 'required|string|max:255',
             'about_me' => 'nullable|string',
-            'social_links' => 'nullable|url',
+            'social_links' => 'nullable|url', // Changed from 'nullable|string' to 'nullable|url'
             'user_id' => 'required|integer|exists:users,id',
         ]);
 

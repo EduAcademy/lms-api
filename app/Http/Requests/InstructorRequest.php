@@ -30,9 +30,9 @@ class InstructorRequest extends FormRequest
             'last_name'     => 'required|string',
             'phone'         => 'required|string',
             'gender'        => 'required|string|in:male,female',
-            'professional_title' => 'required|string|max:255',
+            'professional_title' => 'nullable|string|max:255',
             'about_me' => 'nullable|string',
-            'social_links' => 'nullable|url',
+            'social_links' => 'nullable|string',
             // 'user_id' => 'required|integer|exists:users,id',
         ];
     }
