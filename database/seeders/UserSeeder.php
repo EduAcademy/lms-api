@@ -15,8 +15,8 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $chunks = 99; // Insert rows in chunks
-        $total = 99; // Total rows
+        $chunks = 5; // Insert rows in chunks
+        $total = 5; // Total rows
 
         // Fetch admin role by its name
         $adminRole = DB::table('roles')->where('name', 'admin')->first();
