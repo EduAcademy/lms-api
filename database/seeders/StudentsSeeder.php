@@ -50,7 +50,7 @@ class StudentsSeeder extends Seeder
             $defaultEmail = 'messi@su.edu.ye';
             $defaultImage = 'users/7.jpg';
 
-            // Create default user for student 
+            // Create default user for student
             $defaultUser = User::factory()->create([
                 'role_id'           => $studentRole->id,
                 'email'             => $defaultEmail,
@@ -80,7 +80,7 @@ class StudentsSeeder extends Seeder
         }
 
         // Generate 100 fake students by creating a user and linking it to a student record
-        foreach (range(1, 100) as $index) {
+        foreach (range(1, 2) as $index) {
             // Generate a random 8-digit number for uuid
             $randomNumber = random_int(10000000, 99999999);
             $uuid = (string)$randomNumber;

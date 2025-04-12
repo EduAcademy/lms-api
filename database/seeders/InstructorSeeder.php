@@ -48,12 +48,12 @@ class InstructorSeeder extends Seeder
             ]);
         }
 
-        $total = 50; // Total instructors to generate
+        $total = 5; // Total instructors to generate
 
         // Generate additional instructors by creating a new user and linking it to an instructor record
         foreach (range(1, $total) as $index) {
             // Select a random image between 1.jpg and 10.jpg
-            $randomImage = 'users/' . rand(1, 10) . '.jpg';
+            $randomImage = 'users/' . rand(1, 5) . '.jpg';
 
             // Create a new user with the instructor role and assign a random image
             $user = User::factory()->create([
