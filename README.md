@@ -1,3 +1,15 @@
+
+# Final Year Project - EduAcademy
+
+This repository contains the Backend of our Final Year Project.
+
+## Other parts:
+- [Frontend](https://github.com/EduAcademy/lms-client)
+- [Documentation](https://github.com/EduAcademy/LMS-Project-Documentation)
+
+Please refer to these links for the complete project.
+
+
 # LMS - API
 
 This is the back-end client for the Learning Management System (LMS). It is built using Laravel.
@@ -85,3 +97,5 @@ Contributions are welcome! Please follow the guidelines below:
 ## License
 
 This project is licensed under the MIT License. See the `LICENSE` file for details.
+
+
